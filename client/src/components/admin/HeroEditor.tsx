@@ -22,7 +22,10 @@ const heroSchema = z.object({
     text: z.string().min(1, "버튼 텍스트는 필수입니다"),
     url: z.string().min(1, "버튼 링크는 필수입니다"),
   }),
-  backgroundImage: z.string().url("올바른 URL을 입력해주세요").optional(),
+  backgroundImage: z.string().optional().refine(
+    (val) => !val || z.string().url().safeParse(val).success,
+    { message: "올바른 URL을 입력해주세요" }
+  ),
 });
 
 type HeroFormData = z.infer<typeof heroSchema>;
