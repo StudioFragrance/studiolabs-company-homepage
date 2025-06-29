@@ -3,6 +3,9 @@ services:
     container_name: company-homepage
     env_file:
       - .env
+    environment:
+      - DOCKER=true
+      - NODE_ENV=production
     build:
       context: .
       dockerfile: Dockerfile

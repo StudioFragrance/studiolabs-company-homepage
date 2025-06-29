@@ -62,13 +62,14 @@ app.use((req, res, next) => {
   const port = process.env.PORT ? parseInt(process.env.PORT) : 5000;
   
   // Use appropriate host based on environment
-  // 0.0.0.0 for Replit/cloud environments, localhost for local development
-  const host = process.env.REPL_ID ? "0.0.0.0" : "localhost";
+  // 0.0.0.0 for Replit/cloud/Docker environments, localhost for local development
+  const isCloudEnvironment = process.env.REPL_ID || process.env.RAILWAY_ENVIRONMENT || process.env.RENDER || process.env.VERCEL || process.env.DOCKER;
+  const host = isCloudEnvironment ? "0.0.0.0" : "localhost";
   
   server.listen({
     port,
     host,
-    reusePort: process.env.REPL_ID ? true : false,
+    reusePort: isCloudEnvironment ? true : false,
   }, () => {
     log(`serving on ${host}:${port}`);
   });
