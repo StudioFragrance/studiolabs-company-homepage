@@ -187,7 +187,7 @@ export default function CompanyHistoryEditor({ initialData }: CompanyHistoryEdit
                 </div>
                 
                 <div className="max-h-96 overflow-y-auto">
-                  <Accordion type="multiple" className="space-y-4">
+                  <Accordion type="multiple" className="space-y-4" defaultValue={["event-0"]}>
                     {timelineFields.map((field, index) => (
                       <AccordionItem key={field.id} value={`event-${index}`} className="border rounded-lg shadow-sm">
                         <div className="flex items-center p-4">
