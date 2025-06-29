@@ -335,19 +335,29 @@ export default function CompanyHistoryEditor({ initialData }: CompanyHistoryEdit
                     {watchedValues.timeline?.map((event, index) => (
                       <div key={index} className={`flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}>
                         <div className={`w-5/12 ${index % 2 === 0 ? 'text-right pr-8' : 'text-left pl-8'}`}>
-                          <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-md">
-                            <div className="text-sm text-brand-coral font-medium mb-2">
+                          <div className={`border rounded-lg p-4 shadow-md ${
+                            event.isFuture 
+                              ? 'bg-gray-50 border-gray-300 opacity-60' 
+                              : 'bg-white border-gray-200'
+                          }`}>
+                            <div className={`text-sm font-medium mb-2 ${
+                              event.isFuture ? 'text-gray-400' : 'text-brand-coral'
+                            }`}>
                               {event.date || "날짜"}
                             </div>
-                            <h3 className="font-semibold text-gray-900 mb-2">
+                            <h3 className={`font-semibold mb-2 ${
+                              event.isFuture ? 'text-gray-500' : 'text-gray-900'
+                            }`}>
                               {event.title || "제목"}
                             </h3>
-                            <p className="text-sm text-gray-600">
+                            <p className={`text-sm ${
+                              event.isFuture ? 'text-gray-400' : 'text-gray-600'
+                            }`}>
                               {event.description || "설명"}
                             </p>
                             {event.isFuture && (
                               <div className="mt-2">
-                                <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
+                                <span className="inline-block bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded">
                                   예정
                                 </span>
                               </div>
@@ -356,7 +366,9 @@ export default function CompanyHistoryEditor({ initialData }: CompanyHistoryEdit
                         </div>
                         
                         {/* 중앙 아이콘 */}
-                        <div className="relative z-10 flex items-center justify-center w-10 h-10 bg-brand-coral rounded-full border-4 border-white shadow-lg">
+                        <div className={`relative z-10 flex items-center justify-center w-10 h-10 rounded-full border-4 border-white shadow-lg ${
+                          event.isFuture ? 'bg-gray-400' : 'bg-brand-coral'
+                        }`}>
                           <i className={`fas ${event.icon} text-white text-sm`}></i>
                         </div>
                         
