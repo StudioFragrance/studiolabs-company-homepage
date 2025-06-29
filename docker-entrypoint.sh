@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
 echo "Starting Studio Fragrance application..."
@@ -9,7 +9,7 @@ npx wait-on tcp:postgres:5432 -t 60000
 
 # Run migrations
 echo "Running database migrations..."
-tsx scripts/migration.ts run
+npx tsx scripts/migration.ts run
 
 # Start the application
 echo "Starting the server..."
