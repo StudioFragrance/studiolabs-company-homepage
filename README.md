@@ -15,19 +15,26 @@ AI 기술을 활용한 개인 맞춤형 향수 추천 웹 애플리케이션입�
 
 ### 1. 의존성 설치
 ```bash
-npm install
+pnpm install
 ```
 
 ### 2. 환경 변수 설정
-`.env` 파일을 생성하고 다음 변수들을 설정하세요:
+`.env.example` 파일을 `.env`로 복사하고 필요한 값들을 설정하세요:
+```bash
+cp .env.example .env
+```
+
+`.env` 파일 예시:
 ```
 NODE_ENV=development
+PORT=5000
 DATABASE_URL=postgresql://username:password@localhost:5432/database_name
+SESSION_SECRET=your-secret-key-change-in-production
 ```
 
 ### 3. 개발 서버 실행
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 개발 서버는 `http://localhost:5000`에서 실행됩니다.
@@ -42,33 +49,34 @@ cd studio-fragrance
 
 ### 2. 의존성 설치
 ```bash
-npm install
+pnpm install
 ```
 
 ### 3. 환경 변수 설정
+`.env.example` 파일을 `.env`로 복사하고 프로덕션 값으로 설정:
 ```bash
-export NODE_ENV=production
-export DATABASE_URL=<your-postgresql-connection-string>
-# 또는 .env 파일에 설정
+cp .env.example .env
+```
+
+`.env` 파일에서 다음 값들을 설정:
+```
+NODE_ENV=production
+PORT=5000
+DATABASE_URL=<your-postgresql-connection-string>
+SESSION_SECRET=<secure-random-string>
 ```
 
 ### 4. 프로젝트 빌드
 ```bash
-npm run build
+pnpm run build
 ```
 
 ### 5. 프로덕션 서버 실행
 ```bash
-npm start
+pnpm start
 ```
 
-서버는 기본적으로 포트 5000에서 실행됩니다.
-
-### 6. 포트 변경 (선택사항)
-다른 포트에서 실행하려면:
-```bash
-PORT=3000 npm start
-```
+서버는 `.env` 파일에 설정된 포트에서 실행됩니다 (기본값: 5000).
 
 ## Docker를 사용한 배포
 
@@ -76,16 +84,19 @@ Docker를 사용하여 배포하는 경우, 다음 사항들을 고려하세요:
 
 ### Dockerfile 작성 시 권장사항
 - Node.js 20 이상 사용
-- `npm ci` 사용하여 프로덕션 의존성만 설치
+- pnpm 패키지 매니저 사용
+- `pnpm install --frozen-lockfile` 사용하여 프로덕션 의존성 설치
 - 멀티 스테이지 빌드로 이미지 크기 최적화
 - 포트 5000 노출
+- .env 파일을 컨테이너에 복사하거나 환경 변수로 설정
 
 ### 환경 변수
-컨테이너 실행 시 다음 환경 변수를 설정하세요:
+컨테이너 실행 시 .env 파일을 마운트하거나 다음 환경 변수를 설정하세요:
 ```bash
 -e NODE_ENV=production
--e DATABASE_URL=<postgresql-connection-string>
 -e PORT=5000
+-e DATABASE_URL=<postgresql-connection-string>
+-e SESSION_SECRET=<secure-random-string>
 ```
 
 ## 프로젝트 구조
