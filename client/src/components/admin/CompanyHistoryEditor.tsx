@@ -200,7 +200,16 @@ export default function CompanyHistoryEditor({ initialData }: CompanyHistoryEdit
                                 {form.watch(`timeline.${index}.title`) || `이벤트 ${index + 1}`}
                               </div>
                               <div className="text-sm text-gray-500">
-                                {form.watch(`timeline.${index}.date`) || "날짜 미입력"}
+                                {(() => {
+                                  const year = form.watch(`timeline.${index}.year`);
+                                  const date = form.watch(`timeline.${index}.date`);
+                                  // date에서 월 추출 (예: "2024.05" -> "05")
+                                  const month = date && date.includes('.') ? date.split('.')[1] : '';
+                                  if (year && month) {
+                                    return `${year}.${month.padStart(2, '0')}`;
+                                  }
+                                  return date || "날짜 미입력";
+                                })()}
                               </div>
                             </div>
                           </div>
@@ -216,18 +225,39 @@ export default function CompanyHistoryEditor({ initialData }: CompanyHistoryEdit
                         <AccordionContent className="px-4 pb-4 space-y-3">
                           <div className="grid gap-2 md:grid-cols-3">
                             <div>
-                              <Label>날짜</Label>
-                              <Input
-                                {...form.register(`timeline.${index}.date`)}
-                                placeholder="2024.01"
-                              />
-                            </div>
-                            <div>
                               <Label>연도</Label>
                               <Input
                                 type="number"
-                                {...form.register(`timeline.${index}.year`, { valueAsNumber: true })}
+                                {...form.register(`timeline.${index}.year`, { 
+                                  valueAsNumber: true,
+                                  onChange: (e) => {
+                                    const year = e.target.value;
+                                    const date = form.watch(`timeline.${index}.date`);
+                                    const month = date && date.includes('.') ? date.split('.')[1] : '';
+                                    if (year && month) {
+                                      form.setValue(`timeline.${index}.date`, `${year}.${month}`);
+                                    }
+                                  }
+                                })}
                                 placeholder="2024"
+                              />
+                            </div>
+                            <div>
+                              <Label>월</Label>
+                              <Input
+                                value={(() => {
+                                  const date = form.watch(`timeline.${index}.date`);
+                                  return date && date.includes('.') ? date.split('.')[1] : '';
+                                })()}
+                                onChange={(e) => {
+                                  const year = form.watch(`timeline.${index}.year`);
+                                  const month = e.target.value;
+                                  if (year && month) {
+                                    const paddedMonth = month.padStart(2, '0');
+                                    form.setValue(`timeline.${index}.date`, `${year}.${paddedMonth}`);
+                                  }
+                                }}
+                                placeholder="01 또는 1"
                               />
                             </div>
                             <div>
