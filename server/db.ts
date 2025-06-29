@@ -15,7 +15,7 @@ export const AppDataSource = new DataSource({
   entities: [User, SiteContent],
   synchronize: false, // 마이그레이션을 통해서만 테이블 관리
   logging: process.env.NODE_ENV === 'development',
-  migrations: ["dist/migrations/*.js"],
+  migrations: ["migrations/*.ts"],
   migrationsTableName: "migrations",
   ssl: process.env.NODE_ENV === 'production' ? {
     rejectUnauthorized: false
