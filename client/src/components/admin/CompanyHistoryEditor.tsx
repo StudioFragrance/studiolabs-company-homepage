@@ -19,6 +19,7 @@ const companyHistorySchema = z.object({
   timeline: z.array(z.object({
     date: z.string().min(1, "날짜는 필수입니다"),
     year: z.number().min(2000, "유효한 연도를 입력해주세요"),
+    month: z.number().min(1).max(12),
     icon: z.string().min(1, "아이콘은 필수입니다"),
     title: z.string().min(1, "제목은 필수입니다"),
     description: z.string().min(1, "설명은 필수입니다"),
@@ -35,6 +36,7 @@ interface CompanyHistoryEditorProps {
     timeline: {
       date: string;
       year: number;
+      month: number;
       icon: string;
       title: string;
       description: string;
@@ -174,7 +176,8 @@ export default function CompanyHistoryEditor({ initialData }: CompanyHistoryEdit
                     size="sm"
                     onClick={() => appendTimeline({ 
                       date: "", 
-                      year: new Date().getFullYear(), 
+                      year: new Date().getFullYear(),
+                      month: new Date().getMonth() + 1,
                       icon: "fa-building", 
                       title: "", 
                       description: "",
@@ -202,13 +205,11 @@ export default function CompanyHistoryEditor({ initialData }: CompanyHistoryEdit
                               <div className="text-sm text-gray-500">
                                 {(() => {
                                   const year = form.watch(`timeline.${index}.year`);
-                                  const date = form.watch(`timeline.${index}.date`);
-                                  // date에서 월 추출 (예: "2024.05" -> "05")
-                                  const month = date && date.includes('.') ? date.split('.')[1] : '';
+                                  const month = form.watch(`timeline.${index}.month`);
                                   if (year && month) {
-                                    return `${year}.${month.padStart(2, '0')}`;
+                                    return `${year}.${month.toString().padStart(2, '0')}`;
                                   }
-                                  return date || "날짜 미입력";
+                                  return "날짜 미입력";
                                 })()}
                               </div>
                             </div>
@@ -245,19 +246,21 @@ export default function CompanyHistoryEditor({ initialData }: CompanyHistoryEdit
                             <div>
                               <Label>월</Label>
                               <Input
-                                value={(() => {
-                                  const date = form.watch(`timeline.${index}.date`);
-                                  return date && date.includes('.') ? date.split('.')[1] : '';
-                                })()}
-                                onChange={(e) => {
-                                  const year = form.watch(`timeline.${index}.year`);
-                                  const month = e.target.value;
-                                  if (year && month) {
-                                    const paddedMonth = month.padStart(2, '0');
-                                    form.setValue(`timeline.${index}.date`, `${year}.${paddedMonth}`);
+                                type="number"
+                                min="1"
+                                max="12"
+                                {...form.register(`timeline.${index}.month`, { 
+                                  valueAsNumber: true,
+                                  onChange: (e) => {
+                                    const year = form.watch(`timeline.${index}.year`);
+                                    const month = e.target.value;
+                                    if (year && month) {
+                                      const paddedMonth = month.toString().padStart(2, '0');
+                                      form.setValue(`timeline.${index}.date`, `${year}.${paddedMonth}`);
+                                    }
                                   }
-                                }}
-                                placeholder="01 또는 1"
+                                })}
+                                placeholder="1-12"
                               />
                             </div>
                             <div>

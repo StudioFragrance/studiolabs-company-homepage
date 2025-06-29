@@ -96,7 +96,10 @@ export default function CompanyHistorySection() {
                       <div className={`text-sm font-medium mb-2 ${
                         event.isFuture ? 'text-gray-400' : 'text-brand-coral'
                       }`}>
-                        {event.date}
+                        {event.year && event.month 
+                          ? `${event.year}.${event.month.toString().padStart(2, '0')}`
+                          : event.date
+                        }
                       </div>
                       <h3 className={`font-semibold mb-2 ${
                         event.isFuture ? 'text-gray-500' : 'text-gray-900'
