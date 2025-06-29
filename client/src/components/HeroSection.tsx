@@ -1,13 +1,37 @@
 import { motion } from 'framer-motion';
 import { siteConfig } from '@shared/siteConfig';
+import { useSiteContent } from '@/hooks/useSiteContent';
 
 export default function HeroSection() {
+  const { data: heroContent, isLoading, error } = useSiteContent('hero');
+  
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  // Fallback to siteConfig if database content is not available
+  const content = heroContent?.data || siteConfig.hero;
+  
+  // Type assertion for content to ensure proper typing
+  const heroData = content as typeof siteConfig.hero;
+
+  if (isLoading) {
+    return (
+      <section className="min-h-screen flex items-center justify-center relative overflow-hidden bg-brand-cream">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-primary mx-auto"></div>
+          <p className="mt-4 text-brand-primary">로딩 중...</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    console.warn('Failed to load hero content from database, using fallback:', error);
+  }
 
   return (
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden bg-brand-cream">
@@ -31,7 +55,7 @@ export default function HeroSection() {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="text-lg text-gray-600 mb-4 font-light"
           >
-            {siteConfig.hero.subtitle}
+            {heroData.subtitle}
           </motion.p>
           
           <motion.h1
@@ -49,7 +73,7 @@ export default function HeroSection() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4, duration: 0.6 }}
             >
-              {Array.from(siteConfig.hero.mainTitle.line1).map((char, index) => (
+              {Array.from(heroData.mainTitle.line1).map((char: string, index: number) => (
                 <motion.span
                   key={index}
                   initial={{ opacity: 0 }}
@@ -66,7 +90,7 @@ export default function HeroSection() {
               animate={{ opacity: 1 }}
               transition={{ delay: 1.2, duration: 0.6 }}
             >
-              {Array.from(siteConfig.hero.mainTitle.line2).map((char, index) => (
+              {Array.from(heroData.mainTitle.line2).map((char: string, index: number) => (
                 <motion.span
                   key={index}
                   initial={{ opacity: 0 }}
@@ -89,7 +113,7 @@ export default function HeroSection() {
           >
 
             <motion.a
-              href={siteConfig.hero.ctaButton.url}
+              href={heroData.ctaButton.url}
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.05, y: -2 }}
@@ -97,7 +121,7 @@ export default function HeroSection() {
               className="border-2 border-brand-coral text-brand-coral px-8 py-4 rounded-full hover:bg-brand-coral hover:text-white transition-all font-medium shadow-lg hover:shadow-xl inline-block"
             >
               <i className="fas fa-robot mr-2" />
-              {siteConfig.hero.ctaButton.text}
+              {heroData.ctaButton.text}
             </motion.a>
           </motion.div>
         </motion.div>

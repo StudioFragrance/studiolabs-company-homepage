@@ -1,17 +1,5 @@
-import { pgTable, text, serial, integer, boolean } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
-import { z } from "zod";
+// TypeORM 엔터티를 사용하므로 이 파일은 더 이상 필요하지 않습니다.
+// 타입 정의는 server/entities/ 폴더의 엔터티 파일들에서 가져옵니다.
 
-export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
-  username: text("username").notNull().unique(),
-  password: text("password").notNull(),
-});
-
-export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  password: true,
-});
-
-export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = typeof users.$inferSelect;
+export { User, type InsertUser } from "../server/entities/User";
+export { SiteContent, type InsertSiteContent } from "../server/entities/SiteContent";
