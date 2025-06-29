@@ -6,7 +6,7 @@ AI 기술을 활용한 개인 맞춤형 향수 추천 웹 애플리케이션입�
 
 - **Frontend**: React 18, TypeScript, Tailwind CSS, shadcn/ui
 - **Backend**: Node.js, Express.js, TypeScript
-- **데이터 저장**: 인메모리 스토리지 (MemStorage)
+- **데이터베이스**: TypeORM + PostgreSQL (Docker 네트워크 지원)
 - **빌드 도구**: Vite, ESBuild
 - **상태 관리**: TanStack Query
 - **애니메이션**: Framer Motion
@@ -82,28 +82,121 @@ pnpm start
 
 ## Docker를 사용한 배포
 
-Docker를 사용하여 배포하는 경우, 다음 사항들을 고려하세요:
+### Docker Compose를 사용한 전체 스택 배포
 
-### Dockerfile 작성 시 권장사항
-- Node.js 20 이상 사용
-- pnpm 패키지 매니저 사용
-- `pnpm install --frozen-lockfile` 사용하여 프로덕션 의존성 설치
-- 멀티 스테이지 빌드로 이미지 크기 최적화
-- 포트 5000 노출
-- .env 파일을 컨테이너에 복사하거나 환경 변수로 설정
+본 프로젝트는 PostgreSQL 데이터베이스와 함께 Docker 네트워크를 통해 배포할 수 있습니다.
 
-### 환경 변수
-Docker Compose 사용 시 자동으로 설정됩니다:
-- `DOCKER=true` (0.0.0.0 바인딩 강제)
-- `NODE_ENV=production`
-
-수동 실행 시:
+#### 1. Docker Compose로 전체 시스템 실행
 ```bash
-docker run -p 5000:5000 -e DOCKER=true -e NODE_ENV=production <image-name>
+# PostgreSQL과 애플리케이션을 함께 실행
+docker compose up --build
+
+# 백그라운드 실행
+docker compose up -d --build
 ```
 
-### Docker 실행 확인
-컨테이너가 올바르게 실행되면 `http://localhost:5000`에서 접근 가능합니다.
+#### 2. 개별 서비스 관리
+```bash
+# PostgreSQL만 실행
+docker compose up -d postgres
+
+# 애플리케이션만 빌드 및 실행
+docker compose up --build app
+
+# 모든 서비스 중지
+docker compose down
+
+# 볼륨까지 완전 삭제
+docker compose down -v
+```
+
+#### 3. 로그 확인
+```bash
+# 전체 로그 확인
+docker compose logs -f
+
+# 특정 서비스 로그
+docker compose logs -f app
+docker compose logs -f postgres
+```
+
+### Docker 네트워크 구성
+
+- **네트워크명**: `studiofragrance_network`
+- **PostgreSQL 컨테이너**: `studiofragrance_db`
+- **애플리케이션 컨테이너**: `studiofragrance_app`
+- **내부 통신**: `postgres:5432` (컨테이너 간 통신)
+- **외부 접근**: `localhost:5432` (PostgreSQL), `localhost:5000` (애플리케이션)
+
+### 환경 변수
+
+Docker Compose에서 자동 설정되는 환경 변수:
+```bash
+# 애플리케이션
+NODE_ENV=production
+PORT=5000
+DATABASE_URL=postgresql://postgres:postgres123@postgres:5432/studiofragrance
+
+# PostgreSQL
+POSTGRES_DB=studiofragrance
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres123
+```
+
+### 데이터 지속성
+
+- PostgreSQL 데이터는 `studiofragrance_postgres_data` 볼륨에 저장
+- 컨테이너 재시작 시에도 데이터 유지
+- 완전 초기화가 필요한 경우: `docker compose down -v`
+
+### 수동 Docker 실행
+
+Docker Compose 없이 개별 실행하는 경우:
+
+```bash
+# 1. PostgreSQL 컨테이너 실행
+docker run -d \
+  --name studiofragrance_db \
+  --network studiofragrance_network \
+  -e POSTGRES_DB=studiofragrance \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=postgres123 \
+  -p 5432:5432 \
+  postgres:15-alpine
+
+# 2. 애플리케이션 컨테이너 빌드
+docker build -t studiofragrance_app .
+
+# 3. 애플리케이션 컨테이너 실행
+docker run -d \
+  --name studiofragrance_app \
+  --network studiofragrance_network \
+  -e NODE_ENV=production \
+  -e DATABASE_URL=postgresql://postgres:postgres123@postgres:5432/studiofragrance \
+  -p 5000:5000 \
+  studiofragrance_app
+```
+
+### 트러블슈팅
+
+**데이터베이스 연결 실패 시:**
+```bash
+# PostgreSQL 컨테이너 상태 확인
+docker compose ps postgres
+
+# PostgreSQL 헬스체크 확인
+docker compose logs postgres | grep "ready to accept"
+
+# 애플리케이션 로그에서 연결 오류 확인
+docker compose logs app | grep -i "database"
+```
+
+**포트 충돌 시:**
+```bash
+# docker-compose.yml에서 포트 변경
+ports:
+  - "8080:5000"  # 로컬 8080 → 컨테이너 5000
+```
 
 ## 프로젝트 구조
 
@@ -121,18 +214,41 @@ docker run -p 5000:5000 -e DOCKER=true -e NODE_ENV=production <image-name>
 └── package.json
 ```
 
-## 데이터 저장
+## 데이터베이스 관리
 
-현재 프로젝트는 **인메모리 스토리지(MemStorage)**를 사용하여 데이터를 저장합니다.
-- 서버 재시작 시 데이터가 초기화됩니다
-- 개발 단계에 적합한 간단한 저장 방식입니다
-- 향후 PostgreSQL 데이터베이스로 전환 가능하도록 인터페이스가 설계되어 있습니다
+현재 프로젝트는 **TypeORM + PostgreSQL**을 사용하여 데이터를 관리합니다.
 
-### 데이터베이스로 전환 (선택사항)
-PostgreSQL을 사용하려면:
-1. `DATABASE_URL` 환경변수 설정
-2. 스키마 적용: `pnpm run db:push`
-3. `server/storage.ts`에서 실제 데이터베이스 연결 구현
+### 데이터베이스 구조
+
+**엔터티:**
+- `User`: 사용자 정보 (id, username, password)
+- `SiteContent`: 사이트 콘텐츠 관리 (id, key, data, createdAt, updatedAt)
+
+**주요 특징:**
+- TypeORM의 `synchronize: true`로 자동 테이블 생성
+- JSON 타입으로 유연한 콘텐츠 저장
+- 환경별 데이터베이스 연결 설정 자동화
+
+### 데이터베이스 API
+
+**사이트 콘텐츠 관리:**
+```bash
+GET /api/site-content/:key      # 특정 콘텐츠 조회
+GET /api/site-content           # 전체 콘텐츠 조회
+POST /api/site-content          # 새 콘텐츠 생성
+PUT /api/site-content/:key      # 콘텐츠 업데이트
+```
+
+### 콘텐츠 관리 시스템
+
+사이트의 모든 텍스트 콘텐츠는 데이터베이스에서 동적으로 관리됩니다:
+- Hero 섹션 (제목, 부제목, 설명)
+- 브랜드 스토리 및 통계
+- 회사 히스토리 타임라인
+- 미션/비전/핵심가치
+- 연락처 정보
+
+데이터베이스 오류 시 `shared/siteConfig.ts`의 기본값으로 폴백합니다.
 
 ## 주요 기능
 

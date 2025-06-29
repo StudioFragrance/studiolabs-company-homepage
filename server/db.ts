@@ -13,10 +13,15 @@ export const AppDataSource = new DataSource({
   type: "postgres",
   url: process.env.DATABASE_URL,
   entities: [User, SiteContent],
-  synchronize: true, // 개발 환경에서만 사용, 운영에서는 false
-  logging: false,
-  ssl: {
+  synchronize: true, // TypeORM이 자동으로 테이블 생성
+  logging: process.env.NODE_ENV === 'development',
+  ssl: process.env.NODE_ENV === 'production' ? {
     rejectUnauthorized: false
+  } : false,
+  // Docker 네트워크 연결을 위한 추가 설정
+  connectTimeoutMS: 60000,
+  extra: {
+    connectionLimit: 10,
   }
 });
 

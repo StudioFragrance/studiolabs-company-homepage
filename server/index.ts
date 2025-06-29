@@ -68,7 +68,7 @@ app.use((req, res, next) => {
   
   // Use appropriate host based on environment
   // 0.0.0.0 for Replit/cloud/Docker environments, localhost for local development
-  const isCloudEnvironment = process.env.REPL_ID || process.env.RAILWAY_ENVIRONMENT || process.env.RENDER || process.env.VERCEL || process.env.DOCKER;
+  const isCloudEnvironment = process.env.REPL_ID || process.env.RAILWAY_ENVIRONMENT || process.env.RENDER || process.env.VERCEL || process.env.NODE_ENV === 'production';
   const host = isCloudEnvironment ? "0.0.0.0" : "localhost";
   
   server.listen({
