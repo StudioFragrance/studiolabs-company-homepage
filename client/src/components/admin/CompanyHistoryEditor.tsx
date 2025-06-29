@@ -187,26 +187,25 @@ export default function CompanyHistoryEditor({ initialData }: CompanyHistoryEdit
                 </div>
                 
                 <div className="max-h-96 overflow-y-auto">
-                  <Accordion type="multiple" className="space-y-2">
+                  <Accordion type="multiple" className="space-y-4">
                     {timelineFields.map((field, index) => (
-                      <AccordionItem key={field.id} value={`event-${index}`} className="border rounded-lg">
-                        <div className="flex items-center justify-between p-4 border-b">
-                          <AccordionTrigger className="flex-1 text-left [&[data-state=open]>div>svg]:rotate-180">
-                            <div className="flex items-center space-x-3">
-                              <div className="flex items-center justify-center w-8 h-8 bg-brand-coral rounded-full">
-                                <i className={`fas ${form.watch(`timeline.${index}.icon`) || 'fa-building'} text-white text-sm`}></i>
+                      <AccordionItem key={field.id} value={`event-${index}`} className="border rounded-lg shadow-sm">
+                        <div className="flex items-center p-4">
+                          <div className="flex items-center space-x-3 flex-1">
+                            <div className="flex items-center justify-center w-8 h-8 bg-brand-coral rounded-full">
+                              <i className={`fas ${form.watch(`timeline.${index}.icon`) || 'fa-building'} text-white text-sm`}></i>
+                            </div>
+                            <div className="flex-1">
+                              <div className="font-medium">
+                                {form.watch(`timeline.${index}.title`) || `이벤트 ${index + 1}`}
                               </div>
-                              <div>
-                                <div className="font-medium">
-                                  {form.watch(`timeline.${index}.title`) || `이벤트 ${index + 1}`}
-                                </div>
-                                <div className="text-sm text-gray-500">
-                                  {form.watch(`timeline.${index}.date`) || "날짜 미입력"}
-                                </div>
+                              <div className="text-sm text-gray-500">
+                                {form.watch(`timeline.${index}.date`) || "날짜 미입력"}
                               </div>
                             </div>
-                          </AccordionTrigger>
-                          <div className="flex items-center space-x-2 ml-4">
+                          </div>
+                          
+                          <div className="flex items-center space-x-2 mr-2">
                             {form.watch(`timeline.${index}.isFuture`) && (
                               <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
                                 예정
@@ -223,6 +222,9 @@ export default function CompanyHistoryEditor({ initialData }: CompanyHistoryEdit
                               </Button>
                             )}
                           </div>
+                          
+                          <AccordionTrigger className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded-md transition-colors">
+                          </AccordionTrigger>
                         </div>
                         <AccordionContent className="px-4 pb-4 space-y-3">
                           <div className="grid gap-2 md:grid-cols-3">
