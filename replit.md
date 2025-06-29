@@ -113,6 +113,8 @@ Studio fragrance is a modern web application that provides personalized fragranc
 - Future-ready for database integration when needed
 
 ## Changelog
+- June 29, 2025: **siteConfig 파일 정리 완료** - 사용되지 않는 company 섹션 제거로 설정 파일 간소화
+- June 29, 2025: **프론트엔드 타입 안전성 개선** - HeroSection의 mainTitle 접근 시 null 체크 추가
 - June 29, 2025: **Docker 자동 데이터 시딩 추가** - 컨테이너 시작 시 초기 사이트 콘텐츠 자동 생성으로 빈 웹사이트 문제 해결
 - June 29, 2025: **TypeScript 마이그레이션 컴파일 문제 해결** - Docker 빌드에서 마이그레이션 파일을 JS로 컴파일하도록 수정
 - June 29, 2025: **Docker SSL 연결 오류 해결** - PostgreSQL 컨테이너에서 SSL 비활성화로 연결 문제 해결
