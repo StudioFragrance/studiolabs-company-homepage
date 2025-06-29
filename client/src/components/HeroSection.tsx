@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { siteConfig } from '@shared/siteConfig';
 
 export default function HeroSection() {
   const scrollToSection = (sectionId: string) => {
@@ -14,7 +15,7 @@ export default function HeroSection() {
       <div 
         className="absolute inset-0 parallax opacity-10"
         style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1615611563049-e9c2d5c19bd8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080')",
+          backgroundImage: `url('${siteConfig.hero.backgroundImage}')`,
         }}
       />
       
@@ -30,7 +31,7 @@ export default function HeroSection() {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="text-lg text-gray-600 mb-4 font-light"
           >
-            손쉽게 찾는 나를 위한 향
+            {siteConfig.hero.subtitle}
           </motion.p>
           
           <motion.h1
@@ -48,7 +49,7 @@ export default function HeroSection() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4, duration: 0.6 }}
             >
-              {Array.from("당신의 취향을 읽다,").map((char, index) => (
+              {Array.from(siteConfig.hero.mainTitle.line1).map((char, index) => (
                 <motion.span
                   key={index}
                   initial={{ opacity: 0 }}
@@ -65,7 +66,7 @@ export default function HeroSection() {
               animate={{ opacity: 1 }}
               transition={{ delay: 1.2, duration: 0.6 }}
             >
-              {Array.from("완벽한 향을 건네다").map((char, index) => (
+              {Array.from(siteConfig.hero.mainTitle.line2).map((char, index) => (
                 <motion.span
                   key={index}
                   initial={{ opacity: 0 }}
@@ -88,7 +89,7 @@ export default function HeroSection() {
           >
 
             <motion.a
-              href="https://www.studiofragrance.co.kr"
+              href={siteConfig.hero.ctaButton.url}
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.05, y: -2 }}
@@ -96,7 +97,7 @@ export default function HeroSection() {
               className="border-2 border-brand-coral text-brand-coral px-8 py-4 rounded-full hover:bg-brand-coral hover:text-white transition-all font-medium shadow-lg hover:shadow-xl inline-block"
             >
               <i className="fas fa-robot mr-2" />
-              향수 추천 받기
+              {siteConfig.hero.ctaButton.text}
             </motion.a>
           </motion.div>
         </motion.div>

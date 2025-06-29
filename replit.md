@@ -104,6 +104,9 @@ Studio fragrance is a modern web application that provides personalized fragranc
 - Future-ready for database integration when needed
 
 ## Changelog
+- June 29, 2025: 중앙 집중식 사이트 콘텐츠 관리 시스템 구축 완료 - shared/siteConfig.ts로 모든 텍스트 콘텐츠 통합 관리
+- June 29, 2025: 모든 React 컴포넌트를 설정 파일 기반으로 리팩토링 완료 (Hero, BrandStory, CompanyHistory, MVC, Contact, Footer)
+- June 29, 2025: 배포 후 데이터 변경 가능한 구조 완성 - 코드 수정 없이 siteConfig.ts 파일만 편집하여 콘텐츠 관리 가능
 - June 29, 2025: Docker 배포 문제 해결 - 로컬/클라우드 환경별 호스트 바인딩 및 런타임 의존성 최적화
 - June 29, 2025: 서버 호스트 바인딩을 환경별로 자동 선택 (로컬: localhost, 클라우드: 0.0.0.0)
 - June 29, 2025: README.md 업데이트 완료 - 현재 인메모리 스토리지 사용 상태 반영, npm 명령어를 pnpm으로 변경

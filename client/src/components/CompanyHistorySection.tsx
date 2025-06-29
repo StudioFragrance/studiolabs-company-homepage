@@ -1,58 +1,6 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-
-const timelineData = [
-  {
-    date: '2024.01',
-    title: '업무협약 체결',
-    description: 'JEON',
-    icon: 'fa-handshake',
-    year: 2024,
-  },
-  {
-    date: '2024.02',
-    title: '창업진흥원 창업지원사업 선정',
-    description: '정에하드 창업물굴 사무실자리',
-    icon: 'fa-building',
-    year: 2024,
-  },
-  {
-    date: '2024.02',
-    title: '1인창조기업 등록',
-    description: 'CENTOP',
-    icon: 'fa-certificate',
-    year: 2024,
-  },
-  {
-    date: '2024.05',
-    title: '사업자등록',
-    description: '개인사업자 등록',
-    icon: 'fa-stamp',
-    year: 2024,
-  },
-  {
-    date: '2024.10',
-    title: 'Outsourcing 서비스 개시',
-    description: '외주 서비스 시작',
-    icon: 'fa-rocket',
-    year: 2024,
-  },
-  {
-    date: '2024.11',
-    title: '업무협약 체결',
-    description: 'CHELP',
-    icon: 'fa-handshake',
-    year: 2024,
-  },
-  {
-    date: '2025.02',
-    title: 'Fragrance BETA 서비스 출시',
-    description: 'https://www.studiofragrance.co.kr/',
-    icon: 'fa-flask',
-    year: 2025,
-    isFuture: false,
-  },
-];
+import { siteConfig } from '@shared/siteConfig';
 
 export default function CompanyHistorySection() {
   const [isVisible, setIsVisible] = useState(false);
@@ -82,8 +30,8 @@ export default function CompanyHistorySection() {
           transition={{ duration: 0.8 }}
         >
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-korean font-bold gradient-text mb-4">회사 연혁</h2>
-            <p className="text-lg text-gray-600">Studio fragrance의 성장 여정</p>
+            <h2 className="text-4xl font-korean font-bold gradient-text mb-4">{siteConfig.companyHistory.title}</h2>
+            <p className="text-lg text-gray-600">{siteConfig.companyHistory.subtitle}</p>
           </div>
           
           <div className="relative">
@@ -100,7 +48,7 @@ export default function CompanyHistorySection() {
                 <h3 className="text-3xl font-korean font-bold text-brand-coral bg-white inline-block px-6 py-2 rounded-full shadow-md">2024</h3>
               </motion.div>
               <div className="space-y-8">
-                {timelineData.filter(item => item.year === 2024).map((item, index) => (
+                {siteConfig.companyHistory.timeline.filter(item => item.year === 2024).map((item, index) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, x: -50 }}
@@ -141,7 +89,7 @@ export default function CompanyHistorySection() {
                 <h3 className="text-3xl font-korean font-bold text-white bg-gradient-to-r from-brand-coral to-orange-400 inline-block px-6 py-2 rounded-full shadow-md">2025</h3>
               </motion.div>
               <div className="space-y-8">
-                {timelineData.filter(item => item.year === 2025).map((item, index) => (
+                {siteConfig.companyHistory.timeline.filter(item => item.year === 2025).map((item, index) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, x: -50 }}
