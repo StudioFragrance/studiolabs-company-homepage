@@ -15,8 +15,19 @@ export default function HeroSection() {
   // Fallback to siteConfig if database content is not available
   const content = heroContent?.data || siteConfig.hero;
   
-  // Type assertion for content to ensure proper typing
-  const heroData = content as typeof siteConfig.hero;
+  // Ensure all required fields exist with proper fallbacks
+  const heroData = {
+    subtitle: content?.subtitle || siteConfig.hero.subtitle,
+    mainTitle: {
+      line1: content?.mainTitle?.line1 || siteConfig.hero.mainTitle.line1,
+      line2: content?.mainTitle?.line2 || siteConfig.hero.mainTitle.line2
+    },
+    ctaButton: {
+      text: content?.ctaButton?.text || siteConfig.hero.ctaButton.text,
+      url: content?.ctaButton?.url || siteConfig.hero.ctaButton.url
+    },
+    backgroundImage: content?.backgroundImage || siteConfig.hero.backgroundImage
+  };
 
   if (isLoading) {
     return (
