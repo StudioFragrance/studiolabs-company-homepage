@@ -46,16 +46,45 @@ export default function CompanyHistorySection() {
             {/* 중앙 선 */}
             <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-brand-coral h-full"></div>
             
-            <div className="space-y-8">
-              {companyHistoryData.timeline.map((event: any, index: number) => (
-                <motion.div 
-                  key={index}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                  animate={isVisible ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: 0.2 + index * 0.1, duration: 0.6 }}
-                  className={`flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}
-                >
-                  <div className={`w-5/12 ${index % 2 === 0 ? 'text-right pr-8' : 'text-left pl-8'}`}>
+            <div className="space-y-12">
+              {(() => {
+                // 연도별로 그룹핑
+                const groupedByYear: { [key: string]: any[] } = {};
+                companyHistoryData.timeline.forEach((event: any) => {
+                  if (!groupedByYear[event.year]) {
+                    groupedByYear[event.year] = [];
+                  }
+                  groupedByYear[event.year].push(event);
+                });
+                
+                return Object.keys(groupedByYear)
+                  .sort((a, b) => parseInt(a) - parseInt(b))
+                  .map((year) => (
+                    <div key={year} className="space-y-8">
+                      {/* 연도 헤더 */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={isVisible ? { opacity: 1, y: 0 } : {}}
+                        transition={{ delay: 0.2, duration: 0.6 }}
+                        className="relative flex justify-center"
+                      >
+                        <div className="bg-brand-coral text-white px-6 py-2 rounded-full font-bold text-lg shadow-lg z-10">
+                          {year}
+                        </div>
+                      </motion.div>
+                      
+                      {/* 해당 연도의 이벤트들 */}
+                      {groupedByYear[year].map((event: any, eventIndex: number) => {
+                        const overallIndex = companyHistoryData.timeline.indexOf(event);
+                        return (
+                          <motion.div 
+                            key={eventIndex}
+                            initial={{ opacity: 0, x: overallIndex % 2 === 0 ? -50 : 50 }}
+                            animate={isVisible ? { opacity: 1, x: 0 } : {}}
+                            transition={{ delay: 0.3 + overallIndex * 0.1, duration: 0.6 }}
+                            className={`flex items-center ${overallIndex % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}
+                          >
+                  <div className={`w-5/12 ${overallIndex % 2 === 0 ? 'text-right pr-8' : 'text-left pl-8'}`}>
                     <motion.div 
                       whileHover={event.isFuture ? {} : { scale: 1.02, y: -2 }}
                       className={`border rounded-lg p-4 shadow-md transition-all duration-300 ${
@@ -101,7 +130,11 @@ export default function CompanyHistorySection() {
                   
                   <div className="w-5/12"></div>
                 </motion.div>
-              ))}
+                        );
+                      })}
+                    </div>
+                  ));
+              })()}
             </div>
           </div>
         </motion.div>
