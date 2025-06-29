@@ -20,11 +20,11 @@ Studio fragrance is a modern web application that provides personalized fragranc
 - **Development**: Hot reloading with Vite integration
 - **Build System**: ESBuild for production builds
 
-### Database Layer
-- **ORM**: Drizzle ORM with PostgreSQL dialect
-- **Database**: PostgreSQL (via Neon Database serverless)
-- **Schema Management**: Drizzle Kit for migrations
-- **Storage Interface**: Abstract storage layer with in-memory implementation for development
+### Data Storage Layer
+- **Current Implementation**: In-memory storage (MemStorage)
+- **Schema Design**: Drizzle ORM with PostgreSQL dialect (prepared for future use)
+- **Storage Interface**: Abstract IStorage interface for easy database migration
+- **Development**: All data stored in memory, resets on server restart
 
 ## Key Components
 
@@ -74,10 +74,11 @@ Studio fragrance is a modern web application that provides personalized fragranc
 ## External Dependencies
 
 ### Core Technologies
-- **Database**: Neon Database (PostgreSQL serverless)
-- **Fonts**: Google Fonts (Noto Sans KR, Playfair Display)
-- **Icons**: Font Awesome 6.4.0
-- **Images**: Unsplash for placeholder content
+- **Package Manager**: pnpm (migrated from npm)
+- **Data Storage**: In-memory storage (no external database currently)
+- **Fonts**: Custom Korean fonts (LINE Seed KR family)
+- **Icons**: Lucide React icons
+- **Development**: Replit environment with hot reloading
 
 ### Development Tools
 - **Replit Integration**: Cartographer plugin and runtime error modal
@@ -98,11 +99,12 @@ Studio fragrance is a modern web application that provides personalized fragranc
 - PostgreSQL database connection via environment variables
 
 ### Environment Configuration
-- `NODE_ENV` for environment detection
-- `DATABASE_URL` for PostgreSQL connection
-- `REPL_ID` for Replit-specific features
+- `NODE_ENV` for environment detection (development/production)
+- Simplified configuration with minimal environment variables
+- Future-ready for database integration when needed
 
 ## Changelog
+- June 29, 2025: README.md 업데이트 완료 - 현재 인메모리 스토리지 사용 상태 반영, npm 명령어를 pnpm으로 변경
 - June 29, 2025: 불필요한 환경변수 정리 완료 (PORT, DATABASE_URL, SESSION_SECRET 제거 - 현재 사용되지 않음)
 - June 29, 2025: dotenv 설정 추가하여 환경변수를 .env 파일로 관리하도록 개선
 - June 29, 2025: Successfully migrated from Replit Agent to standard Replit environment

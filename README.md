@@ -6,7 +6,7 @@ AI 기술을 활용한 개인 맞춤형 향수 추천 웹 애플리케이션입�
 
 - **Frontend**: React 18, TypeScript, Tailwind CSS, shadcn/ui
 - **Backend**: Node.js, Express.js, TypeScript
-- **Database**: PostgreSQL (Neon Database)
+- **데이터 저장**: 인메모리 스토리지 (MemStorage)
 - **빌드 도구**: Vite, ESBuild
 - **상태 관리**: TanStack Query
 - **애니메이션**: Framer Motion
@@ -27,9 +27,6 @@ cp .env.example .env
 `.env` 파일 예시:
 ```
 NODE_ENV=development
-PORT=5000
-DATABASE_URL=postgresql://username:password@localhost:5432/database_name
-SESSION_SECRET=your-secret-key-change-in-production
 ```
 
 ### 3. 개발 서버 실행
@@ -58,12 +55,9 @@ pnpm install
 cp .env.example .env
 ```
 
-`.env` 파일에서 다음 값들을 설정:
+`.env` 파일에서 다음 값을 설정:
 ```
 NODE_ENV=production
-PORT=5000
-DATABASE_URL=<your-postgresql-connection-string>
-SESSION_SECRET=<secure-random-string>
 ```
 
 ### 4. 프로젝트 빌드
@@ -94,9 +88,6 @@ Docker를 사용하여 배포하는 경우, 다음 사항들을 고려하세요:
 컨테이너 실행 시 .env 파일을 마운트하거나 다음 환경 변수를 설정하세요:
 ```bash
 -e NODE_ENV=production
--e PORT=5000
--e DATABASE_URL=<postgresql-connection-string>
--e SESSION_SECRET=<secure-random-string>
 ```
 
 ## 프로젝트 구조
@@ -115,17 +106,18 @@ Docker를 사용하여 배포하는 경우, 다음 사항들을 고려하세요:
 └── package.json
 ```
 
-## 데이터베이스 설정
+## 데이터 저장
 
-### PostgreSQL 연결
-- Neon Database 또는 다른 PostgreSQL 서비스 사용
-- `DATABASE_URL` 환경 변수에 연결 문자열 설정
+현재 프로젝트는 **인메모리 스토리지(MemStorage)**를 사용하여 데이터를 저장합니다.
+- 서버 재시작 시 데이터가 초기화됩니다
+- 개발 단계에 적합한 간단한 저장 방식입니다
+- 향후 PostgreSQL 데이터베이스로 전환 가능하도록 인터페이스가 설계되어 있습니다
 
-### 스키마 관리
-```bash
-# 마이그레이션 실행 (필요시)
-npm run db:migrate
-```
+### 데이터베이스로 전환 (선택사항)
+PostgreSQL을 사용하려면:
+1. `DATABASE_URL` 환경변수 설정
+2. 스키마 적용: `pnpm run db:push`
+3. `server/storage.ts`에서 실제 데이터베이스 연결 구현
 
 ## 주요 기능
 
