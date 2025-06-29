@@ -19,6 +19,10 @@ COPY . .
 # TypeScript 컴파일 및 클라이언트 빌드
 RUN pnpm run build
 
+# 마이그레이션 파일을 dist 폴더로 복사
+RUN mkdir -p dist/migrations
+RUN cp migrations/*.ts dist/migrations/
+
 # 포트 노출
 EXPOSE 5000
 
