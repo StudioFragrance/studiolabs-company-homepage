@@ -331,50 +331,78 @@ export default function CompanyHistoryEditor({ initialData }: CompanyHistoryEdit
                   {/* 중앙 선 */}
                   <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-brand-coral h-full"></div>
                   
-                  <div className="space-y-8">
-                    {watchedValues.timeline?.map((event, index) => (
-                      <div key={index} className={`flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}>
-                        <div className={`w-5/12 ${index % 2 === 0 ? 'text-right pr-8' : 'text-left pl-8'}`}>
-                          <div className={`border rounded-lg p-4 shadow-md ${
-                            event.isFuture 
-                              ? 'bg-gray-50 border-gray-300 opacity-60' 
-                              : 'bg-white border-gray-200'
-                          }`}>
-                            <div className={`text-sm font-medium mb-2 ${
-                              event.isFuture ? 'text-gray-400' : 'text-brand-coral'
-                            }`}>
-                              {event.date || "날짜"}
-                            </div>
-                            <h3 className={`font-semibold mb-2 ${
-                              event.isFuture ? 'text-gray-500' : 'text-gray-900'
-                            }`}>
-                              {event.title || "제목"}
-                            </h3>
-                            <p className={`text-sm ${
-                              event.isFuture ? 'text-gray-400' : 'text-gray-600'
-                            }`}>
-                              {event.description || "설명"}
-                            </p>
-                            {event.isFuture && (
-                              <div className="mt-2">
-                                <span className="inline-block bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded">
-                                  예정
-                                </span>
+                  <div className="space-y-12">
+                    {(() => {
+                      // 연도별로 그룹핑
+                      const groupedByYear: { [key: string]: any[] } = {};
+                      watchedValues.timeline?.forEach((event: any) => {
+                        if (!groupedByYear[event.year]) {
+                          groupedByYear[event.year] = [];
+                        }
+                        groupedByYear[event.year].push(event);
+                      });
+                      
+                      return Object.keys(groupedByYear)
+                        .sort((a, b) => parseInt(a) - parseInt(b))
+                        .map((year) => (
+                          <div key={year} className="space-y-8">
+                            {/* 연도 헤더 */}
+                            <div className="relative flex justify-center">
+                              <div className="bg-brand-coral text-white px-6 py-2 rounded-full font-bold text-lg shadow-lg z-10">
+                                {year}
                               </div>
-                            )}
+                            </div>
+                            
+                            {/* 해당 연도의 이벤트들 */}
+                            {groupedByYear[year].map((event: any, eventIndex: number) => {
+                              const overallIndex = watchedValues.timeline?.indexOf(event) || 0;
+                              return (
+                                <div key={eventIndex} className={`flex items-center ${overallIndex % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}>
+                                  <div className={`w-5/12 ${overallIndex % 2 === 0 ? 'text-right pr-8' : 'text-left pl-8'}`}>
+                                    <div className={`border rounded-lg p-4 shadow-md ${
+                                      event.isFuture 
+                                        ? 'bg-gray-50 border-gray-300 opacity-60' 
+                                        : 'bg-white border-gray-200'
+                                    }`}>
+                                      <div className={`text-sm font-medium mb-2 ${
+                                        event.isFuture ? 'text-gray-400' : 'text-brand-coral'
+                                      }`}>
+                                        {event.date || "날짜"}
+                                      </div>
+                                      <h3 className={`font-semibold mb-2 ${
+                                        event.isFuture ? 'text-gray-500' : 'text-gray-900'
+                                      }`}>
+                                        {event.title || "제목"}
+                                      </h3>
+                                      <p className={`text-sm ${
+                                        event.isFuture ? 'text-gray-400' : 'text-gray-600'
+                                      }`}>
+                                        {event.description || "설명"}
+                                      </p>
+                                      {event.isFuture && (
+                                        <div className="mt-2">
+                                          <span className="inline-block bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded">
+                                            예정
+                                          </span>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                  
+                                  {/* 중앙 아이콘 */}
+                                  <div className={`relative z-10 flex items-center justify-center w-10 h-10 rounded-full border-4 border-white shadow-lg ${
+                                    event.isFuture ? 'bg-gray-400' : 'bg-brand-coral'
+                                  }`}>
+                                    <i className={`fas ${event.icon} text-white text-sm`}></i>
+                                  </div>
+                                  
+                                  <div className="w-5/12"></div>
+                                </div>
+                              );
+                            })}
                           </div>
-                        </div>
-                        
-                        {/* 중앙 아이콘 */}
-                        <div className={`relative z-10 flex items-center justify-center w-10 h-10 rounded-full border-4 border-white shadow-lg ${
-                          event.isFuture ? 'bg-gray-400' : 'bg-brand-coral'
-                        }`}>
-                          <i className={`fas ${event.icon} text-white text-sm`}></i>
-                        </div>
-                        
-                        <div className="w-5/12"></div>
-                      </div>
-                    ))}
+                        ));
+                    })()}
                   </div>
                 </div>
               </div>
