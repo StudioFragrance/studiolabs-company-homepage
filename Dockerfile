@@ -19,9 +19,6 @@ COPY . .
 # TypeScript 컴파일 및 클라이언트 빌드
 RUN pnpm run build
 
-# 엔트리포인트 스크립트 실행 권한 설정
-RUN chmod +x docker-entrypoint.sh
-
 # 빌드 결과 확인 (디버깅용)
 RUN ls -la dist/
 
@@ -29,4 +26,4 @@ RUN ls -la dist/
 EXPOSE 5000
 
 # 데이터베이스 대기 후 마이그레이션 실행 및 애플리케이션 시작
-CMD ["/app/docker-entrypoint.sh"]
+CMD ["sh", "-c", "echo 'Starting Studio Fragrance application...' && npx wait-on tcp:postgres:5432 -t 60000 && echo 'Running database migrations...' && npx tsx scripts/migration.ts run && echo 'Starting the server...' && node dist/index.js"]
