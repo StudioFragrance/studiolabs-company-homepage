@@ -78,42 +78,48 @@ async function seedData() {
                             title: "업무협약 체결",
                             description: "JEON",
                             icon: "fa-handshake",
-                            year: 2024
+                            year: 2024,
+                            month: 1
                         },
                         {
                             date: "2024.02",
                             title: "창업진흥원 창업지원사업 선정",
                             description: "정에하드 창업물굴 사무실자리",
                             icon: "fa-building",
-                            year: 2024
+                            year: 2024,
+                            month: 2
                         },
                         {
                             date: "2024.02",
                             title: "1인창조기업 등록",
                             description: "CENTOP",
                             icon: "fa-certificate",
-                            year: 2024
+                            year: 2024,
+                            month: 2
                         },
                         {
                             date: "2024.05",
                             title: "사업자등록",
                             description: "개인사업자 등록",
                             icon: "fa-stamp",
-                            year: 2024
+                            year: 2024,
+                            month: 5
                         },
                         {
                             date: "2024.10",
                             title: "Outsourcing 서비스 개시",
                             description: "외주 서비스 시작",
                             icon: "fa-rocket",
-                            year: 2024
+                            year: 2024,
+                            month: 10
                         },
                         {
                             date: "2024.11",
                             title: "업무협약 체결",
                             description: "CHELP",
                             icon: "fa-handshake",
-                            year: 2024
+                            year: 2024,
+                            month: 11
                         },
                         {
                             date: "2025.02",
@@ -121,6 +127,7 @@ async function seedData() {
                             description: "https://www.studiofragrance.co.kr/",
                             icon: "fa-flask",
                             year: 2025,
+                            month: 2,
                             isFuture: false
                         }
                     ]
