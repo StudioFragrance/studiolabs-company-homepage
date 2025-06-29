@@ -198,6 +198,24 @@ ports:
   - "8080:5000"  # 로컬 8080 → 컨테이너 5000
 ```
 
+**빌드 오류 시:**
+```bash
+# 캐시 제거 후 재빌드
+docker compose build --no-cache
+
+# 특정 서비스만 재빌드
+docker compose build --no-cache app
+```
+
+**마이그레이션 실행:**
+```bash
+# 컨테이너에서 직접 마이그레이션 실행
+docker compose exec app tsx scripts/migration.ts run
+
+# 마이그레이션 상태 확인
+docker compose exec app tsx scripts/migration.ts show
+```
+
 ## 프로젝트 구조
 
 ```
