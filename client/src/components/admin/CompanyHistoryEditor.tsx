@@ -190,7 +190,7 @@ export default function CompanyHistoryEditor({ initialData }: CompanyHistoryEdit
                   <Accordion type="multiple" className="space-y-4" defaultValue={["event-0"]}>
                     {timelineFields.map((field, index) => (
                       <AccordionItem key={field.id} value={`event-${index}`} className="border rounded-lg shadow-sm">
-                        <div className="flex items-center p-4">
+                        <AccordionTrigger className="flex items-center p-4 w-full text-left hover:bg-gray-50 transition-colors">
                           <div className="flex items-center space-x-3 flex-1">
                             <div className="flex items-center justify-center w-8 h-8 bg-brand-coral rounded-full">
                               <i className={`fas ${form.watch(`timeline.${index}.icon`) || 'fa-building'} text-white text-sm`}></i>
@@ -212,10 +212,7 @@ export default function CompanyHistoryEditor({ initialData }: CompanyHistoryEdit
                               </span>
                             )}
                           </div>
-                          
-                          <AccordionTrigger className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded-md transition-colors">
-                          </AccordionTrigger>
-                        </div>
+                        </AccordionTrigger>
                         <AccordionContent className="px-4 pb-4 space-y-3">
                           <div className="grid gap-2 md:grid-cols-3">
                             <div>
