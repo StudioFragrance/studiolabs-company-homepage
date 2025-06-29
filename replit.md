@@ -103,9 +103,10 @@ Studio fragrance is a modern web application that provides personalized fragranc
 - `REPL_ID` for Replit-specific features
 
 ## Changelog
+- June 29, 2025: Successfully migrated from Replit Agent to standard Replit environment
 - June 29, 2025: Removed Docker configuration files (Dockerfile, docker-compose.yml, .dockerignore) to simplify deployment strategy
 - June 28, 2025. Initial setup
 
 ## User Preferences
 
-Preferred communication style: Simple, everyday language.
+Preferred communication style: Simple, everyday language in Korean (한국어).
