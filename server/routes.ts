@@ -61,8 +61,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         { key: 'brandStory', data: siteConfig.brandStory },
         { key: 'companyHistory', data: siteConfig.companyHistory },
         { key: 'mvc', data: siteConfig.mvc },
-        { key: 'contact', data: siteConfig.contact },
-        { key: 'company', data: siteConfig.company }
+        { key: 'contact', data: siteConfig.contact }
       ];
 
       const results = [];

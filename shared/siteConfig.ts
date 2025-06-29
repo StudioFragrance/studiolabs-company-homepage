@@ -2,10 +2,6 @@
 // 이 파일을 수정하여 웹사이트 내용을 업데이트할 수 있습니다.
 
 export const siteConfig = {
-  // 사이트 기본 정보
-  siteName: "Studio fragrance",
-  siteUrl: "https://www.studiofragrance.co.kr",
-  companyEmail: "contact@studiolabs.co.kr",
   
   // 히어로 섹션 설정
   hero: {
@@ -158,16 +154,6 @@ export const siteConfig = {
       inactiveMessage: "현재 진행 중인 공고가 없습니다"
     },
     teamImage: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400"
-  },
-
-  // 회사 정보
-  company: {
-    name: "스튜디오랩스",
-    ceo: "배성준",
-    address: "부산광역시 해운대구<br />센텀동로 45, 1층",
-    businessNumber: "751-16-02446",
-    ecommerceNumber: "2024-부산해운대-1007",
-    hosting: "AWS"
   }
 };
 
