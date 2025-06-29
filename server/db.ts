@@ -13,8 +13,10 @@ export const AppDataSource = new DataSource({
   type: "postgres",
   url: process.env.DATABASE_URL,
   entities: [User, SiteContent],
-  synchronize: true, // TypeORM이 자동으로 테이블 생성
+  synchronize: false, // 마이그레이션을 통해서만 테이블 관리
   logging: process.env.NODE_ENV === 'development',
+  migrations: ["dist/migrations/*.js"],
+  migrationsTableName: "migrations",
   ssl: process.env.NODE_ENV === 'production' ? {
     rejectUnauthorized: false
   } : false,
@@ -30,6 +32,23 @@ export const initializeDatabase = async () => {
     if (!AppDataSource.isInitialized) {
       await AppDataSource.initialize();
       console.log("Database connection established");
+      
+      // 개발 환경에서만 자동으로 마이그레이션 실행
+      if (process.env.NODE_ENV === 'development') {
+        const pendingMigrations = await AppDataSource.showMigrations();
+        if (pendingMigrations) {
+          console.log("Running pending migrations...");
+          const executedMigrations = await AppDataSource.runMigrations();
+          if (executedMigrations.length > 0) {
+            console.log(`Executed ${executedMigrations.length} migrations:`);
+            executedMigrations.forEach(migration => {
+              console.log(`- ${migration.name}`);
+            });
+          } else {
+            console.log("No pending migrations to run");
+          }
+        }
+      }
     }
   } catch (error) {
     console.error("Error during database initialization:", error);

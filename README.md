@@ -225,9 +225,24 @@ ports:
 - `SiteContent`: 사이트 콘텐츠 관리 (id, key, data, createdAt, updatedAt)
 
 **주요 특징:**
-- TypeORM의 `synchronize: true`로 자동 테이블 생성
+- TypeORM 마이그레이션을 통한 안전한 스키마 관리
 - JSON 타입으로 유연한 콘텐츠 저장
 - 환경별 데이터베이스 연결 설정 자동화
+
+### 데이터베이스 마이그레이션
+
+**마이그레이션 명령어:**
+```bash
+./migrate.sh run      # 대기 중인 마이그레이션 실행
+./migrate.sh revert   # 마지막 마이그레이션 되돌리기
+./migrate.sh show     # 실행된 마이그레이션 목록 조회
+./migrate.sh generate # 새 마이그레이션 생성 가이드
+```
+
+**새 마이그레이션 생성:**
+1. `migrations/` 폴더에 새 파일 생성
+2. 파일명 형식: `TIMESTAMP-MigrationName.ts`
+3. 예시: `1751189600000-AddNewTable.ts`
 
 ### 데이터베이스 API
 

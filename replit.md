@@ -22,8 +22,9 @@ Studio fragrance is a modern web application that provides personalized fragranc
 
 ### Data Storage Layer
 - **Current Implementation**: TypeORM + PostgreSQL database
-- **Database Entities**: User, SiteContent with automatic table creation
+- **Database Entities**: User, SiteContent with TypeORM migration system
 - **Storage Interface**: DatabaseStorage with TypeORM repository pattern
+- **Schema Management**: TypeORM migrations with CLI tools (./migrate.sh)
 - **Production**: Docker network with PostgreSQL container and data persistence
 
 ## Key Components
@@ -57,7 +58,7 @@ Studio fragrance is a modern web application that provides personalized fragranc
    - TypeORM with PostgreSQL connection
    - DatabaseStorage implementation with repository pattern
    - User and SiteContent entity management
-   - Automatic schema synchronization
+   - TypeORM migration system for schema management
 
 3. **Development Tools**
    - Vite middleware integration
@@ -112,7 +113,10 @@ Studio fragrance is a modern web application that provides personalized fragranc
 - Future-ready for database integration when needed
 
 ## Changelog
-- June 29, 2025: **Docker 네트워크 및 PostgreSQL 마이그레이션 완료** - TypeORM + PostgreSQL로 완전 전환, Docker Compose 배포 환경 구축
+- June 29, 2025: **TypeORM 마이그레이션 시스템 구축 완료** - synchronize 비활성화, CLI 도구 및 베이스라인 마이그레이션 생성
+- June 29, 2025: 마이그레이션 관리 도구 추가 - ./migrate.sh 스크립트로 run/revert/show/generate 기능 제공
+- June 29, 2025: 기존 테이블 베이스라인 처리 완료 - synchronize로 생성된 테이블을 마이그레이션 시스템에 통합
+- June 29, 2025: Docker 네트워크 및 PostgreSQL 마이그레이션 완료 - TypeORM + PostgreSQL로 완전 전환, Docker Compose 배포 환경 구축
 - June 29, 2025: Docker Compose 설정 완료 - PostgreSQL 컨테이너와 앱 컨테이너 간 네트워크 통신 구성
 - June 29, 2025: README.md에 Docker 네트워크 배포 가이드 추가 - 컨테이너 관리 및 트러블슈팅 섹션 포함
 - June 29, 2025: 환경별 호스트 바인딩 개선 - 프로덕션/Docker 환경에서 0.0.0.0 자동 사용
