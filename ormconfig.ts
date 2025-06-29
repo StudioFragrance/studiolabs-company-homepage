@@ -20,9 +20,7 @@ export const AppDataSource = new DataSource({
   logging: process.env.NODE_ENV === 'development',
   migrations: ["migrations/*.ts"],
   migrationsTableName: "migrations",
-  ssl: process.env.NODE_ENV === 'production' ? {
-    rejectUnauthorized: false
-  } : false,
+  ssl: false, // Docker 환경에서는 SSL 비활성화
 });
 
 export default AppDataSource;

@@ -17,9 +17,7 @@ export const AppDataSource = new DataSource({
   logging: process.env.NODE_ENV === 'development',
   migrations: ["migrations/*.ts"],
   migrationsTableName: "migrations",
-  ssl: process.env.NODE_ENV === 'production' ? {
-    rejectUnauthorized: false
-  } : false,
+  ssl: false, // Docker 환경에서는 SSL 비활성화
   // Docker 네트워크 연결을 위한 추가 설정
   connectTimeoutMS: 60000,
   extra: {
