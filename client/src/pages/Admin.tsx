@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import HeroEditor from "@/components/admin/HeroEditor";
 import BrandStoryEditor from "@/components/admin/BrandStoryEditor";
 import CompanyHistoryEditor from "@/components/admin/CompanyHistoryEditor";
+import MVCEditor from "@/components/admin/MVCEditor";
 import { useSiteContent } from "@/hooks/useSiteContent";
 
 interface SiteContent {
@@ -202,7 +203,11 @@ export default function Admin() {
             <CompanyHistoryEditor initialData={getContentByKey("companyHistory")?.data} />
           </TabsContent>
 
-          {contentSections.filter(s => s.key !== "hero" && s.key !== "brandStory" && s.key !== "companyHistory").map((section) => (
+          <TabsContent value="mvc" className="mt-6">
+            <MVCEditor initialData={getContentByKey("mvc")?.data} />
+          </TabsContent>
+
+          {contentSections.filter(s => !["hero", "brandStory", "companyHistory", "mvc"].includes(s.key)).map((section) => (
             <TabsContent key={section.key} value={section.key} className="mt-6">
               <Card>
                 <CardHeader>
