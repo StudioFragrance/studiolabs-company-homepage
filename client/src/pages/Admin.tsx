@@ -6,6 +6,7 @@ import { Edit, Save, Eye, RefreshCw } from "lucide-react";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import HeroEditor from "@/components/admin/HeroEditor";
+import BrandStoryEditor from "@/components/admin/BrandStoryEditor";
 import { useSiteContent } from "@/hooks/useSiteContent";
 
 interface SiteContent {
@@ -192,7 +193,11 @@ export default function Admin() {
             <HeroEditor initialData={getContentByKey("hero")?.data} />
           </TabsContent>
 
-          {contentSections.filter(s => s.key !== "hero").map((section) => (
+          <TabsContent value="brandStory" className="mt-6">
+            <BrandStoryEditor initialData={getContentByKey("brandStory")?.data} />
+          </TabsContent>
+
+          {contentSections.filter(s => s.key !== "hero" && s.key !== "brandStory").map((section) => (
             <TabsContent key={section.key} value={section.key} className="mt-6">
               <Card>
                 <CardHeader>
