@@ -113,6 +113,7 @@ Studio fragrance is a modern web application that provides personalized fragranc
 - Future-ready for database integration when needed
 
 ## Changelog
+- June 29, 2025: **siteConfig 파일 완전 삭제** - 모든 컴포넌트가 데이터베이스에서 직접 콘텐츠 로드, 정적 설정 파일 제거로 완전한 동적 CMS 구축
 - June 29, 2025: **siteConfig 파일 정리 완료** - 사용되지 않는 company 섹션 제거로 설정 파일 간소화
 - June 29, 2025: **프론트엔드 타입 안전성 개선** - HeroSection의 mainTitle 접근 시 null 체크 추가
 - June 29, 2025: **Docker 자동 데이터 시딩 추가** - 컨테이너 시작 시 초기 사이트 콘텐츠 자동 생성으로 빈 웹사이트 문제 해결

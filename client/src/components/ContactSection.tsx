@@ -1,19 +1,29 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { siteConfig } from '@shared/siteConfig';
 import { useSiteContent } from '@/hooks/useSiteContent';
 
 export default function ContactSection() {
   const [isVisible, setIsVisible] = useState(false);
   const { data: contactContent, isLoading, error } = useSiteContent('contact');
   
-  const content = contactContent?.data || siteConfig.contact;
   const contactData = {
-    title: content?.title || siteConfig.contact.title,
-    email: content?.email || siteConfig.contact.email,
-    businessInquiry: content?.businessInquiry || siteConfig.contact.businessInquiry,
-    recruitment: content?.recruitment || siteConfig.contact.recruitment,
-    teamImage: content?.teamImage || siteConfig.contact.teamImage
+    title: contactContent?.data?.title || "함께 성장하실 여러분들의 연락을 기다립니다",
+    email: contactContent?.data?.email || "contact@studiolabs.co.kr",
+    businessInquiry: contactContent?.data?.businessInquiry || {
+      title: "협업/입점 문의",
+      description: "비즈니스 파트너십 및 제휴 문의",
+      buttonText: "문의하기",
+      icon: "fa-handshake"
+    },
+    recruitment: contactContent?.data?.recruitment || {
+      title: "채용 공고 보기",
+      description: "함께 성장할 팀원을 찾고 있습니다",
+      buttonText: "채용 정보 확인",
+      icon: "fa-users",
+      isActive: false,
+      inactiveMessage: "현재 진행 중인 공고가 없습니다"
+    },
+    teamImage: contactContent?.data?.teamImage || "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400"
   };
 
   useEffect(() => {
@@ -91,11 +101,11 @@ export default function ContactSection() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => {
-                  if (siteConfig.contact.recruitment.isActive) {
+                  if (contactData.recruitment.isActive) {
                     // Handle active recruitment
                     alert('채용 페이지로 이동합니다.');
                   } else {
-                    alert(siteConfig.contact.recruitment.inactiveMessage);
+                    alert(contactData.recruitment.inactiveMessage);
                   }
                 }}
                 className="w-full border-2 border-brand-coral text-brand-coral py-3 px-6 rounded-full hover:bg-brand-coral hover:text-white transition-all font-medium shadow-md hover:shadow-lg"

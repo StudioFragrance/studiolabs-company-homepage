@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { siteConfig } from '@shared/siteConfig';
 import { useSiteContent } from '@/hooks/useSiteContent';
 
 export default function BrandStorySection() {
@@ -23,20 +22,23 @@ export default function BrandStorySection() {
     return () => observer.disconnect();
   }, []);
 
-  // Fallback to siteConfig if database content is not available
-  const content = brandStoryContent?.data || siteConfig.brandStory;
-  
-  // Ensure all required fields exist with proper fallbacks
   const brandStoryData = {
-    title: content?.title || siteConfig.brandStory.title,
-    quote: content?.quote || siteConfig.brandStory.quote,
-    content: content?.content || siteConfig.brandStory.content,
+    title: brandStoryContent?.data?.title || "AI가 골라주는 딱 맞는 향",
+    quote: brandStoryContent?.data?.quote || "이게 나에게 맞는 향기일까?",
+    content: brandStoryContent?.data?.content || [
+      "수많은 기대와 망설임 속에서 나에게 꼭 맞는 향을 찾는 여정은 늘 쉽지 않았습니다.",
+      "어렵게 느껴졌던 향수의 세계, 그 막막함을 저희는 이해합니다.",
+      "Studio fragrance는 당신의 감각과 취향에 귀 기울입니다. 흩어져 있던 향들 속에서 당신만을 위한 향을 찾아, 당신의 손에 건네 드립니다."
+    ],
     ctaButton: {
-      text: content?.ctaButton?.text || siteConfig.brandStory.ctaButton.text,
-      url: content?.ctaButton?.url || siteConfig.brandStory.ctaButton.url
+      text: brandStoryContent?.data?.ctaButton?.text || "Studio fragrance 바로가기",
+      url: brandStoryContent?.data?.ctaButton?.url || "https://www.studiofragrance.co.kr"
     },
-    image: content?.image || siteConfig.brandStory.image,
-    statistics: content?.statistics || siteConfig.brandStory.statistics
+    image: brandStoryContent?.data?.image || "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
+    statistics: brandStoryContent?.data?.statistics || [
+      { icon: "fa-users", title: "7,000명 이상 사람들이", description: "향수를 추천받았어요" },
+      { icon: "fa-home", title: "무료시향으로 집에서도", description: "간편하게 체험" }
+    ]
   };
 
   if (isLoading) {

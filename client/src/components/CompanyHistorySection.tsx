@@ -1,17 +1,15 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { siteConfig } from '@shared/siteConfig';
 import { useSiteContent } from '@/hooks/useSiteContent';
 
 export default function CompanyHistorySection() {
   const [isVisible, setIsVisible] = useState(false);
   const { data: companyHistoryContent, isLoading, error } = useSiteContent('companyHistory');
   
-  const content = companyHistoryContent?.data || siteConfig.companyHistory;
   const companyHistoryData = {
-    title: content?.title || siteConfig.companyHistory.title,
-    subtitle: content?.subtitle || siteConfig.companyHistory.subtitle,
-    timeline: content?.timeline || siteConfig.companyHistory.timeline
+    title: companyHistoryContent?.data?.title || "회사 연혁",
+    subtitle: companyHistoryContent?.data?.subtitle || "Studio fragrance의 성장 여정",
+    timeline: companyHistoryContent?.data?.timeline || []
   };
 
   useEffect(() => {

@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { siteConfig } from '@shared/siteConfig';
 import { useSiteContent } from '@/hooks/useSiteContent';
 
 export default function HeroSection() {
@@ -12,21 +11,17 @@ export default function HeroSection() {
     }
   };
 
-  // Fallback to siteConfig if database content is not available
-  const content = heroContent?.data || siteConfig.hero;
-  
-  // Ensure all required fields exist with proper fallbacks
   const heroData = {
-    subtitle: content?.subtitle || siteConfig.hero.subtitle,
+    subtitle: heroContent?.data?.subtitle || "손쉽게 찾는 나를 위한 향",
     mainTitle: {
-      line1: content?.mainTitle?.line1 || siteConfig.hero.mainTitle.line1,
-      line2: content?.mainTitle?.line2 || siteConfig.hero.mainTitle.line2
+      line1: heroContent?.data?.mainTitle?.line1 || "당신의 취향을 읽다,",
+      line2: heroContent?.data?.mainTitle?.line2 || "완벽한 향을 건네다"
     },
     ctaButton: {
-      text: content?.ctaButton?.text || siteConfig.hero.ctaButton.text,
-      url: content?.ctaButton?.url || siteConfig.hero.ctaButton.url
+      text: heroContent?.data?.ctaButton?.text || "향수 추천 받기",
+      url: heroContent?.data?.ctaButton?.url || "https://www.studiofragrance.co.kr"
     },
-    backgroundImage: content?.backgroundImage || siteConfig.hero.backgroundImage
+    backgroundImage: heroContent?.data?.backgroundImage || "https://images.unsplash.com/photo-1615611563049-e9c2d5c19bd8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
   };
 
   if (isLoading) {
@@ -50,7 +45,7 @@ export default function HeroSection() {
       <div 
         className="absolute inset-0 parallax opacity-10"
         style={{
-          backgroundImage: `url('${siteConfig.hero.backgroundImage}')`,
+          backgroundImage: `url('${heroData.backgroundImage}')`,
         }}
       />
       

@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import studioLogo from '@/assets/studio-logo.png';
 
-import { siteConfig } from '@shared/siteConfig';
+
 
 export default function Footer() {
   return (
@@ -25,7 +25,7 @@ export default function Footer() {
                 className="h-10 w-auto brightness-0 invert"
               />
             </motion.div>
-            <p className="text-gray-400 mb-6">{siteConfig.hero.subtitle}</p>
+            <p className="text-gray-400 mb-6">손쉽게 찾는 나를 위한 향</p>
             <img
               src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200"
               alt="Clean minimalist office workspace representing Studio fragrance brand values"

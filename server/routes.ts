@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage-typeorm";
-import { siteConfig } from "@shared/siteConfig";
+
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Site Content API routes
@@ -53,36 +53,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Initialize site content with default data from siteConfig
-  app.post("/api/site-content/initialize", async (req, res) => {
+  // Health check for site content
+  app.get("/api/site-content/status", async (req, res) => {
     try {
-      const sections = [
-        { key: 'hero', data: siteConfig.hero },
-        { key: 'brandStory', data: siteConfig.brandStory },
-        { key: 'companyHistory', data: siteConfig.companyHistory },
-        { key: 'mvc', data: siteConfig.mvc },
-        { key: 'contact', data: siteConfig.contact }
-      ];
-
-      const results = [];
-      
-      for (const section of sections) {
-        // Check if content already exists
-        const existing = await storage.getSiteContent(section.key);
-        if (!existing) {
-          const created = await storage.createSiteContent(section);
-          results.push(created);
-        }
-      }
-
+      const allContent = await storage.getAllSiteContent();
       res.json({ 
-        message: "Site content initialized", 
-        created: results.length,
-        sections: results 
+        message: "Site content status",
+        contentCount: allContent.length,
+        sections: allContent.map(c => c.key)
       });
     } catch (error) {
-      console.error("Error initializing site content:", error);
-      res.status(500).json({ error: "Failed to initialize site content" });
+      console.error("Error checking site content status:", error);
+      res.status(500).json({ error: "Failed to check site content status" });
     }
   });
 

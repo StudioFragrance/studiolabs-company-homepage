@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { siteConfig } from '@shared/siteConfig';
 import { useSiteContent } from '@/hooks/useSiteContent';
 
 
@@ -9,13 +8,18 @@ export default function MVCSection() {
   const [isVisible, setIsVisible] = useState(false);
   const { data: mvcContent, isLoading, error } = useSiteContent('mvc');
   
-  const content = mvcContent?.data || siteConfig.mvc;
   const mvcData = {
-    title: content?.title || siteConfig.mvc.title,
-    subtitle: content?.subtitle || siteConfig.mvc.subtitle,
-    mission: content?.mission || siteConfig.mvc.mission,
-    vision: content?.vision || siteConfig.mvc.vision,
-    coreValues: content?.coreValues || siteConfig.mvc.coreValues
+    title: mvcContent?.data?.title || "Mission · Vision · Core Value",
+    subtitle: mvcContent?.data?.subtitle || "우리의 가치와 비전",
+    mission: mvcContent?.data?.mission || {
+      title: "사람들의 취향을 발견하고 이를 통해 행복한 삶을 추구하는 사회를 만들기",
+      description: "개인의 취향이 곧 세상의 트렌드를 만들어 낸다는 것에 공감합니다."
+    },
+    vision: mvcContent?.data?.vision || {
+      title: "향 정보의 기준을 분석하여 누구나 향을 쉽게 선택할 수 있도록 하기",
+      description: "후각으로 전달되는 향은 취향에 민감합니다."
+    },
+    coreValues: mvcContent?.data?.coreValues || []
   };
 
   useEffect(() => {
