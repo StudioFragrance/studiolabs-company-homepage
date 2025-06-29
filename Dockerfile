@@ -19,8 +19,12 @@ COPY . .
 # TypeScript 컴파일 및 클라이언트 빌드
 RUN pnpm run build
 
+# 마이그레이션 파일들을 JavaScript로 컴파일
+RUN npx esbuild migrations/*.ts --platform=node --packages=external --format=esm --outdir=dist/migrations
+
 # 빌드 결과 확인 (디버깅용)
 RUN ls -la dist/
+RUN ls -la dist/migrations/
 
 # 포트 노출
 EXPOSE 5000

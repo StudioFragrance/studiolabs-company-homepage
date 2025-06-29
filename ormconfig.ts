@@ -18,7 +18,7 @@ export const AppDataSource = new DataSource({
   entities: [User, SiteContent],
   synchronize: false,
   logging: process.env.NODE_ENV === 'development',
-  migrations: ["migrations/*.ts"],
+  migrations: [process.env.NODE_ENV === 'production' ? "dist/migrations/*.js" : "migrations/*.ts"],
   migrationsTableName: "migrations",
   ssl: false, // Docker 환경에서는 SSL 비활성화
 });
