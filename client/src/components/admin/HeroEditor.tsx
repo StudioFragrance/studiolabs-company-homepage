@@ -241,30 +241,31 @@ export default function HeroEditor({ initialData }: HeroEditorProps) {
             </CardHeader>
             <CardContent>
               <div 
-                className="relative min-h-[400px] flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-orange-50 to-pink-50"
+                className="relative min-h-[400px] flex items-center justify-center overflow-hidden rounded-lg bg-brand-cream"
                 style={{
                   backgroundImage: watchedValues.backgroundImage ? `url('${watchedValues.backgroundImage}')` : undefined,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                 }}
               >
-                {/* 배경 오버레이 */}
-                <div className="absolute inset-0 bg-white/70"></div>
+                {/* 배경 오버레이 - 실제와 동일한 투명도 */}
+                <div className="absolute inset-0 bg-brand-cream opacity-10"></div>
                 
                 <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
-                  <p className="text-lg text-gray-600 mb-4 font-light">
+                  <p className="text-lg text-gray-600 mb-4 font-light font-korean">
                     {watchedValues.subtitle || "서브타이틀"}
                   </p>
                   
                   <h1 
-                    className="text-5xl md:text-7xl font-bold mb-8"
+                    className="text-5xl md:text-7xl font-korean font-bold mb-8 overflow-visible"
                     style={{ 
                       lineHeight: '1.3',
                       paddingTop: '0.5rem',
                       paddingBottom: '0.5rem',
+                      minHeight: 'fit-content'
                     }}
                   >
-                    <span className="bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 bg-clip-text text-transparent block">
+                    <span className="gradient-text block">
                       {watchedValues.mainTitle?.line1 || "첫 번째 줄"}
                     </span>
                     <span className="text-gray-900 block">
@@ -273,7 +274,7 @@ export default function HeroEditor({ initialData }: HeroEditorProps) {
                   </h1>
                   
                   <div className="flex justify-center">
-                    <div className="border-2 border-orange-400 text-orange-400 px-8 py-4 rounded-full hover:bg-orange-400 hover:text-white transition-all font-medium shadow-lg inline-flex items-center gap-2">
+                    <div className="border-2 border-brand-coral text-brand-coral px-8 py-4 rounded-full hover:bg-brand-coral hover:text-white transition-all font-medium shadow-lg hover:shadow-xl inline-flex items-center gap-2">
                       <i className="fas fa-robot" />
                       {watchedValues.ctaButton?.text || "버튼 텍스트"}
                     </div>
