@@ -1,9 +1,20 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { siteConfig } from '@shared/siteConfig';
+import { useSiteContent } from '@/hooks/useSiteContent';
 
 export default function ContactSection() {
   const [isVisible, setIsVisible] = useState(false);
+  const { data: contactContent, isLoading, error } = useSiteContent('contact');
+  
+  const content = contactContent?.data || siteConfig.contact;
+  const contactData = {
+    title: content?.title || siteConfig.contact.title,
+    email: content?.email || siteConfig.contact.email,
+    businessInquiry: content?.businessInquiry || siteConfig.contact.businessInquiry,
+    recruitment: content?.recruitment || siteConfig.contact.recruitment,
+    teamImage: content?.teamImage || siteConfig.contact.teamImage
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -31,7 +42,7 @@ export default function ContactSection() {
           className="text-center"
         >
           <h2 className="text-4xl font-korean gradient-text mb-8">
-            {siteConfig.contact.title}
+            {contactData.title}
           </h2>
           
           <motion.div
@@ -48,18 +59,18 @@ export default function ContactSection() {
               <div className="mb-6">
                 <motion.i
                   whileHover={{ scale: 1.2, rotate: 5 }}
-                  className={`fas ${siteConfig.contact.businessInquiry.icon} text-brand-coral text-4xl mb-4`}
+                  className={`fas ${contactData.businessInquiry.icon} text-brand-coral text-4xl mb-4`}
                 />
-                <h3 className="text-xl font-semibold mb-2">{siteConfig.contact.businessInquiry.title}</h3>
-                <p className="text-gray-600">{siteConfig.contact.businessInquiry.description}</p>
+                <h3 className="text-xl font-semibold mb-2">{contactData.businessInquiry.title}</h3>
+                <p className="text-gray-600">{contactData.businessInquiry.description}</p>
               </div>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => window.location.href = `mailto:${siteConfig.contact.email}?subject=협업/입점 문의`}
+                onClick={() => window.location.href = `mailto:${contactData.email}?subject=협업/입점 문의`}
                 className="w-full bg-brand-coral text-white py-3 px-6 rounded-full hover:bg-brand-coral/90 transition-all font-medium shadow-md hover:shadow-lg"
               >
-                {siteConfig.contact.businessInquiry.buttonText}
+                {contactData.businessInquiry.buttonText}
               </motion.button>
             </motion.div>
             
@@ -71,10 +82,10 @@ export default function ContactSection() {
               <div className="mb-6">
                 <motion.i
                   whileHover={{ scale: 1.2, rotate: 5 }}
-                  className={`fas ${siteConfig.contact.recruitment.icon} text-brand-coral text-4xl mb-4`}
+                  className={`fas ${contactData.recruitment.icon} text-brand-coral text-4xl mb-4`}
                 />
-                <h3 className="text-xl font-semibold mb-2">{siteConfig.contact.recruitment.title}</h3>
-                <p className="text-gray-600">{siteConfig.contact.recruitment.description}</p>
+                <h3 className="text-xl font-semibold mb-2">{contactData.recruitment.title}</h3>
+                <p className="text-gray-600">{contactData.recruitment.description}</p>
               </div>
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -89,7 +100,7 @@ export default function ContactSection() {
                 }}
                 className="w-full border-2 border-brand-coral text-brand-coral py-3 px-6 rounded-full hover:bg-brand-coral hover:text-white transition-all font-medium shadow-md hover:shadow-lg"
               >
-                {siteConfig.contact.recruitment.buttonText}
+                {contactData.recruitment.buttonText}
               </motion.button>
             </motion.div>
           </motion.div>
@@ -101,7 +112,7 @@ export default function ContactSection() {
             className="mt-12 p-8 bg-white rounded-xl shadow-lg"
           >
             <img
-              src={siteConfig.contact.teamImage}
+              src={contactData.teamImage}
               alt="Professional Korean business team collaborating in modern office space"
               className="w-full h-64 object-cover rounded-lg mb-6"
             />

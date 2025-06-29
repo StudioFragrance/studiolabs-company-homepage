@@ -1,9 +1,18 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { siteConfig } from '@shared/siteConfig';
+import { useSiteContent } from '@/hooks/useSiteContent';
 
 export default function CompanyHistorySection() {
   const [isVisible, setIsVisible] = useState(false);
+  const { data: companyHistoryContent, isLoading, error } = useSiteContent('companyHistory');
+  
+  const content = companyHistoryContent?.data || siteConfig.companyHistory;
+  const companyHistoryData = {
+    title: content?.title || siteConfig.companyHistory.title,
+    subtitle: content?.subtitle || siteConfig.companyHistory.subtitle,
+    timeline: content?.timeline || siteConfig.companyHistory.timeline
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -30,8 +39,8 @@ export default function CompanyHistorySection() {
           transition={{ duration: 0.8 }}
         >
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-korean font-bold gradient-text mb-4">{siteConfig.companyHistory.title}</h2>
-            <p className="text-lg text-gray-600">{siteConfig.companyHistory.subtitle}</p>
+            <h2 className="text-4xl font-korean font-bold gradient-text mb-4">{companyHistoryData.title}</h2>
+            <p className="text-lg text-gray-600">{companyHistoryData.subtitle}</p>
           </div>
           
           <div className="relative">
@@ -48,7 +57,7 @@ export default function CompanyHistorySection() {
                 <h3 className="text-3xl font-korean font-bold text-brand-coral bg-white inline-block px-6 py-2 rounded-full shadow-md">2024</h3>
               </motion.div>
               <div className="space-y-8">
-                {siteConfig.companyHistory.timeline.filter(item => item.year === 2024).map((item, index) => (
+                {companyHistoryData.timeline.filter((item: any) => item.year === 2024).map((item: any, index: number) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, x: -50 }}
@@ -89,7 +98,7 @@ export default function CompanyHistorySection() {
                 <h3 className="text-3xl font-korean font-bold text-white bg-gradient-to-r from-brand-coral to-orange-400 inline-block px-6 py-2 rounded-full shadow-md">2025</h3>
               </motion.div>
               <div className="space-y-8">
-                {siteConfig.companyHistory.timeline.filter(item => item.year === 2025).map((item, index) => (
+                {companyHistoryData.timeline.filter((item: any) => item.year === 2025).map((item: any, index: number) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, x: -50 }}

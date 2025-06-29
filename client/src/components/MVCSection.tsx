@@ -1,11 +1,22 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { siteConfig } from '@shared/siteConfig';
+import { useSiteContent } from '@/hooks/useSiteContent';
 
 
 
 export default function MVCSection() {
   const [isVisible, setIsVisible] = useState(false);
+  const { data: mvcContent, isLoading, error } = useSiteContent('mvc');
+  
+  const content = mvcContent?.data || siteConfig.mvc;
+  const mvcData = {
+    title: content?.title || siteConfig.mvc.title,
+    subtitle: content?.subtitle || siteConfig.mvc.subtitle,
+    mission: content?.mission || siteConfig.mvc.mission,
+    vision: content?.vision || siteConfig.mvc.vision,
+    coreValues: content?.coreValues || siteConfig.mvc.coreValues
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -33,9 +44,9 @@ export default function MVCSection() {
         >
           <div className="text-center mb-16">
             <h2 className="text-4xl font-korean font-bold gradient-text mb-4">
-              {siteConfig.mvc.title}
+              {mvcData.title}
             </h2>
-            <p className="text-lg text-gray-600">{siteConfig.mvc.subtitle}</p>
+            <p className="text-lg text-gray-600">{mvcData.subtitle}</p>
           </div>
           
           <div className="grid lg:grid-cols-3 gap-8">
@@ -57,8 +68,8 @@ export default function MVCSection() {
                 <h3 className="text-2xl font-bold gradient-text mb-4">Mission</h3>
               </div>
               <div className="space-y-4">
-                <h4 className="text-lg font-semibold">{siteConfig.mvc.mission.title}</h4>
-                <p className="text-gray-600 text-sm leading-relaxed">{siteConfig.mvc.mission.description}</p>
+                <h4 className="text-lg font-semibold">{mvcData.mission.title}</h4>
+                <p className="text-gray-600 text-sm leading-relaxed">{mvcData.mission.description}</p>
               </div>
             </motion.div>
 
@@ -80,8 +91,8 @@ export default function MVCSection() {
                 <h3 className="text-2xl font-bold gradient-text mb-4">Vision</h3>
               </div>
               <div className="space-y-4">
-                <h4 className="text-lg font-semibold">{siteConfig.mvc.vision.title}</h4>
-                <p className="text-gray-600 text-sm leading-relaxed">{siteConfig.mvc.vision.description}</p>
+                <h4 className="text-lg font-semibold">{mvcData.vision.title}</h4>
+                <p className="text-gray-600 text-sm leading-relaxed">{mvcData.vision.description}</p>
               </div>
             </motion.div>
 
@@ -103,7 +114,7 @@ export default function MVCSection() {
                 <h3 className="text-2xl font-bold gradient-text mb-4">Core Values</h3>
               </div>
               <div className="space-y-6">
-                {siteConfig.mvc.coreValues.map((value, valueIndex) => (
+                {mvcData.coreValues.map((value, valueIndex) => (
                   <motion.div
                     key={valueIndex}
                     initial={{ opacity: 0, x: -20 }}
