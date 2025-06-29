@@ -104,6 +104,8 @@ Studio fragrance is a modern web application that provides personalized fragranc
 - Future-ready for database integration when needed
 
 ## Changelog
+- June 29, 2025: Docker 배포 문제 해결 - 로컬/클라우드 환경별 호스트 바인딩 및 런타임 의존성 최적화
+- June 29, 2025: 서버 호스트 바인딩을 환경별로 자동 선택 (로컬: localhost, 클라우드: 0.0.0.0)
 - June 29, 2025: README.md 업데이트 완료 - 현재 인메모리 스토리지 사용 상태 반영, npm 명령어를 pnpm으로 변경
 - June 29, 2025: 불필요한 환경변수 정리 완료 (PORT, DATABASE_URL, SESSION_SECRET 제거 - 현재 사용되지 않음)
 - June 29, 2025: dotenv 설정 추가하여 환경변수를 .env 파일로 관리하도록 개선
