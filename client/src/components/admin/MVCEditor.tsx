@@ -133,51 +133,66 @@ export default function MVCEditor({ initialData }: MVCEditorProps) {
             <div className="py-20 bg-white">
               <div className="max-w-6xl mx-auto px-4">
                 <div className="text-center mb-16">
-                  <h2 className="text-4xl font-bold gradient-text mb-4">
+                  <h2 className="text-4xl font-korean font-bold gradient-text mb-4">
                     {watchedValues.title || "Mission · Vision · Core Value"}
                   </h2>
-                  <p className="text-xl text-gray-600">
+                  <p className="text-lg text-gray-600">
                     {watchedValues.subtitle || "우리의 가치와 비전"}
                   </p>
                 </div>
-
-                <div className="space-y-16">
+                
+                <div className="grid lg:grid-cols-3 gap-8">
                   {/* Mission */}
-                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-2xl">
-                    <div className="text-center">
-                      <h3 className="text-2xl font-bold text-gray-800 mb-4">Mission</h3>
-                      <h4 className="text-xl font-semibold text-blue-600 mb-4">
+                  <div className="bg-brand-cream p-8 rounded-xl shadow-lg hover:shadow-xl transition-all">
+                    <div className="text-center mb-6">
+                      <div className="w-16 h-16 bg-brand-coral rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i className="fas fa-bullseye text-white text-2xl" />
+                      </div>
+                      <h3 className="text-2xl font-bold gradient-text mb-4">Mission</h3>
+                    </div>
+                    <div className="space-y-4">
+                      <h4 className="text-lg font-semibold">
                         {watchedValues.mission?.title || "미션 제목"}
                       </h4>
-                      <p className="text-gray-700 leading-relaxed">
+                      <p className="text-gray-600 text-sm leading-relaxed">
                         {watchedValues.mission?.description || "미션 설명"}
                       </p>
                     </div>
                   </div>
 
                   {/* Vision */}
-                  <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-8 rounded-2xl">
-                    <div className="text-center">
-                      <h3 className="text-2xl font-bold text-gray-800 mb-4">Vision</h3>
-                      <h4 className="text-xl font-semibold text-green-600 mb-4">
+                  <div className="bg-brand-cream p-8 rounded-xl shadow-lg hover:shadow-xl transition-all">
+                    <div className="text-center mb-6">
+                      <div className="w-16 h-16 bg-brand-coral rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i className="fas fa-eye text-white text-2xl" />
+                      </div>
+                      <h3 className="text-2xl font-bold gradient-text mb-4">Vision</h3>
+                    </div>
+                    <div className="space-y-4">
+                      <h4 className="text-lg font-semibold">
                         {watchedValues.vision?.title || "비전 제목"}
                       </h4>
-                      <p className="text-gray-700 leading-relaxed">
+                      <p className="text-gray-600 text-sm leading-relaxed">
                         {watchedValues.vision?.description || "비전 설명"}
                       </p>
                     </div>
                   </div>
 
                   {/* Core Values */}
-                  <div>
-                    <h3 className="text-2xl font-bold text-center text-gray-800 mb-8">Core Values</h3>
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  <div className="bg-brand-cream p-8 rounded-xl shadow-lg hover:shadow-xl transition-all">
+                    <div className="text-center mb-6">
+                      <div className="w-16 h-16 bg-brand-coral rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i className="fas fa-heart text-white text-2xl" />
+                      </div>
+                      <h3 className="text-2xl font-bold gradient-text mb-4">Core Values</h3>
+                    </div>
+                    <div className="space-y-6">
                       {watchedValues.coreValues?.map((value, index) => (
-                        <div key={index} className="bg-white border rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                          <h4 className="text-lg font-semibold text-gray-800 mb-3">
+                        <div key={index}>
+                          <h4 className="font-semibold mb-2">
                             {value.title || `핵심가치 ${index + 1}`}
                           </h4>
-                          <p className="text-gray-600 text-sm leading-relaxed">
+                          <p className="text-gray-600 text-sm">
                             {value.description || "핵심가치 설명"}
                           </p>
                         </div>
