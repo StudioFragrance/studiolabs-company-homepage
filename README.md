@@ -207,10 +207,14 @@ ports:
 │   │   ├── pages/         # 페이지 컴포넌트
 │   │   └── hooks/         # 커스텀 훅
 ├── server/                # Express 백엔드
+│   ├── entities/         # TypeORM 엔터티
 │   ├── index.ts          # 서버 진입점
 │   ├── routes.ts         # API 라우트
-│   └── storage.ts        # 데이터 저장소
-├── shared/               # 공유 타입 및 스키마
+│   ├── db.ts            # 데이터베이스 연결
+│   └── storage-typeorm.ts # TypeORM 저장소
+├── migrations/           # TypeORM 마이그레이션
+├── scripts/             # 유틸리티 스크립트
+├── shared/             # 공유 설정
 └── package.json
 ```
 

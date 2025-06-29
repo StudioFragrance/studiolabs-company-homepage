@@ -1,4 +1,5 @@
-import { User, type InsertUser, SiteContent, type InsertSiteContent } from "@shared/schema";
+import { User, type InsertUser } from "./entities/User";
+import { SiteContent, type InsertSiteContent } from "./entities/SiteContent";
 import { AppDataSource } from "./db";
 
 export interface IStorage {
