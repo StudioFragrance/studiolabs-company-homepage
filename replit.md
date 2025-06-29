@@ -113,6 +113,9 @@ Studio fragrance is a modern web application that provides personalized fragranc
 - Future-ready for database integration when needed
 
 ## Changelog
+- June 29, 2025: **Docker SSL 연결 오류 해결** - PostgreSQL 컨테이너에서 SSL 비활성화로 연결 문제 해결
+- June 29, 2025: **Docker 엔트리포인트 최적화** - 별도 스크립트 대신 CMD에서 직접 실행으로 파일 경로 문제 해결
+- June 29, 2025: **README.md를 Docker 중심 가이드로 완전 개편** - 마이그레이션 관리 및 컨테이너 운영 중심 문서화
 - June 29, 2025: **프로젝트 파일 정리 완료** - 불필요한 파일 제거 (storage.ts, attached_assets, shared/schema.ts, init-db)
 - June 29, 2025: TypeORM 마이그레이션 시스템 구축 완료 - synchronize 비활성화, CLI 도구 및 베이스라인 마이그레이션 생성
 - June 29, 2025: 마이그레이션 관리 도구 추가 - ./migrate.sh 스크립트로 run/revert/show/generate 기능 제공
