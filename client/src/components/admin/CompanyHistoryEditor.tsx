@@ -190,8 +190,8 @@ export default function CompanyHistoryEditor({ initialData }: CompanyHistoryEdit
                   <Accordion type="multiple" className="space-y-2">
                     {timelineFields.map((field, index) => (
                       <AccordionItem key={field.id} value={`event-${index}`} className="border rounded-lg">
-                        <AccordionTrigger className="px-4 py-3 text-left">
-                          <div className="flex items-center justify-between w-full">
+                        <div className="flex items-center justify-between p-4 border-b">
+                          <AccordionTrigger className="flex-1 text-left [&[data-state=open]>div>svg]:rotate-180">
                             <div className="flex items-center space-x-3">
                               <div className="flex items-center justify-center w-8 h-8 bg-brand-coral rounded-full">
                                 <i className={`fas ${form.watch(`timeline.${index}.icon`) || 'fa-building'} text-white text-sm`}></i>
@@ -205,28 +205,25 @@ export default function CompanyHistoryEditor({ initialData }: CompanyHistoryEdit
                                 </div>
                               </div>
                             </div>
-                            <div className="flex items-center space-x-2">
-                              {form.watch(`timeline.${index}.isFuture`) && (
-                                <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
-                                  예정
-                                </span>
-                              )}
-                              {timelineFields.length > 1 && (
-                                <Button
-                                  type="button"
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    removeTimeline(index);
-                                  }}
-                                >
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              )}
-                            </div>
+                          </AccordionTrigger>
+                          <div className="flex items-center space-x-2 ml-4">
+                            {form.watch(`timeline.${index}.isFuture`) && (
+                              <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
+                                예정
+                              </span>
+                            )}
+                            {timelineFields.length > 1 && (
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => removeTimeline(index)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            )}
                           </div>
-                        </AccordionTrigger>
+                        </div>
                         <AccordionContent className="px-4 pb-4 space-y-3">
                           <div className="grid gap-2 md:grid-cols-3">
                             <div>
