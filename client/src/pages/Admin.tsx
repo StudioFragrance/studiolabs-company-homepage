@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import HeroEditor from "@/components/admin/HeroEditor";
 import BrandStoryEditor from "@/components/admin/BrandStoryEditor";
+import CompanyHistoryEditor from "@/components/admin/CompanyHistoryEditor";
 import { useSiteContent } from "@/hooks/useSiteContent";
 
 interface SiteContent {
@@ -197,7 +198,11 @@ export default function Admin() {
             <BrandStoryEditor initialData={getContentByKey("brandStory")?.data} />
           </TabsContent>
 
-          {contentSections.filter(s => s.key !== "hero" && s.key !== "brandStory").map((section) => (
+          <TabsContent value="companyHistory" className="mt-6">
+            <CompanyHistoryEditor initialData={getContentByKey("companyHistory")?.data} />
+          </TabsContent>
+
+          {contentSections.filter(s => s.key !== "hero" && s.key !== "brandStory" && s.key !== "companyHistory").map((section) => (
             <TabsContent key={section.key} value={section.key} className="mt-6">
               <Card>
                 <CardHeader>
