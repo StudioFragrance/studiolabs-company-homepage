@@ -13,26 +13,32 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 
 const heroSchema = z.object({
-  mainTitle: z.string().min(1, "메인 타이틀은 필수입니다"),
+  mainTitle: z.object({
+    line1: z.string().min(1, "첫 번째 줄은 필수입니다"),
+    line2: z.string().min(1, "두 번째 줄은 필수입니다"),
+  }),
   subtitle: z.string().min(1, "서브타이틀은 필수입니다"),
-  description: z.string().min(1, "설명은 필수입니다"),
-  primaryButtonText: z.string().min(1, "주요 버튼 텍스트는 필수입니다"),
-  primaryButtonLink: z.string().min(1, "주요 버튼 링크는 필수입니다"),
-  secondaryButtonText: z.string().min(1, "보조 버튼 텍스트는 필수입니다"),
-  secondaryButtonLink: z.string().min(1, "보조 버튼 링크는 필수입니다"),
+  ctaButton: z.object({
+    text: z.string().min(1, "버튼 텍스트는 필수입니다"),
+    url: z.string().min(1, "버튼 링크는 필수입니다"),
+  }),
+  backgroundImage: z.string().url("올바른 URL을 입력해주세요").optional(),
 });
 
 type HeroFormData = z.infer<typeof heroSchema>;
 
 interface HeroEditorProps {
   initialData?: {
-    mainTitle: string;
+    mainTitle: {
+      line1: string;
+      line2: string;
+    };
     subtitle: string;
-    description: string;
-    primaryButtonText: string;
-    primaryButtonLink: string;
-    secondaryButtonText: string;
-    secondaryButtonLink: string;
+    ctaButton: {
+      text: string;
+      url: string;
+    };
+    backgroundImage?: string;
   };
 }
 
@@ -44,13 +50,16 @@ export default function HeroEditor({ initialData }: HeroEditorProps) {
   const form = useForm<HeroFormData>({
     resolver: zodResolver(heroSchema),
     defaultValues: initialData || {
-      mainTitle: "",
+      mainTitle: {
+        line1: "",
+        line2: "",
+      },
       subtitle: "",
-      description: "",
-      primaryButtonText: "",
-      primaryButtonLink: "",
-      secondaryButtonText: "",
-      secondaryButtonLink: "",
+      ctaButton: {
+        text: "",
+        url: "",
+      },
+      backgroundImage: "",
     },
   });
 
@@ -119,25 +128,11 @@ export default function HeroEditor({ initialData }: HeroEditorProps) {
           <CardContent>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <div>
-                <Label htmlFor="mainTitle">메인 타이틀</Label>
-                <Input
-                  id="mainTitle"
-                  {...form.register("mainTitle")}
-                  placeholder="예: Studio fragrance"
-                />
-                {form.formState.errors.mainTitle && (
-                  <p className="text-sm text-red-500 mt-1">
-                    {form.formState.errors.mainTitle.message}
-                  </p>
-                )}
-              </div>
-
-              <div>
                 <Label htmlFor="subtitle">서브타이틀</Label>
                 <Input
                   id="subtitle"
                   {...form.register("subtitle")}
-                  placeholder="예: AI 기반 맞춤형 향수 추천"
+                  placeholder="예: 손쉽게 찾는 나를 위한 향"
                 />
                 {form.formState.errors.subtitle && (
                   <p className="text-sm text-red-500 mt-1">
@@ -146,79 +141,72 @@ export default function HeroEditor({ initialData }: HeroEditorProps) {
                 )}
               </div>
 
+              <div className="space-y-2">
+                <Label>메인 타이틀</Label>
+                <div className="space-y-2">
+                  <Input
+                    {...form.register("mainTitle.line1")}
+                    placeholder="첫 번째 줄 (예: 당신의 취향을 읽다,)"
+                  />
+                  {form.formState.errors.mainTitle?.line1 && (
+                    <p className="text-sm text-red-500">
+                      {form.formState.errors.mainTitle.line1.message}
+                    </p>
+                  )}
+                  <Input
+                    {...form.register("mainTitle.line2")}
+                    placeholder="두 번째 줄 (예: 완벽한 향을 건네다)"
+                  />
+                  {form.formState.errors.mainTitle?.line2 && (
+                    <p className="text-sm text-red-500">
+                      {form.formState.errors.mainTitle.line2.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                <div>
+                  <Label htmlFor="ctaButtonText">버튼 텍스트</Label>
+                  <Input
+                    id="ctaButtonText"
+                    {...form.register("ctaButton.text")}
+                    placeholder="향수 추천 받기"
+                  />
+                  {form.formState.errors.ctaButton?.text && (
+                    <p className="text-sm text-red-500 mt-1">
+                      {form.formState.errors.ctaButton.text.message}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <Label htmlFor="ctaButtonUrl">버튼 링크</Label>
+                  <Input
+                    id="ctaButtonUrl"
+                    {...form.register("ctaButton.url")}
+                    placeholder="https://www.studiofragrance.co.kr"
+                  />
+                  {form.formState.errors.ctaButton?.url && (
+                    <p className="text-sm text-red-500 mt-1">
+                      {form.formState.errors.ctaButton.url.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+
               <div>
-                <Label htmlFor="description">설명</Label>
-                <Textarea
-                  id="description"
-                  {...form.register("description")}
-                  placeholder="당신만의 완벽한 향수를 찾아보세요..."
-                  rows={3}
+                <Label htmlFor="backgroundImage">배경 이미지 URL (선택사항)</Label>
+                <Input
+                  id="backgroundImage"
+                  {...form.register("backgroundImage")}
+                  placeholder="https://images.unsplash.com/..."
                 />
-                {form.formState.errors.description && (
+                {form.formState.errors.backgroundImage && (
                   <p className="text-sm text-red-500 mt-1">
-                    {form.formState.errors.description.message}
+                    {form.formState.errors.backgroundImage.message}
                   </p>
                 )}
-              </div>
-
-              <div className="grid gap-4 md:grid-cols-2">
-                <div>
-                  <Label htmlFor="primaryButtonText">주요 버튼 텍스트</Label>
-                  <Input
-                    id="primaryButtonText"
-                    {...form.register("primaryButtonText")}
-                    placeholder="지금 시작하기"
-                  />
-                  {form.formState.errors.primaryButtonText && (
-                    <p className="text-sm text-red-500 mt-1">
-                      {form.formState.errors.primaryButtonText.message}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <Label htmlFor="primaryButtonLink">주요 버튼 링크</Label>
-                  <Input
-                    id="primaryButtonLink"
-                    {...form.register("primaryButtonLink")}
-                    placeholder="#"
-                  />
-                  {form.formState.errors.primaryButtonLink && (
-                    <p className="text-sm text-red-500 mt-1">
-                      {form.formState.errors.primaryButtonLink.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div className="grid gap-4 md:grid-cols-2">
-                <div>
-                  <Label htmlFor="secondaryButtonText">보조 버튼 텍스트</Label>
-                  <Input
-                    id="secondaryButtonText"
-                    {...form.register("secondaryButtonText")}
-                    placeholder="더 알아보기"
-                  />
-                  {form.formState.errors.secondaryButtonText && (
-                    <p className="text-sm text-red-500 mt-1">
-                      {form.formState.errors.secondaryButtonText.message}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <Label htmlFor="secondaryButtonLink">보조 버튼 링크</Label>
-                  <Input
-                    id="secondaryButtonLink"
-                    {...form.register("secondaryButtonLink")}
-                    placeholder="#brand-story"
-                  />
-                  {form.formState.errors.secondaryButtonLink && (
-                    <p className="text-sm text-red-500 mt-1">
-                      {form.formState.errors.secondaryButtonLink.message}
-                    </p>
-                  )}
-                </div>
               </div>
 
               <Button 
@@ -251,23 +239,25 @@ export default function HeroEditor({ initialData }: HeroEditorProps) {
             <CardContent>
               <div className="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-gray-800 dark:to-gray-900 p-8 rounded-lg">
                 <div className="text-center space-y-4">
-                  <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-                    {watchedValues.mainTitle || "메인 타이틀"}
-                  </h1>
-                  <h2 className="text-xl text-gray-600 dark:text-gray-400">
-                    {watchedValues.subtitle || "서브타이틀"}
-                  </h2>
-                  <p className="text-gray-700 dark:text-gray-300 max-w-md mx-auto">
-                    {watchedValues.description || "설명"}
-                  </p>
-                  <div className="flex gap-4 justify-center">
+                  <div className="space-y-2">
+                    <h2 className="text-lg text-gray-600 dark:text-gray-400">
+                      {watchedValues.subtitle || "서브타이틀"}
+                    </h2>
+                    <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent leading-tight">
+                      <div>{watchedValues.mainTitle?.line1 || "첫 번째 줄"}</div>
+                      <div>{watchedValues.mainTitle?.line2 || "두 번째 줄"}</div>
+                    </h1>
+                  </div>
+                  <div className="pt-4">
                     <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
-                      {watchedValues.primaryButtonText || "주요 버튼"}
-                    </Button>
-                    <Button size="lg" variant="outline">
-                      {watchedValues.secondaryButtonText || "보조 버튼"}
+                      {watchedValues.ctaButton?.text || "버튼 텍스트"}
                     </Button>
                   </div>
+                  {watchedValues.backgroundImage && (
+                    <div className="mt-4 text-sm text-gray-500">
+                      배경 이미지: {watchedValues.backgroundImage.substring(0, 50)}...
+                    </div>
+                  )}
                 </div>
               </div>
             </CardContent>
