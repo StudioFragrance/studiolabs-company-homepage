@@ -41,89 +41,55 @@ export default function CompanyHistorySection() {
             <p className="text-lg text-gray-600">{companyHistoryData.subtitle}</p>
           </div>
           
+          {/* 타임라인 */}
           <div className="relative">
-            <div className="timeline-line"></div>
+            {/* 중앙 선 */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-brand-coral h-full"></div>
             
-            {/* 2024년 섹션 */}
-            <div className="mb-16">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={isVisible ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.2, duration: 0.6 }}
-                className="text-center mb-8"
-              >
-                <h3 className="text-3xl font-korean font-bold text-brand-coral bg-white inline-block px-6 py-2 rounded-full shadow-md">2024</h3>
-              </motion.div>
-              <div className="space-y-8">
-                {companyHistoryData.timeline.filter((item: any) => item.year === 2024).map((item: any, index: number) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: -50 }}
-                    animate={isVisible ? { opacity: 1, x: 0 } : {}}
-                    transition={{ delay: 0.3 + index * 0.1, duration: 0.6 }}
-                    className="timeline-item relative pl-12 ml-6 bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105"
+            <div className="space-y-8">
+              {companyHistoryData.timeline.map((event: any, index: number) => (
+                <motion.div 
+                  key={index}
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                  animate={isVisible ? { opacity: 1, x: 0 } : {}}
+                  transition={{ delay: 0.2 + index * 0.1, duration: 0.6 }}
+                  className={`flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}
+                >
+                  <div className={`w-5/12 ${index % 2 === 0 ? 'text-right pr-8' : 'text-left pl-8'}`}>
+                    <motion.div 
+                      whileHover={{ scale: 1.02, y: -2 }}
+                      className="bg-white border border-gray-200 rounded-lg p-4 shadow-md hover:shadow-lg transition-all duration-300"
+                    >
+                      <div className="text-sm text-brand-coral font-medium mb-2">
+                        {event.date}
+                      </div>
+                      <h3 className="font-semibold text-gray-900 mb-2">
+                        {event.title}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        {event.description}
+                      </p>
+                      {event.isFuture && (
+                        <div className="mt-2">
+                          <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
+                            예정
+                          </span>
+                        </div>
+                      )}
+                    </motion.div>
+                  </div>
+                  
+                  {/* 중앙 아이콘 */}
+                  <motion.div 
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    className="relative z-10 flex items-center justify-center w-10 h-10 bg-brand-coral rounded-full border-4 border-white shadow-lg"
                   >
-                    <div className="flex flex-col md:flex-row md:items-center justify-between">
-                      <div>
-                        <span className="font-bold text-lg text-brand-coral">
-                          {item.date}
-                        </span>
-                        <h3 className="text-xl font-semibold mt-2">{item.title}</h3>
-                        <p className="mt-1 text-gray-600">
-                          {item.description}
-                        </p>
-                      </div>
-                      <div className="text-right mt-4 md:mt-0">
-                        <motion.i
-                          whileHover={{ scale: 1.2, rotate: 5 }}
-                          className={`fas ${item.icon} text-brand-coral text-2xl`}
-                        />
-                      </div>
-                    </div>
+                    <i className={`fas ${event.icon} text-white text-sm`}></i>
                   </motion.div>
-                ))}
-              </div>
-            </div>
-
-            {/* 2025년 섹션 */}
-            <div>
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={isVisible ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.8, duration: 0.6 }}
-                className="text-center mb-8"
-              >
-                <h3 className="text-3xl font-korean font-bold text-white bg-gradient-to-r from-brand-coral to-orange-400 inline-block px-6 py-2 rounded-full shadow-md">2025</h3>
-              </motion.div>
-              <div className="space-y-8">
-                {companyHistoryData.timeline.filter((item: any) => item.year === 2025).map((item: any, index: number) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: -50 }}
-                    animate={isVisible ? { opacity: 1, x: 0 } : {}}
-                    transition={{ delay: 0.9 + index * 0.1, duration: 0.6 }}
-                    className="timeline-item relative pl-12 ml-6 bg-gradient-to-r from-brand-coral to-orange-400 text-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105"
-                  >
-                    <div className="flex flex-col md:flex-row md:items-center justify-between">
-                      <div>
-                        <span className="font-bold text-lg opacity-90">
-                          {item.date}
-                        </span>
-                        <h3 className="text-xl font-semibold mt-2">{item.title}</h3>
-                        <p className="mt-1 opacity-90">
-                          {item.description}
-                        </p>
-                      </div>
-                      <div className="text-right mt-4 md:mt-0">
-                        <motion.i
-                          whileHover={{ scale: 1.2, rotate: 5 }}
-                          className={`fas ${item.icon} text-white text-2xl`}
-                        />
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+                  
+                  <div className="w-5/12"></div>
+                </motion.div>
+              ))}
             </div>
           </div>
         </motion.div>
