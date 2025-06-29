@@ -237,25 +237,48 @@ export default function HeroEditor({ initialData }: HeroEditorProps) {
               <CardTitle>미리보기</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-gray-800 dark:to-gray-900 p-8 rounded-lg">
-                <div className="text-center space-y-4">
-                  <div className="space-y-2">
-                    <h2 className="text-lg text-gray-600 dark:text-gray-400">
-                      {watchedValues.subtitle || "서브타이틀"}
-                    </h2>
-                    <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent leading-tight">
-                      <div>{watchedValues.mainTitle?.line1 || "첫 번째 줄"}</div>
-                      <div>{watchedValues.mainTitle?.line2 || "두 번째 줄"}</div>
-                    </h1>
-                  </div>
-                  <div className="pt-4">
-                    <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
+              <div 
+                className="relative min-h-[400px] flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-orange-50 to-pink-50"
+                style={{
+                  backgroundImage: watchedValues.backgroundImage ? `url('${watchedValues.backgroundImage}')` : undefined,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
+              >
+                {/* 배경 오버레이 */}
+                <div className="absolute inset-0 bg-white/70"></div>
+                
+                <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
+                  <p className="text-lg text-gray-600 mb-4 font-light">
+                    {watchedValues.subtitle || "서브타이틀"}
+                  </p>
+                  
+                  <h1 
+                    className="text-5xl md:text-7xl font-bold mb-8"
+                    style={{ 
+                      lineHeight: '1.3',
+                      paddingTop: '0.5rem',
+                      paddingBottom: '0.5rem',
+                    }}
+                  >
+                    <span className="bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 bg-clip-text text-transparent block">
+                      {watchedValues.mainTitle?.line1 || "첫 번째 줄"}
+                    </span>
+                    <span className="text-gray-900 block">
+                      {watchedValues.mainTitle?.line2 || "두 번째 줄"}
+                    </span>
+                  </h1>
+                  
+                  <div className="flex justify-center">
+                    <div className="border-2 border-orange-400 text-orange-400 px-8 py-4 rounded-full hover:bg-orange-400 hover:text-white transition-all font-medium shadow-lg inline-flex items-center gap-2">
+                      <i className="fas fa-robot" />
                       {watchedValues.ctaButton?.text || "버튼 텍스트"}
-                    </Button>
+                    </div>
                   </div>
+                  
                   {watchedValues.backgroundImage && (
-                    <div className="mt-4 text-sm text-gray-500">
-                      배경 이미지: {watchedValues.backgroundImage.substring(0, 50)}...
+                    <div className="mt-6 text-xs text-gray-500 bg-white/80 rounded px-2 py-1 inline-block">
+                      배경: {watchedValues.backgroundImage.split('/').pop()?.substring(0, 30)}...
                     </div>
                   )}
                 </div>
