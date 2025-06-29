@@ -9,7 +9,6 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Save, RefreshCw, Eye, EyeOff, Plus, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -119,270 +118,183 @@ export default function MVCEditor({ initialData }: MVCEditorProps) {
             onClick={() => setShowPreview(!showPreview)}
           >
             {showPreview ? <EyeOff className="h-4 w-4 mr-2" /> : <Eye className="h-4 w-4 mr-2" />}
-            {showPreview ? '편집 모드' : '미리보기'}
+            {showPreview ? "편집 모드" : "미리보기"}
           </Button>
         </div>
       </div>
 
-      {showPreview ? (
-        <Card>
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Card className={showPreview ? "lg:col-span-1" : "lg:col-span-2"}>
           <CardHeader>
-            <CardTitle>미리보기</CardTitle>
+            <CardTitle>콘텐츠 편집</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="py-20 bg-white">
-              <div className="max-w-6xl mx-auto px-4">
-                <div className="text-center mb-16">
-                  <h2 className="text-4xl font-korean font-bold gradient-text mb-4">
-                    {watchedValues.title || "Mission · Vision · Core Value"}
-                  </h2>
-                  <p className="text-lg text-gray-600">
-                    {watchedValues.subtitle || "우리의 가치와 비전"}
-                  </p>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <div className="space-y-4">
+                <div>
+                  <Label>섹션 제목</Label>
+                  <Input {...form.register("title")} placeholder="Mission · Vision · Core Value" />
                 </div>
-                
-                <div className="grid lg:grid-cols-3 gap-8">
-                  {/* Mission */}
-                  <div className="bg-brand-cream p-8 rounded-xl shadow-lg hover:shadow-xl transition-all">
-                    <div className="text-center mb-6">
-                      <div className="w-16 h-16 bg-brand-coral rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i className="fas fa-bullseye text-white text-2xl" />
-                      </div>
-                      <h3 className="text-2xl font-bold gradient-text mb-4">Mission</h3>
-                    </div>
-                    <div className="space-y-4">
-                      <h4 className="text-lg font-semibold">
-                        {watchedValues.mission?.title || "미션 제목"}
-                      </h4>
-                      <p className="text-gray-600 text-sm leading-relaxed">
-                        {watchedValues.mission?.description || "미션 설명"}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Vision */}
-                  <div className="bg-brand-cream p-8 rounded-xl shadow-lg hover:shadow-xl transition-all">
-                    <div className="text-center mb-6">
-                      <div className="w-16 h-16 bg-brand-coral rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i className="fas fa-eye text-white text-2xl" />
-                      </div>
-                      <h3 className="text-2xl font-bold gradient-text mb-4">Vision</h3>
-                    </div>
-                    <div className="space-y-4">
-                      <h4 className="text-lg font-semibold">
-                        {watchedValues.vision?.title || "비전 제목"}
-                      </h4>
-                      <p className="text-gray-600 text-sm leading-relaxed">
-                        {watchedValues.vision?.description || "비전 설명"}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Core Values */}
-                  <div className="bg-brand-cream p-8 rounded-xl shadow-lg hover:shadow-xl transition-all">
-                    <div className="text-center mb-6">
-                      <div className="w-16 h-16 bg-brand-coral rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i className="fas fa-heart text-white text-2xl" />
-                      </div>
-                      <h3 className="text-2xl font-bold gradient-text mb-4">Core Values</h3>
-                    </div>
-                    <div className="space-y-6">
-                      {watchedValues.coreValues?.map((value, index) => (
-                        <div key={index}>
-                          <h4 className="font-semibold mb-2">
-                            {value.title || `핵심가치 ${index + 1}`}
-                          </h4>
-                          <p className="text-gray-600 text-sm">
-                            {value.description || "핵심가치 설명"}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                <div>
+                  <Label>섹션 부제목</Label>
+                  <Input {...form.register("subtitle")} placeholder="우리의 가치와 비전" />
                 </div>
               </div>
-            </div>
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Mission</h3>
+                <div>
+                  <Label>미션 제목</Label>
+                  <Textarea {...form.register("mission.title")} rows={2} />
+                </div>
+                <div>
+                  <Label>미션 설명</Label>
+                  <Textarea {...form.register("mission.description")} rows={3} />
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Vision</h3>
+                <div>
+                  <Label>비전 제목</Label>
+                  <Textarea {...form.register("vision.title")} rows={2} />
+                </div>
+                <div>
+                  <Label>비전 설명</Label>
+                  <Textarea {...form.register("vision.description")} rows={3} />
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold">Core Values</h3>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => appendCoreValue({ title: "", description: "" })}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    추가
+                  </Button>
+                </div>
+                {coreValueFields.map((field, index) => (
+                  <div key={field.id} className="p-4 border rounded space-y-3">
+                    <div className="flex justify-between items-center">
+                      <Label>핵심가치 {index + 1}</Label>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeCoreValue(index)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    <Input
+                      {...form.register(`coreValues.${index}.title`)}
+                      placeholder="제목"
+                    />
+                    <Textarea
+                      {...form.register(`coreValues.${index}.description`)}
+                      placeholder="설명"
+                      rows={2}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <Button type="submit" disabled={updateMutation.isPending}>
+                {updateMutation.isPending ? (
+                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <Save className="h-4 w-4 mr-2" />
+                )}
+                저장
+              </Button>
+            </form>
           </CardContent>
         </Card>
-      ) : (
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+
+        {showPreview && (
           <Card>
             <CardHeader>
-              <CardTitle>기본 정보</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label>섹션 제목</Label>
-                <Input {...form.register("title")} placeholder="Mission · Vision · Core Value" />
-                {form.formState.errors.title && (
-                  <p className="text-sm text-red-600">{form.formState.errors.title.message}</p>
-                )}
-              </div>
-
-              <div>
-                <Label>섹션 부제목</Label>
-                <Input {...form.register("subtitle")} placeholder="우리의 가치와 비전" />
-                {form.formState.errors.subtitle && (
-                  <p className="text-sm text-red-600">{form.formState.errors.subtitle.message}</p>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Mission */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Mission</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label>미션 제목</Label>
-                <Textarea 
-                  {...form.register("mission.title")} 
-                  placeholder="회사의 미션을 입력하세요"
-                  rows={2}
-                />
-                {form.formState.errors.mission?.title && (
-                  <p className="text-sm text-red-600">{form.formState.errors.mission.title.message}</p>
-                )}
-              </div>
-
-              <div>
-                <Label>미션 설명</Label>
-                <Textarea 
-                  {...form.register("mission.description")} 
-                  placeholder="미션에 대한 자세한 설명을 입력하세요"
-                  rows={3}
-                />
-                {form.formState.errors.mission?.description && (
-                  <p className="text-sm text-red-600">{form.formState.errors.mission.description.message}</p>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Vision */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Vision</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label>비전 제목</Label>
-                <Textarea 
-                  {...form.register("vision.title")} 
-                  placeholder="회사의 비전을 입력하세요"
-                  rows={2}
-                />
-                {form.formState.errors.vision?.title && (
-                  <p className="text-sm text-red-600">{form.formState.errors.vision.title.message}</p>
-                )}
-              </div>
-
-              <div>
-                <Label>비전 설명</Label>
-                <Textarea 
-                  {...form.register("vision.description")} 
-                  placeholder="비전에 대한 자세한 설명을 입력하세요"
-                  rows={3}
-                />
-                {form.formState.errors.vision?.description && (
-                  <p className="text-sm text-red-600">{form.formState.errors.vision.description.message}</p>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Core Values */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle>Core Values</CardTitle>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => appendCoreValue({ title: "", description: "" })}
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  핵심가치 추가
-                </Button>
-              </div>
+              <CardTitle>미리보기</CardTitle>
             </CardHeader>
             <CardContent>
-              {coreValueFields.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                  <p>핵심가치를 추가해주세요</p>
-                </div>
-              ) : (
-                <Accordion type="multiple" className="space-y-2">
-                  {coreValueFields.map((field, index) => (
-                    <AccordionItem key={field.id} value={`coreValue-${index}`}>
-                      <AccordionTrigger className="px-4 hover:no-underline">
-                        <div className="flex items-center justify-between w-full mr-4">
-                          <div className="flex items-center gap-3">
-                            <div className="font-medium">
-                              {form.watch(`coreValues.${index}.title`) || `핵심가치 ${index + 1}`}
-                            </div>
-                          </div>
-                          <div
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              removeCoreValue(index);
-                            }}
-                            className="text-red-600 hover:text-red-700 hover:bg-red-50 p-2 rounded cursor-pointer"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </div>
+              <div className="py-12 bg-white">
+                <div className="max-w-4xl mx-auto px-4">
+                  <div className="text-center mb-12">
+                    <h2 className="text-3xl font-korean font-bold gradient-text mb-4">
+                      {watchedValues.title || "Mission · Vision · Core Value"}
+                    </h2>
+                    <p className="text-lg text-gray-600">
+                      {watchedValues.subtitle || "우리의 가치와 비전"}
+                    </p>
+                  </div>
+                  
+                  <div className="grid lg:grid-cols-3 gap-6">
+                    <div className="bg-brand-cream p-6 rounded-xl shadow-lg">
+                      <div className="text-center mb-6">
+                        <div className="w-12 h-12 bg-brand-coral rounded-full flex items-center justify-center mx-auto mb-4">
+                          <i className="fas fa-bullseye text-white text-xl" />
                         </div>
-                      </AccordionTrigger>
-                      <AccordionContent className="px-4 pb-4 space-y-3">
-                        <div>
-                          <Label>제목</Label>
-                          <Input
-                            {...form.register(`coreValues.${index}.title`)}
-                            placeholder="핵심가치 제목"
-                          />
-                          {form.formState.errors.coreValues?.[index]?.title && (
-                            <p className="text-sm text-red-600">{form.formState.errors.coreValues[index]?.title?.message}</p>
-                          )}
-                        </div>
+                        <h3 className="text-xl font-bold gradient-text mb-4">Mission</h3>
+                      </div>
+                      <div className="space-y-3">
+                        <h4 className="font-semibold text-sm">
+                          {watchedValues.mission?.title || "미션 제목"}
+                        </h4>
+                        <p className="text-gray-600 text-xs leading-relaxed">
+                          {watchedValues.mission?.description || "미션 설명"}
+                        </p>
+                      </div>
+                    </div>
 
-                        <div>
-                          <Label>설명</Label>
-                          <Textarea
-                            {...form.register(`coreValues.${index}.description`)}
-                            placeholder="핵심가치에 대한 설명"
-                            rows={3}
-                          />
-                          {form.formState.errors.coreValues?.[index]?.description && (
-                            <p className="text-sm text-red-600">{form.formState.errors.coreValues[index]?.description?.message}</p>
-                          )}
+                    <div className="bg-brand-cream p-6 rounded-xl shadow-lg">
+                      <div className="text-center mb-6">
+                        <div className="w-12 h-12 bg-brand-coral rounded-full flex items-center justify-center mx-auto mb-4">
+                          <i className="fas fa-eye text-white text-xl" />
                         </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </Accordion>
-              )}
+                        <h3 className="text-xl font-bold gradient-text mb-4">Vision</h3>
+                      </div>
+                      <div className="space-y-3">
+                        <h4 className="font-semibold text-sm">
+                          {watchedValues.vision?.title || "비전 제목"}
+                        </h4>
+                        <p className="text-gray-600 text-xs leading-relaxed">
+                          {watchedValues.vision?.description || "비전 설명"}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="bg-brand-cream p-6 rounded-xl shadow-lg">
+                      <div className="text-center mb-6">
+                        <div className="w-12 h-12 bg-brand-coral rounded-full flex items-center justify-center mx-auto mb-4">
+                          <i className="fas fa-heart text-white text-xl" />
+                        </div>
+                        <h3 className="text-xl font-bold gradient-text mb-4">Core Values</h3>
+                      </div>
+                      <div className="space-y-4">
+                        {watchedValues.coreValues?.map((value, index) => (
+                          <div key={index}>
+                            <h4 className="font-semibold mb-1 text-sm">
+                              {value.title || `핵심가치 ${index + 1}`}
+                            </h4>
+                            <p className="text-gray-600 text-xs">
+                              {value.description || "핵심가치 설명"}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </CardContent>
           </Card>
-
-          <div className="flex justify-end space-x-4 pt-6">
-            <Button 
-              type="submit"
-              disabled={updateMutation.isPending}
-              className="bg-blue-600 hover:bg-blue-700"
-            >
-              {updateMutation.isPending ? (
-                <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-              ) : (
-                <Save className="h-4 w-4 mr-2" />
-              )}
-              저장
-            </Button>
-          </div>
-        </form>
-      )}
+        )}
+      </div>
     </div>
   );
 }
