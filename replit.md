@@ -103,6 +103,8 @@ Studio fragrance is a modern web application that provides personalized fragranc
 - `REPL_ID` for Replit-specific features
 
 ## Changelog
+- June 29, 2025: 불필요한 환경변수 정리 완료 (PORT, DATABASE_URL, SESSION_SECRET 제거 - 현재 사용되지 않음)
+- June 29, 2025: dotenv 설정 추가하여 환경변수를 .env 파일로 관리하도록 개선
 - June 29, 2025: Successfully migrated from Replit Agent to standard Replit environment
 - June 29, 2025: Removed Docker configuration files (Dockerfile, docker-compose.yml, .dockerignore) to simplify deployment strategy
 - June 28, 2025. Initial setup
