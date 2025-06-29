@@ -204,13 +204,22 @@ export default function MVCEditor({ initialData }: MVCEditorProps) {
                 ))}
               </div>
 
-              <Button type="submit" disabled={updateMutation.isPending}>
+              <Button 
+                type="submit" 
+                className="w-full"
+                disabled={updateMutation.isPending}
+              >
                 {updateMutation.isPending ? (
-                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                  <>
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                    저장 중...
+                  </>
                 ) : (
-                  <Save className="h-4 w-4 mr-2" />
+                  <>
+                    <Save className="h-4 w-4 mr-2" />
+                    저장
+                  </>
                 )}
-                저장
               </Button>
             </form>
           </CardContent>
