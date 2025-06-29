@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Save, RefreshCw, Eye, EyeOff, Plus, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -185,77 +186,104 @@ export default function CompanyHistoryEditor({ initialData }: CompanyHistoryEdit
                   </Button>
                 </div>
                 
-                <div className="space-y-4 max-h-96 overflow-y-auto">
-                  {timelineFields.map((field, index) => (
-                    <div key={field.id} className="border rounded-lg p-4 space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium">이벤트 {index + 1}</span>
-                        {timelineFields.length > 1 && (
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => removeTimeline(index)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        )}
-                      </div>
-                      
-                      <div className="grid gap-2 md:grid-cols-3">
-                        <div>
-                          <Label>날짜</Label>
-                          <Input
-                            {...form.register(`timeline.${index}.date`)}
-                            placeholder="2024.01"
-                          />
-                        </div>
-                        <div>
-                          <Label>연도</Label>
-                          <Input
-                            type="number"
-                            {...form.register(`timeline.${index}.year`, { valueAsNumber: true })}
-                            placeholder="2024"
-                          />
-                        </div>
-                        <div>
-                          <Label>아이콘</Label>
-                          <Input
-                            {...form.register(`timeline.${index}.icon`)}
-                            placeholder="fa-building"
-                          />
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <Label>제목</Label>
-                        <Input
-                          {...form.register(`timeline.${index}.title`)}
-                          placeholder="이벤트 제목"
-                        />
-                      </div>
-                      
-                      <div>
-                        <Label>설명</Label>
-                        <Textarea
-                          {...form.register(`timeline.${index}.description`)}
-                          placeholder="이벤트 설명"
-                          rows={2}
-                        />
-                      </div>
-                      
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id={`future-${index}`}
-                          checked={form.watch(`timeline.${index}.isFuture`) || false}
-                          onCheckedChange={(checked) => 
-                            form.setValue(`timeline.${index}.isFuture`, !!checked)
-                          }
-                        />
-                        <Label htmlFor={`future-${index}`}>미래 계획</Label>
-                      </div>
-                    </div>
-                  ))}
+                <div className="max-h-96 overflow-y-auto">
+                  <Accordion type="multiple" className="space-y-2">
+                    {timelineFields.map((field, index) => (
+                      <AccordionItem key={field.id} value={`event-${index}`} className="border rounded-lg">
+                        <AccordionTrigger className="px-4 py-3 text-left">
+                          <div className="flex items-center justify-between w-full">
+                            <div className="flex items-center space-x-3">
+                              <div className="flex items-center justify-center w-8 h-8 bg-brand-coral rounded-full">
+                                <i className={`fas ${form.watch(`timeline.${index}.icon`) || 'fa-building'} text-white text-sm`}></i>
+                              </div>
+                              <div>
+                                <div className="font-medium">
+                                  {form.watch(`timeline.${index}.title`) || `이벤트 ${index + 1}`}
+                                </div>
+                                <div className="text-sm text-gray-500">
+                                  {form.watch(`timeline.${index}.date`) || "날짜 미입력"}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              {form.watch(`timeline.${index}.isFuture`) && (
+                                <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
+                                  예정
+                                </span>
+                              )}
+                              {timelineFields.length > 1 && (
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    removeTimeline(index);
+                                  }}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="px-4 pb-4 space-y-3">
+                          <div className="grid gap-2 md:grid-cols-3">
+                            <div>
+                              <Label>날짜</Label>
+                              <Input
+                                {...form.register(`timeline.${index}.date`)}
+                                placeholder="2024.01"
+                              />
+                            </div>
+                            <div>
+                              <Label>연도</Label>
+                              <Input
+                                type="number"
+                                {...form.register(`timeline.${index}.year`, { valueAsNumber: true })}
+                                placeholder="2024"
+                              />
+                            </div>
+                            <div>
+                              <Label>아이콘</Label>
+                              <Input
+                                {...form.register(`timeline.${index}.icon`)}
+                                placeholder="fa-building"
+                              />
+                            </div>
+                          </div>
+                          
+                          <div>
+                            <Label>제목</Label>
+                            <Input
+                              {...form.register(`timeline.${index}.title`)}
+                              placeholder="이벤트 제목"
+                            />
+                          </div>
+                          
+                          <div>
+                            <Label>설명</Label>
+                            <Textarea
+                              {...form.register(`timeline.${index}.description`)}
+                              placeholder="이벤트 설명"
+                              rows={2}
+                            />
+                          </div>
+                          
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id={`future-${index}`}
+                              checked={form.watch(`timeline.${index}.isFuture`) || false}
+                              onCheckedChange={(checked) => 
+                                form.setValue(`timeline.${index}.isFuture`, !!checked)
+                              }
+                            />
+                            <Label htmlFor={`future-${index}`}>미래 계획</Label>
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
                 </div>
               </div>
 
