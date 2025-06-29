@@ -9,3 +9,5 @@ vite.config.ts.*
 .idea
 .vscode
 .vs
+
+.env

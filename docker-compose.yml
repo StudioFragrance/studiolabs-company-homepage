@@ -1,0 +1,11 @@
+services:
+  server:
+    container_name: company-homepage
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    restart: always
