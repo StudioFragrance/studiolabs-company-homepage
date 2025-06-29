@@ -211,16 +211,6 @@ export default function CompanyHistoryEditor({ initialData }: CompanyHistoryEdit
                                 예정
                               </span>
                             )}
-                            {timelineFields.length > 1 && (
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => removeTimeline(index)}
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            )}
                           </div>
                           
                           <AccordionTrigger className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded-md transition-colors">
@@ -269,15 +259,29 @@ export default function CompanyHistoryEditor({ initialData }: CompanyHistoryEdit
                             />
                           </div>
                           
-                          <div className="flex items-center space-x-2">
-                            <Checkbox
-                              id={`future-${index}`}
-                              checked={form.watch(`timeline.${index}.isFuture`) || false}
-                              onCheckedChange={(checked) => 
-                                form.setValue(`timeline.${index}.isFuture`, !!checked)
-                              }
-                            />
-                            <Label htmlFor={`future-${index}`}>미래 계획</Label>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-2">
+                              <Checkbox
+                                id={`future-${index}`}
+                                checked={form.watch(`timeline.${index}.isFuture`) || false}
+                                onCheckedChange={(checked) => 
+                                  form.setValue(`timeline.${index}.isFuture`, !!checked)
+                                }
+                              />
+                              <Label htmlFor={`future-${index}`}>미래 계획</Label>
+                            </div>
+                            
+                            {timelineFields.length > 1 && (
+                              <Button
+                                type="button"
+                                variant="destructive"
+                                size="sm"
+                                onClick={() => removeTimeline(index)}
+                              >
+                                <Trash2 className="h-4 w-4 mr-1" />
+                                삭제
+                              </Button>
+                            )}
                           </div>
                         </AccordionContent>
                       </AccordionItem>
