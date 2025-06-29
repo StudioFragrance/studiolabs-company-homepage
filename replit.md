@@ -21,10 +21,10 @@ Studio fragrance is a modern web application that provides personalized fragranc
 - **Build System**: ESBuild for production builds
 
 ### Data Storage Layer
-- **Current Implementation**: In-memory storage (MemStorage)
-- **Schema Design**: Drizzle ORM with PostgreSQL dialect (prepared for future use)
-- **Storage Interface**: Abstract IStorage interface for easy database migration
-- **Development**: All data stored in memory, resets on server restart
+- **Current Implementation**: TypeORM + PostgreSQL database
+- **Database Entities**: User, SiteContent with automatic table creation
+- **Storage Interface**: DatabaseStorage with TypeORM repository pattern
+- **Production**: Docker network with PostgreSQL container and data persistence
 
 ## Key Components
 
@@ -53,10 +53,11 @@ Studio fragrance is a modern web application that provides personalized fragranc
    - Error handling middleware
    - Development-optimized request logging
 
-2. **Storage Layer**
-   - Abstract IStorage interface
-   - In-memory storage implementation
-   - User CRUD operations (ready for database integration)
+2. **Database Layer**
+   - TypeORM with PostgreSQL connection
+   - DatabaseStorage implementation with repository pattern
+   - User and SiteContent entity management
+   - Automatic schema synchronization
 
 3. **Development Tools**
    - Vite middleware integration
@@ -75,10 +76,11 @@ Studio fragrance is a modern web application that provides personalized fragranc
 
 ### Core Technologies
 - **Package Manager**: pnpm (migrated from npm)
-- **Data Storage**: In-memory storage (no external database currently)
+- **Database**: PostgreSQL with TypeORM (Docker containerized)
 - **Fonts**: Custom Korean fonts (LINE Seed KR family)
 - **Icons**: Lucide React icons
 - **Development**: Replit environment with hot reloading
+- **Container**: Docker Compose with PostgreSQL and app services
 
 ### Development Tools
 - **Replit Integration**: Cartographer plugin and runtime error modal
@@ -90,13 +92,19 @@ Studio fragrance is a modern web application that provides personalized fragranc
 ### Development Environment
 - Vite dev server with hot reloading
 - Express server with middleware integration
-- In-memory storage for rapid development
+- PostgreSQL database with TypeORM auto-sync
 
 ### Production Build
 - Vite builds optimized frontend bundle
 - ESBuild compiles backend to single file
 - Static assets served from Express
-- PostgreSQL database connection via environment variables
+- Docker containerized with PostgreSQL database
+
+### Docker Network Configuration
+- PostgreSQL container: studiofragrance_db
+- Application container: studiofragrance_app
+- Network: studiofragrance_network
+- Persistent volume: studiofragrance_postgres_data
 
 ### Environment Configuration
 - `NODE_ENV` for environment detection (development/production)
@@ -104,16 +112,15 @@ Studio fragrance is a modern web application that provides personalized fragranc
 - Future-ready for database integration when needed
 
 ## Changelog
+- June 29, 2025: **Docker 네트워크 및 PostgreSQL 마이그레이션 완료** - TypeORM + PostgreSQL로 완전 전환, Docker Compose 배포 환경 구축
+- June 29, 2025: Docker Compose 설정 완료 - PostgreSQL 컨테이너와 앱 컨테이너 간 네트워크 통신 구성
+- June 29, 2025: README.md에 Docker 네트워크 배포 가이드 추가 - 컨테이너 관리 및 트러블슈팅 섹션 포함
+- June 29, 2025: 환경별 호스트 바인딩 개선 - 프로덕션/Docker 환경에서 0.0.0.0 자동 사용
+- June 29, 2025: TypeORM 설정 최적화 - Docker 네트워크 연결 타임아웃 및 SSL 설정 개선
 - June 29, 2025: 중앙 집중식 사이트 콘텐츠 관리 시스템 구축 완료 - shared/siteConfig.ts로 모든 텍스트 콘텐츠 통합 관리
 - June 29, 2025: 모든 React 컴포넌트를 설정 파일 기반으로 리팩토링 완료 (Hero, BrandStory, CompanyHistory, MVC, Contact, Footer)
 - June 29, 2025: 배포 후 데이터 변경 가능한 구조 완성 - 코드 수정 없이 siteConfig.ts 파일만 편집하여 콘텐츠 관리 가능
-- June 29, 2025: Docker 배포 문제 해결 - 로컬/클라우드 환경별 호스트 바인딩 및 런타임 의존성 최적화
-- June 29, 2025: 서버 호스트 바인딩을 환경별로 자동 선택 (로컬: localhost, 클라우드: 0.0.0.0)
-- June 29, 2025: README.md 업데이트 완료 - 현재 인메모리 스토리지 사용 상태 반영, npm 명령어를 pnpm으로 변경
-- June 29, 2025: 불필요한 환경변수 정리 완료 (PORT, DATABASE_URL, SESSION_SECRET 제거 - 현재 사용되지 않음)
-- June 29, 2025: dotenv 설정 추가하여 환경변수를 .env 파일로 관리하도록 개선
 - June 29, 2025: Successfully migrated from Replit Agent to standard Replit environment
-- June 29, 2025: Removed Docker configuration files (Dockerfile, docker-compose.yml, .dockerignore) to simplify deployment strategy
 - June 28, 2025. Initial setup
 
 ## User Preferences

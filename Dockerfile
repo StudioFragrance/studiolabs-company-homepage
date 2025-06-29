@@ -1,39 +1,26 @@
-FROM node:22-alpine as base
+# Node.js 기반 이미지 사용
+FROM node:20-alpine
 
-# KST 타임존 설정
-ENV TZ=Asia/Seoul
-RUN apk --no-cache add tzdata && \
-    cp /usr/share/zoneinfo/$TZ /etc/localtime && \
-    echo $TZ > /etc/timezone && \
-    apk del tzdata
+# 작업 디렉토리 설정
+WORKDIR /app
 
+# pnpm 설치
 RUN npm install -g pnpm
 
-WORKDIR /app
-
-
-FROM base as deps
-
-WORKDIR /app
+# package.json과 pnpm-lock.yaml 복사
 COPY package.json pnpm-lock.yaml ./
-RUN --mount=type=cache,id=pnpm,target=/var/pnpm/store pnpm install --frozen-lockfile
 
-FROM base as build
+# 의존성 설치
+RUN pnpm install --frozen-lockfile
 
-WORKDIR /app
+# 소스 코드 복사
 COPY . .
-COPY --from=deps /app/node_modules ./node_modules
+
+# TypeScript 컴파일 및 클라이언트 빌드
 RUN pnpm run build
 
-FROM base as publish
-
-WORKDIR /app
-
-# 런타임에 필요한 모든 파일 복사
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=build /app/dist ./dist
-COPY package.json ./
-COPY vite.config.ts ./
-
+# 포트 노출
 EXPOSE 5000
-CMD ["node", "./dist/index.js"]
+
+# 프로덕션 환경에서 애플리케이션 실행
+CMD ["node", "dist/server/index.js"]
