@@ -93,10 +93,17 @@ Docker를 사용하여 배포하는 경우, 다음 사항들을 고려하세요:
 - .env 파일을 컨테이너에 복사하거나 환경 변수로 설정
 
 ### 환경 변수
-컨테이너 실행 시 .env 파일을 마운트하거나 다음 환경 변수를 설정하세요:
+Docker Compose 사용 시 자동으로 설정됩니다:
+- `DOCKER=true` (0.0.0.0 바인딩 강제)
+- `NODE_ENV=production`
+
+수동 실행 시:
 ```bash
--e NODE_ENV=production
+docker run -p 5000:5000 -e DOCKER=true -e NODE_ENV=production <image-name>
 ```
+
+### Docker 실행 확인
+컨테이너가 올바르게 실행되면 `http://localhost:5000`에서 접근 가능합니다.
 
 ## 프로젝트 구조
 
