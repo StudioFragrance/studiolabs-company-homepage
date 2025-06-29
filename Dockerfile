@@ -12,26 +12,28 @@ RUN npm install -g pnpm
 WORKDIR /app
 
 
+FROM base as deps
+
+WORKDIR /app
+COPY package.json pnpm-lock.yaml ./
+RUN --mount=type=cache,id=pnpm,target=/var/pnpm/store pnpm install --frozen-lockfile
+
 FROM base as build
 
 WORKDIR /app
 COPY . .
-RUN --mount=type=cache,id=pnpm,target=/var/pnpm/store pnpm install --frozen-lockfile
+COPY --from=deps /app/node_modules ./node_modules
 RUN pnpm run build
-
-
-FROM base as prod
-
-WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
-RUN --mount=type=cache,id=pnpm,target=/var/pnpm/store pnpm install --prod --frozen-lockfile
 
 FROM base as publish
 
 WORKDIR /app
 
-COPY --from=prod /app/node_modules ./node_modules
+# 런타임에 필요한 모든 파일 복사
+COPY --from=deps /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
+COPY package.json ./
+COPY vite.config.ts ./
 
 EXPOSE 5000
 CMD ["node", "./dist/index.js"]
