@@ -87,7 +87,7 @@ export default function ContactEditor({ initialData }: ContactEditorProps) {
 
   const updateMutation = useMutation({
     mutationFn: async (data: ContactFormData) => {
-      return apiRequest("/api/site-content/contact", "PUT", data);
+      return apiRequest("PUT", "/api/site-content/contact", data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/site-content"] });
