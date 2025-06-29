@@ -331,51 +331,71 @@ export default function BrandStoryEditor({ initialData }: BrandStoryEditorProps)
               <CardTitle>미리보기</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="bg-white rounded-lg p-6 space-y-6 border">
-                <div className="text-center space-y-4">
-                  <h2 className="text-3xl font-bold text-gray-900 font-korean">
-                    {watchedValues.title || "타이틀"}
-                  </h2>
-                  <p className="text-xl text-gray-600 italic">
-                    "{watchedValues.quote || "인용구"}"
-                  </p>
-                </div>
-
-                {watchedValues.image && (
-                  <div className="w-full h-48 bg-gray-200 rounded-lg overflow-hidden">
-                    <img 
-                      src={watchedValues.image} 
-                      alt="Brand story" 
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                )}
-
-                <div className="space-y-4">
-                  {watchedValues.content?.map((paragraph, index) => (
-                    <p key={index} className="text-gray-700 leading-relaxed">
-                      {paragraph || `문단 ${index + 1}`}
-                    </p>
-                  ))}
-                </div>
-
-                <div className="text-center">
-                  <div className="border-2 border-brand-coral text-brand-coral px-6 py-3 rounded-lg hover:bg-brand-coral hover:text-white transition-all font-medium inline-block">
-                    {watchedValues.ctaButton?.text || "CTA 버튼"}
-                  </div>
-                </div>
-
-                {watchedValues.statistics && watchedValues.statistics.length > 0 && (
-                  <div className="grid gap-4 md:grid-cols-2">
-                    {watchedValues.statistics.map((stat, index) => (
-                      <div key={index} className="text-center p-4 bg-gray-50 rounded-lg">
-                        <i className={`fas ${stat.icon} text-brand-coral text-2xl mb-2`}></i>
-                        <div className="font-medium text-gray-900">{stat.title || "제목"}</div>
-                        <div className="text-sm text-gray-600">{stat.description || "설명"}</div>
+              <div className="bg-white rounded-lg p-6">
+                {/* 실제와 동일한 2열 그리드 레이아웃 */}
+                <div className="grid lg:grid-cols-2 gap-8 items-center">
+                  {/* 이미지 영역 */}
+                  <div>
+                    {watchedValues.image ? (
+                      <img
+                        src={watchedValues.image}
+                        alt="Brand story"
+                        className="rounded-2xl shadow-xl w-full h-auto"
+                      />
+                    ) : (
+                      <div className="bg-gray-200 rounded-2xl shadow-xl w-full h-48 flex items-center justify-center">
+                        <span className="text-gray-500">이미지 없음</span>
                       </div>
-                    ))}
+                    )}
                   </div>
-                )}
+                  
+                  {/* 콘텐츠 영역 */}
+                  <div className="space-y-6">
+                    <h2 className="text-4xl font-korean font-bold gradient-text">
+                      {watchedValues.title || "타이틀"}
+                    </h2>
+                    
+                    <div className="space-y-4 text-lg leading-relaxed text-gray-700">
+                      <p className="italic text-brand-coral font-medium">
+                        "{watchedValues.quote || "인용구"}"
+                      </p>
+                      {watchedValues.content?.map((paragraph, index) => (
+                        <p 
+                          key={index} 
+                          className={`${index === (watchedValues.content?.length || 1) - 1 ? "font-medium" : ""}`}
+                        >
+                          {paragraph || `문단 ${index + 1}`}
+                        </p>
+                      ))}
+                    </div>
+                    
+                    {/* CTA 버튼 */}
+                    <div className="pt-6">
+                      <div className="inline-flex items-center bg-brand-coral text-white px-8 py-4 rounded-full hover:bg-brand-coral/90 transition-all font-medium text-lg shadow-lg hover:shadow-xl">
+                        <span>{watchedValues.ctaButton?.text || "CTA 버튼"}</span>
+                        <i className="fas fa-external-link-alt ml-3" />
+                      </div>
+                    </div>
+                    
+                    {/* 통계 정보 */}
+                    {watchedValues.statistics && watchedValues.statistics.length > 0 && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-8">
+                        {watchedValues.statistics.map((stat, index) => (
+                          <div 
+                            key={index} 
+                            className="bg-brand-cream p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300"
+                          >
+                            <div className="flex items-center mb-3">
+                              <i className={`fas ${stat.icon} text-brand-coral text-xl mr-3`} />
+                              <h4 className="font-semibold">{stat.title || "제목"}</h4>
+                            </div>
+                            <p className="text-sm text-gray-600">{stat.description || "설명"}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
