@@ -46,7 +46,7 @@ export function setupNaverWorksAuth() {
     clientSecret,
     callbackURL,
     scope: ['user.read', 'user.email.read'],
-    state: false,  // state 파라미터 비활성화 (Replit 환경에서 문제 발생)
+    state: true,  // CSRF 방지용 state 파라미터 활성화
     passReqToCallback: true,
     customHeaders: {
       'User-Agent': 'Studio-Fragrance-OAuth-Client/1.0'

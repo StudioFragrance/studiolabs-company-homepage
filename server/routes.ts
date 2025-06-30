@@ -12,31 +12,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // 네이버웍스 OAuth 시작
-  app.get('/auth/naver-works', (req, res, next) => {
-    console.log('네이버웍스 OAuth 로그인 요청 시작');
-    
-    // 수동으로 OAuth URL 생성하여 테스트
-    const clientID = process.env.NAVER_WORKS_CLIENT_ID;
-    const callbackURL = process.env.NAVER_WORKS_REDIRECT_URI;
-    const scope = 'user.read user.email.read';
-    
-    const oauthUrl = `https://auth.worksmobile.com/oauth2/v2.0/authorize?` +
-      `response_type=code` +
-      `&client_id=${encodeURIComponent(clientID!)}` +
-      `&redirect_uri=${encodeURIComponent(callbackURL!)}` +
-      `&scope=${encodeURIComponent(scope)}`;
-    
-    console.log('수동 생성된 OAuth URL:', oauthUrl);
-    console.log('OAuth 파라미터:', {
-      response_type: 'code',
-      client_id: clientID,
-      redirect_uri: callbackURL,
-      scope: scope
-    });
-    
-    // 수동 리다이렉트로 테스트
-    res.redirect(oauthUrl);
-  });
+  app.get('/auth/naver-works', passport.authenticate('naver-works'));
 
   // 네이버웍스 OAuth 콜백
   app.get('/auth/naver-works/callback', (req, res, next) => {
