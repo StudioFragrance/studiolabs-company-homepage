@@ -63,15 +63,22 @@ app.use('/api/site-content', (req, res, next) => {
 app.use(express.json({ limit: '1mb' })); // JSON 크기 제한
 app.use(express.urlencoded({ extended: false, limit: '1mb' })); // URL-encoded 크기 제한
 
-// 세션 설정
+// 세션 설정 (Docker 환경 호환)
+const isDocker = process.env.DOCKER === 'true' || process.env.NODE_ENV === 'docker';
+console.log('세션 설정:', { isDocker, NODE_ENV: process.env.NODE_ENV });
+
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key',
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === 'production',
+    secure: false, // Docker 환경에서는 HTTP도 허용
+    httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000, // 24시간
+    sameSite: isDocker ? 'lax' : 'strict', // Docker에서는 lax로 설정
+    domain: isDocker ? undefined : undefined, // 도메인 제한 없음
   },
+  name: 'studiofragrance.sid', // 세션 쿠키 이름 명시
 }));
 
 // Passport 초기화
