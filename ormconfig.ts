@@ -13,8 +13,9 @@ if (!process.env.DATABASE_URL) {
   );
 }
 
-// Docker 환경에서는 항상 컴파일된 마이그레이션 사용
-const migrationPaths = process.env.DOCKER_ENV === 'true' ? ["dist/migrations/*.js"] : ["migrations/*.ts"];
+// 환경에 따라 마이그레이션 경로 설정
+const isProduction = process.env.NODE_ENV === 'production';
+const migrationPaths = isProduction ? ["dist/migrations/*.js"] : ["migrations/*.ts"];
 
 export const AppDataSource = new DataSource({
   type: "postgres",

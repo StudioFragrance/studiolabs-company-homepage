@@ -63,21 +63,21 @@ app.use('/api/site-content', (req, res, next) => {
 app.use(express.json({ limit: '1mb' })); // JSON 크기 제한
 app.use(express.urlencoded({ extended: false, limit: '1mb' })); // URL-encoded 크기 제한
 
-// 세션 설정 (Docker 환경용 단순화)
-const isDockerEnv = process.env.DOCKER_ENV === 'true';
-console.log('세션 설정:', { isDockerEnv, NODE_ENV: process.env.NODE_ENV });
+// 세션 설정 (환경별 최적화)
+const isProduction = process.env.NODE_ENV === 'production';
+console.log('세션 설정:', { isProduction, NODE_ENV: process.env.NODE_ENV });
 
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key',
-  resave: true,
-  saveUninitialized: true,
+  resave: true, // Docker HTTP 환경에서 true로 변경
+  saveUninitialized: true, // 초기화되지 않은 세션도 저장
   cookie: {
-    secure: false, // Docker HTTP 환경에서는 false
-    httpOnly: false,
+    secure: isProduction, // Production에서는 HTTPS만 허용
+    httpOnly: false, // 클라이언트 접근 허용 (디버깅용)
     maxAge: 24 * 60 * 60 * 1000, // 24시간
-    sameSite: 'lax', // Docker 환경에서 안정적인 설정
+    sameSite: isProduction ? 'strict' : false, // Production에서는 strict, 개발환경에서는 비활성화
   },
-  name: 'connect.sid',
+  name: 'connect.sid', // 기본 세션 쿠키 이름 사용
 }));
 
 // Passport 초기화
