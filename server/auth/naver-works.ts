@@ -13,6 +13,9 @@ export interface NaverWorksUser {
   name: string;
   profileImage?: string;
   domainId: string;
+  isAdministrator?: boolean;
+  executive?: boolean;
+  orgUnits?: any[];
 }
 
 export function setupNaverWorksAuth() {
@@ -84,6 +87,9 @@ export function setupNaverWorksAuth() {
         name: userName,
         profileImage: userInfo.profileImageUrl || userInfo.profileImage,
         domainId: userInfo.domainId || userInfo.domain,
+        isAdministrator: userInfo.isAdministrator || false,
+        executive: userInfo.executive || false,
+        orgUnits: userInfo.organizations?.[0]?.orgUnits || [],
       };
       
       console.log('변환된 사용자 객체:', JSON.stringify(user, null, 2));
@@ -117,14 +123,48 @@ export function requireAuth(req: Request, res: any, next: any) {
   res.redirect('/auth/login');
 }
 
-// 관리자 권한 확인 미들웨어 (추후 확장 가능)
+// 관리자 권한 확인 미들웨어
 export function requireAdmin(req: Request, res: any, next: any) {
-  if (req.isAuthenticated && req.isAuthenticated()) {
-    const user = req.user as NaverWorksUser;
-    // 현재는 모든 인증된 사용자를 관리자로 간주
-    // 추후 특정 도메인이나 이메일 조건 추가 가능
+  if (!req.isAuthenticated || !req.isAuthenticated()) {
+    console.log('관리자 권한 확인: 인증되지 않은 사용자');
+    return res.status(401).json({ message: '인증이 필요합니다.' });
+  }
+
+  const user = req.user as NaverWorksUser;
+  console.log('관리자 권한 확인:', {
+    email: user.email,
+    isAdministrator: user.isAdministrator,
+    executive: user.executive,
+    domainId: user.domainId
+  });
+
+  // 관리자 권한 확인: 네이버웍스에서 isAdministrator가 true인 경우만 허용
+  if (user.isAdministrator === true) {
+    console.log('관리자 권한 승인: isAdministrator = true');
     return next();
   }
+
+  // 추가 권한 확인: executive가 true이고 특정 도메인인 경우
+  if (user.executive === true && user.email && user.email.endsWith('@studiolabs.co.kr')) {
+    console.log('관리자 권한 승인: executive = true + studiolabs 도메인');
+    return next();
+  }
+
+  // 특정 사용자 화이트리스트 (필요시 추가)
+  const adminEmails: string[] = [
+    'partis98@studiolabs.co.kr',
+    // 필요한 관리자 이메일을 여기에 추가
+  ];
   
-  res.redirect('/auth/login');
+  if (user.email && adminEmails.includes(user.email)) {
+    console.log('관리자 권한 승인: 화이트리스트 이메일');
+    return next();
+  }
+
+  console.log('관리자 권한 거부:', user.email);
+  return res.status(403).json({ 
+    message: '관리자 권한이 필요합니다.',
+    email: user.email,
+    hasAdminRights: false
+  });
 }

@@ -47,6 +47,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.redirect('/login?error=no_user_callback');
       }
       
+      // 관리자 권한 확인 (naver-works.ts의 requireAdmin과 동일한 로직)
+      const adminEmails: string[] = ['partis98@studiolabs.co.kr'];
+      const hasAdminRights = user.isAdministrator === true || 
+                           (user.executive === true && user.email && user.email.endsWith('@studiolabs.co.kr')) ||
+                           (user.email && adminEmails.includes(user.email));
+      
+      if (!hasAdminRights) {
+        console.log('관리자 권한 없음:', user.email);
+        return res.redirect('/login?error=no_permission&email=' + encodeURIComponent(user.email));
+      }
+      
       req.logIn(user, (err) => {
         if (err) {
           console.error('콜백 로그인 세션 오류:', err);
