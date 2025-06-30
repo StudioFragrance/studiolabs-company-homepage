@@ -50,9 +50,13 @@ COPY client/ client/
 # 빌드된 파일들 복사
 COPY --from=builder /app/dist ./dist
 
-# 정적 파일 서빙을 위해 server/public 디렉토리 생성 및 복사
+# 정적 파일 서빙을 위해 server/public 디렉토리 생성 및 내용 복사
 RUN mkdir -p server/public
-COPY --from=builder /app/dist ./server/public
+COPY --from=builder /app/dist/public/ ./server/public/
+
+# 디버깅: 파일 구조 확인
+RUN echo "=== dist 디렉토리 구조 ===" && ls -la dist/ || true
+RUN echo "=== server/public 디렉토리 구조 ===" && ls -la server/public/ || true
 
 # 포트 노출
 EXPOSE 5000
