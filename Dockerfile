@@ -19,8 +19,7 @@ COPY . .
 # TypeScript 컴파일 및 클라이언트 빌드
 RUN pnpm run build
 
-# 마이그레이션 파일들을 JavaScript로 컴파일
-RUN npx esbuild migrations/*.ts --platform=node --packages=external --format=esm --outdir=dist/migrations
+# TypeScript 모듈들은 tsx로 실행할 예정이므로 추가 컴파일 불필요
 
 # Stage 2: 프로덕션 단계
 FROM node:20-alpine AS production
@@ -34,8 +33,8 @@ RUN npm install -g pnpm
 # package.json과 pnpm-lock.yaml 복사
 COPY package.json pnpm-lock.yaml ./
 
-# 프로덕션 의존성만 설치
-RUN pnpm install --frozen-lockfile --prod
+# 프로덕션 의존성 설치 (tsx 포함을 위해 devDependencies도 설치)
+RUN pnpm install --frozen-lockfile
 
 # 필요한 스크립트와 설정 파일들 복사
 COPY ormconfig.ts ./
