@@ -1,6 +1,7 @@
 #!/usr/bin/env tsx
 import { AppDataSource } from "../ormconfig";
 import { SiteContent } from "../server/entities/SiteContent";
+import { AdminUser } from "../server/entities/AdminUser";
 import { exit } from "process";
 
 async function seedData() {
@@ -9,12 +10,31 @@ async function seedData() {
         console.log("데이터베이스 연결 성공");
 
         const siteContentRepository = AppDataSource.getRepository(SiteContent);
+        const adminUserRepository = AppDataSource.getRepository(AdminUser);
 
-        // 기존 데이터가 있는지 확인
+        // 기본 관리자 사용자 생성 (항상 실행)
+        console.log("기본 관리자 사용자 확인 중...");
+        const existingAdmin = await adminUserRepository.findOne({
+            where: { email: 'partis98@studiolabs.co.kr' }
+        });
+
+        if (!existingAdmin) {
+            const adminUser = new AdminUser();
+            adminUser.email = 'partis98@studiolabs.co.kr';
+            adminUser.name = '배성준';
+            adminUser.note = '대표자';
+            adminUser.isActive = true;
+            await adminUserRepository.save(adminUser);
+            console.log("- 기본 관리자 사용자 생성됨: partis98@studiolabs.co.kr");
+        } else {
+            console.log("- 기본 관리자 사용자가 이미 존재합니다.");
+        }
+
+        // 기존 사이트 콘텐츠 데이터가 있는지 확인
         const existingContent = await siteContentRepository.count();
         
         if (existingContent > 0) {
-            console.log("기존 사이트 콘텐츠가 있습니다. 시딩을 건너뜁니다.");
+            console.log("기존 사이트 콘텐츠가 있습니다. 콘텐츠 시딩을 건너뜁니다.");
             await AppDataSource.destroy();
             exit(0);
         }

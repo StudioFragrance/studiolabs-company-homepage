@@ -1,6 +1,7 @@
 import { DataSource } from "typeorm";
 import { User } from "./server/entities/User";
 import { SiteContent } from "./server/entities/SiteContent";
+import { AdminUser } from "./server/entities/AdminUser";
 import dotenv from "dotenv";
 
 // 환경 변수 로드
@@ -15,7 +16,7 @@ if (!process.env.DATABASE_URL) {
 export const AppDataSource = new DataSource({
   type: "postgres",
   url: process.env.DATABASE_URL,
-  entities: [User, SiteContent],
+  entities: [User, SiteContent, AdminUser],
   synchronize: false,
   logging: process.env.NODE_ENV === 'development',
   migrations: [process.env.NODE_ENV === 'production' ? "dist/migrations/*.js" : "migrations/*.ts"],

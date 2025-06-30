@@ -11,6 +11,10 @@ npx wait-on tcp:postgres:5432 -t 60000
 echo "Running database migrations..."
 npx tsx scripts/migration.ts run
 
+# Seed initial data
+echo "Seeding initial data..."
+npx tsx scripts/seed-data.ts
+
 # Start the application
 echo "Starting the server..."
 exec node dist/index.js
