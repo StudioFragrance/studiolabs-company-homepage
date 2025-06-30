@@ -32,7 +32,7 @@ export function setupNaverWorksAuth() {
     clientID,
     clientSecret,
     callbackURL,
-    scope: ['user.read'],
+    scope: ['user'],
     passReqToCallback: true,
   }, async (req: Request, accessToken: string, refreshToken: string, profile: any, done: any) => {
     try {
