@@ -26,6 +26,9 @@ export default function Admin() {
   const [activeTab, setActiveTab] = useState("overview");
   const [, setLocation] = useLocation();
   const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
+  
+  // 디버깅을 위한 사용자 정보 로깅
+  console.log('Admin 페이지 사용자 정보:', user);
 
   const { data: allContent, isLoading: isContentLoading, refetch } = useQuery<SiteContent[]>({
     queryKey: ["/api/site-content"],
@@ -103,20 +106,20 @@ export default function Admin() {
               </p>
             </div>
             <div className="flex items-center gap-4">
-              {user && (
+              {user && typeof user === 'object' && (
                 <div className="flex items-center gap-3">
                   <div className="text-right">
                     <p className="text-sm font-medium text-gray-900 dark:text-white">
-                      {user.name}
+                      {String(user.name || 'Unknown User')}
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
-                      {user.email}
+                      {String(user.email || 'No Email')}
                     </p>
                   </div>
-                  {user.profileImage && (
+                  {user.profileImage && typeof user.profileImage === 'string' && (
                     <img
                       src={user.profileImage}
-                      alt={user.name}
+                      alt={String(user.name || 'User')}
                       className="h-8 w-8 rounded-full object-cover"
                     />
                   )}
