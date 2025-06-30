@@ -113,6 +113,7 @@ Studio fragrance is a modern web application that provides personalized fragranc
 - Future-ready for database integration when needed
 
 ## Changelog
+- June 30, 2025: **네이버웍스 조직 구성원 목록 기능 완성** - OAuth 토큰 세션 저장, 여러 API 엔드포인트 자동 시도, name 객체 문자열 변환, React 렌더링 오류 해결. 관리자 추가 시 조직 구성원 선택 가능
 - June 30, 2025: **대표자 계정 삭제 방지 시스템 구축** - 웹 콘솔에서 대표자 계정 삭제 불가하도록 백엔드/프론트엔드 이중 보호 구현
 - June 30, 2025: **seed-data에 기본 관리자 권한 자동 생성 추가** - Docker 배포와 개발 환경에서 partis98@studiolabs.co.kr (배성준/대표자) 권한이 자동으로 생성되도록 개선
 - June 30, 2025: **데이터베이스 기반 관리자 권한 시스템 구축 완료** - AdminUser 테이블 생성, 관리자 사용자 CRUD API, 웹 관리 인터페이스, 권한 검증을 데이터베이스 기반으로 전환. 초기 관리자: partis98@studiolabs.co.kr (배성준/대표자)
