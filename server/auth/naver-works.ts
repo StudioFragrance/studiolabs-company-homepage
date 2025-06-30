@@ -101,28 +101,29 @@ export function setupNaverWorksAuth() {
       console.log('네이버웍스 사용자 정보:', JSON.stringify(userInfo, null, 2));
       
       // name 객체에서 문자열로 변환
+      const userInfoAny = userInfo as any;
       let userName = 'Unknown User';
-      if (userInfo.name && typeof userInfo.name === 'object') {
-        const nameObj = userInfo.name;
+      if (userInfoAny.name && typeof userInfoAny.name === 'object') {
+        const nameObj = userInfoAny.name;
         const lastName = nameObj.lastName || '';
         const firstName = nameObj.firstName || '';
         userName = `${lastName}${firstName}`.trim() || 'Unknown User';
         console.log('이름 변환:', { lastName, firstName, userName });
-      } else if (typeof userInfo.name === 'string') {
-        userName = userInfo.name;
-      } else if (userInfo.userName || userInfo.displayName) {
-        userName = userInfo.userName || userInfo.displayName;
+      } else if (typeof userInfoAny.name === 'string') {
+        userName = userInfoAny.name;
+      } else if (userInfoAny.userName || userInfoAny.displayName) {
+        userName = userInfoAny.userName || userInfoAny.displayName;
       }
 
       const user: NaverWorksUser = {
-        id: userInfo.userId || userInfo.id,
-        email: userInfo.email || userInfo.emailAddress,
+        id: userInfoAny.userId || userInfoAny.id,
+        email: userInfoAny.email || userInfoAny.emailAddress,
         name: userName,
-        profileImage: userInfo.profileImageUrl || userInfo.profileImage,
-        domainId: userInfo.domainId || userInfo.domain,
-        isAdministrator: userInfo.isAdministrator || false,
-        executive: userInfo.executive || false,
-        orgUnits: userInfo.organizations?.[0]?.orgUnits || [],
+        profileImage: userInfoAny.profileImageUrl || userInfoAny.profileImage,
+        domainId: userInfoAny.domainId || userInfoAny.domain,
+        isAdministrator: userInfoAny.isAdministrator || false,
+        executive: userInfoAny.executive || false,
+        orgUnits: userInfoAny.organizations?.[0]?.orgUnits || [],
         accessToken: accessToken, // 액세스 토큰 저장
         refreshToken: refreshToken, // 리프레시 토큰 저장
       };
@@ -224,7 +225,8 @@ export async function getOrganizationUsers(accessToken: string, domainId: number
         const data = await response.json();
         
         // 응답 구조에 따라 사용자 목록 반환
-        const users = data.members || data.users || data.data || data || [];
+        const dataAny = data as any;
+        const users = dataAny.members || dataAny.users || dataAny.data || dataAny || [];
         if (Array.isArray(users) && users.length > 0) {
           return users;
         }

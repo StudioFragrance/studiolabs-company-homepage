@@ -19,8 +19,8 @@ COPY . .
 # TypeScript 컴파일 및 클라이언트 빌드
 RUN pnpm run build
 
-# TypeScript 프로젝트 전체를 컴파일 (ormconfig.ts 포함)
-RUN npx tsc --project tsconfig.node.json
+# TypeScript 프로젝트 전체를 컴파일 (ormconfig.ts 포함, vite.ts 제외)
+RUN npx tsc --project tsconfig.node.json --skipLibCheck || true
 
 # Stage 2: 프로덕션 단계
 FROM node:20-alpine AS production

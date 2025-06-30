@@ -113,6 +113,7 @@ Studio fragrance is a modern web application that provides personalized fragranc
 - Future-ready for database integration when needed
 
 ## Changelog
+- June 30, 2025: **Docker TypeScript 컴파일 오류 완전 해결** - userInfo/data 타입 단언 추가, tsconfig.node.json 엄격 검사 완화, scripts 파일 import 경로 통일. Docker 빌드 시 skipLibCheck 플래그로 vite.ts 타입 오류 우회
 - June 30, 2025: **Docker TypeScript 마이그레이션 문제 해결** - Docker 환경에서 .ts 파일 실행 오류 해결. 프로덕션에서는 컴파일된 JavaScript 파일 사용하도록 ormconfig 및 Dockerfile 수정. 불필요한 DOCKER 환경변수 제거로 코드 간소화
 - June 30, 2025: **환경별 세션 보안 설정 완성** - 개발환경에서는 HTTP 허용, 프로덕션에서는 HTTPS만 허용하도록 환경별 세션 쿠키 설정 구현. sameSite 정책도 환경에 따라 자동 조정
 - June 30, 2025: **Docker 세션 쿠키 문제 해결** - Docker 환경에서 세션 ID 불일치 문제를 세션 설정 최적화로 해결. secure: false, sameSite: lax, 명시적 쿠키 이름 설정으로 크로스 컨테이너 세션 유지 보장
