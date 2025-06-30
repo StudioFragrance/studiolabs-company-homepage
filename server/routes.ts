@@ -363,8 +363,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // name 객체에서 문자열로 변환
           let userName = 'Unknown User';
           console.log('원본 name 데이터:', orgUser.name);
+          console.log('원본 displayName 데이터:', orgUser.displayName);
+          console.log('원본 userName 데이터:', orgUser.userName);
           
-          if (orgUser.name && typeof orgUser.name === 'object') {
+          // displayName이나 userName이 객체인 경우 처리
+          if (orgUser.displayName && typeof orgUser.displayName === 'object') {
+            const nameObj = orgUser.displayName;
+            const lastName = nameObj.lastName || '';
+            const firstName = nameObj.firstName || '';
+            userName = `${lastName}${firstName}`.trim() || 'Unknown User';
+            console.log(`displayName 객체 변환: ${lastName} + ${firstName} = ${userName}`);
+          } else if (orgUser.userName && typeof orgUser.userName === 'object') {
+            const nameObj = orgUser.userName;
+            const lastName = nameObj.lastName || '';
+            const firstName = nameObj.firstName || '';
+            userName = `${lastName}${firstName}`.trim() || 'Unknown User';
+            console.log(`userName 객체 변환: ${lastName} + ${firstName} = ${userName}`);
+          } else if (orgUser.name && typeof orgUser.name === 'object') {
             const nameObj = orgUser.name;
             const lastName = nameObj.lastName || '';
             const firstName = nameObj.firstName || '';
@@ -373,9 +388,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           } else if (typeof orgUser.name === 'string') {
             userName = orgUser.name;
             console.log(`name 문자열: ${userName}`);
-          } else if (orgUser.displayName || orgUser.userName) {
-            userName = orgUser.displayName || orgUser.userName;
-            console.log(`대체 name: ${userName}`);
+          } else if (typeof orgUser.displayName === 'string') {
+            userName = orgUser.displayName;
+            console.log(`displayName 문자열: ${userName}`);
+          } else if (typeof orgUser.userName === 'string') {
+            userName = orgUser.userName;
+            console.log(`userName 문자열: ${userName}`);
           }
 
           // 조직 정보에서 부서/직책 추출

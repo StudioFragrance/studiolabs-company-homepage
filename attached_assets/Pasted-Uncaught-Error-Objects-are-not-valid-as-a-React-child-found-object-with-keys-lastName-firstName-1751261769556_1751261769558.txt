@@ -1,0 +1,238 @@
+Uncaught Error: Objects are not valid as a React child (found: object with keys {lastName, firstName, phoneticLastName, phoneticFirstName}). If you meant to render a collection of children, use an array instead.
+    at throwOnInvalidObjectType (chunk-EMBGZOEE.js?v=988174e5:9934:17)
+    at reconcileChildFibers2 (chunk-EMBGZOEE.js?v=988174e5:10564:15)
+    at reconcileChildren (chunk-EMBGZOEE.js?v=988174e5:14290:37)
+    at updateHostComponent (chunk-EMBGZOEE.js?v=988174e5:14807:11)
+    at beginWork (chunk-EMBGZOEE.js?v=988174e5:15935:22)
+    at HTMLUnknownElement.callCallback2 (chunk-EMBGZOEE.js?v=988174e5:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-EMBGZOEE.js?v=988174e5:3699:24)
+    at invokeGuardedCallback (chunk-EMBGZOEE.js?v=988174e5:3733:39)
+    at beginWork$1 (chunk-EMBGZOEE.js?v=988174e5:19765:15)
+    at performUnitOfWork (chunk-EMBGZOEE.js?v=988174e5:19198:20)
+throwOnInvalidObjectType @ chunk-EMBGZOEE.js?v=988174e5:9934
+reconcileChildFibers2 @ chunk-EMBGZOEE.js?v=988174e5:10564
+reconcileChildren @ chunk-EMBGZOEE.js?v=988174e5:14290
+updateHostComponent @ chunk-EMBGZOEE.js?v=988174e5:14807
+beginWork @ chunk-EMBGZOEE.js?v=988174e5:15935
+callCallback2 @ chunk-EMBGZOEE.js?v=988174e5:3674
+invokeGuardedCallbackDev @ chunk-EMBGZOEE.js?v=988174e5:3699
+invokeGuardedCallback @ chunk-EMBGZOEE.js?v=988174e5:3733
+beginWork$1 @ chunk-EMBGZOEE.js?v=988174e5:19765
+performUnitOfWork @ chunk-EMBGZOEE.js?v=988174e5:19198
+workLoopSync @ chunk-EMBGZOEE.js?v=988174e5:19137
+renderRootSync @ chunk-EMBGZOEE.js?v=988174e5:19116
+performSyncWorkOnRoot @ chunk-EMBGZOEE.js?v=988174e5:18874
+flushSyncCallbacks @ chunk-EMBGZOEE.js?v=988174e5:9119
+(익명) @ chunk-EMBGZOEE.js?v=988174e5:18627
+setTimeout
+defaultScheduler @ @tanstack_react-query.js?v=988174e5:565
+flush @ @tanstack_react-query.js?v=988174e5:589
+batch @ @tanstack_react-query.js?v=988174e5:607
+dispatch_fn @ @tanstack_react-query.js?v=988174e5:1040
+setData @ @tanstack_react-query.js?v=988174e5:718
+onSuccess @ @tanstack_react-query.js?v=988174e5:940
+resolve @ @tanstack_react-query.js?v=988174e5:475
+Promise.then
+run @ @tanstack_react-query.js?v=988174e5:517
+start @ @tanstack_react-query.js?v=988174e5:555
+fetch @ @tanstack_react-query.js?v=988174e5:969
+executeFetch_fn @ @tanstack_react-query.js?v=988174e5:2279
+setOptions @ @tanstack_react-query.js?v=988174e5:2040
+(익명) @ @tanstack_react-query.js?v=988174e5:3156
+commitHookEffectListMount @ chunk-EMBGZOEE.js?v=988174e5:16915
+commitPassiveMountOnFiber @ chunk-EMBGZOEE.js?v=988174e5:18156
+commitPassiveMountEffects_complete @ chunk-EMBGZOEE.js?v=988174e5:18129
+commitPassiveMountEffects_begin @ chunk-EMBGZOEE.js?v=988174e5:18119
+commitPassiveMountEffects @ chunk-EMBGZOEE.js?v=988174e5:18109
+flushPassiveEffectsImpl @ chunk-EMBGZOEE.js?v=988174e5:19490
+flushPassiveEffects @ chunk-EMBGZOEE.js?v=988174e5:19447
+commitRootImpl @ chunk-EMBGZOEE.js?v=988174e5:19416
+commitRoot @ chunk-EMBGZOEE.js?v=988174e5:19277
+performSyncWorkOnRoot @ chunk-EMBGZOEE.js?v=988174e5:18895
+flushSyncCallbacks @ chunk-EMBGZOEE.js?v=988174e5:9119
+(익명) @ chunk-EMBGZOEE.js?v=988174e5:18627이 오류 이해하기
+3chunk-EMBGZOEE.js?v=988174e5:9934 Uncaught Error: Objects are not valid as a React child (found: object with keys {lastName, firstName, phoneticLastName, phoneticFirstName}). If you meant to render a collection of children, use an array instead.
+    at throwOnInvalidObjectType (chunk-EMBGZOEE.js?v=988174e5:9934:17)
+    at reconcileChildFibers2 (chunk-EMBGZOEE.js?v=988174e5:10564:15)
+    at reconcileChildren (chunk-EMBGZOEE.js?v=988174e5:14290:37)
+    at updateHostComponent (chunk-EMBGZOEE.js?v=988174e5:14807:11)
+    at beginWork (chunk-EMBGZOEE.js?v=988174e5:15935:22)
+    at HTMLUnknownElement.callCallback2 (chunk-EMBGZOEE.js?v=988174e5:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-EMBGZOEE.js?v=988174e5:3699:24)
+    at invokeGuardedCallback (chunk-EMBGZOEE.js?v=988174e5:3733:39)
+    at beginWork$1 (chunk-EMBGZOEE.js?v=988174e5:19765:15)
+    at performUnitOfWork (chunk-EMBGZOEE.js?v=988174e5:19198:20)
+throwOnInvalidObjectType @ chunk-EMBGZOEE.js?v=988174e5:9934
+reconcileChildFibers2 @ chunk-EMBGZOEE.js?v=988174e5:10564
+reconcileChildren @ chunk-EMBGZOEE.js?v=988174e5:14290
+updateHostComponent @ chunk-EMBGZOEE.js?v=988174e5:14807
+beginWork @ chunk-EMBGZOEE.js?v=988174e5:15935
+callCallback2 @ chunk-EMBGZOEE.js?v=988174e5:3674
+invokeGuardedCallbackDev @ chunk-EMBGZOEE.js?v=988174e5:3699
+invokeGuardedCallback @ chunk-EMBGZOEE.js?v=988174e5:3733
+beginWork$1 @ chunk-EMBGZOEE.js?v=988174e5:19765
+performUnitOfWork @ chunk-EMBGZOEE.js?v=988174e5:19198
+workLoopSync @ chunk-EMBGZOEE.js?v=988174e5:19137
+renderRootSync @ chunk-EMBGZOEE.js?v=988174e5:19116
+recoverFromConcurrentError @ chunk-EMBGZOEE.js?v=988174e5:18736
+performSyncWorkOnRoot @ chunk-EMBGZOEE.js?v=988174e5:18879
+flushSyncCallbacks @ chunk-EMBGZOEE.js?v=988174e5:9119
+(익명) @ chunk-EMBGZOEE.js?v=988174e5:18627
+setTimeout
+defaultScheduler @ @tanstack_react-query.js?v=988174e5:565
+flush @ @tanstack_react-query.js?v=988174e5:589
+batch @ @tanstack_react-query.js?v=988174e5:607
+dispatch_fn @ @tanstack_react-query.js?v=988174e5:1040
+setData @ @tanstack_react-query.js?v=988174e5:718
+onSuccess @ @tanstack_react-query.js?v=988174e5:940
+resolve @ @tanstack_react-query.js?v=988174e5:475
+Promise.then
+run @ @tanstack_react-query.js?v=988174e5:517
+start @ @tanstack_react-query.js?v=988174e5:555
+fetch @ @tanstack_react-query.js?v=988174e5:969
+executeFetch_fn @ @tanstack_react-query.js?v=988174e5:2279
+setOptions @ @tanstack_react-query.js?v=988174e5:2040
+(익명) @ @tanstack_react-query.js?v=988174e5:3156
+commitHookEffectListMount @ chunk-EMBGZOEE.js?v=988174e5:16915
+commitPassiveMountOnFiber @ chunk-EMBGZOEE.js?v=988174e5:18156
+commitPassiveMountEffects_complete @ chunk-EMBGZOEE.js?v=988174e5:18129
+commitPassiveMountEffects_begin @ chunk-EMBGZOEE.js?v=988174e5:18119
+commitPassiveMountEffects @ chunk-EMBGZOEE.js?v=988174e5:18109
+flushPassiveEffectsImpl @ chunk-EMBGZOEE.js?v=988174e5:19490
+flushPassiveEffects @ chunk-EMBGZOEE.js?v=988174e5:19447
+commitRootImpl @ chunk-EMBGZOEE.js?v=988174e5:19416
+commitRoot @ chunk-EMBGZOEE.js?v=988174e5:19277
+performSyncWorkOnRoot @ chunk-EMBGZOEE.js?v=988174e5:18895
+flushSyncCallbacks @ chunk-EMBGZOEE.js?v=988174e5:9119
+(익명) @ chunk-EMBGZOEE.js?v=988174e5:18627이 오류 이해하기
+3chunk-EMBGZOEE.js?v=988174e5:14032 The above error occurred in the <div> component:
+
+    at div
+    at div
+    at div
+    at div
+    at div
+    at div
+    at div
+    at div
+    at _c9 (https://edff7402-d9f8-4709-aa64-abcada66b864-00-1nrc1mfg9b6dq.riker.replit.dev/src/components/ui/card.tsx:114:12)
+    at div
+    at _c (https://edff7402-d9f8-4709-aa64-abcada66b864-00-1nrc1mfg9b6dq.riker.replit.dev/src/components/ui/card.tsx:20:11)
+    at div
+    at _c9 (https://edff7402-d9f8-4709-aa64-abcada66b864-00-1nrc1mfg9b6dq.riker.replit.dev/src/components/ui/card.tsx:114:12)
+    at div
+    at _c (https://edff7402-d9f8-4709-aa64-abcada66b864-00-1nrc1mfg9b6dq.riker.replit.dev/src/components/ui/card.tsx:20:11)
+    at AdminUserManager (https://edff7402-d9f8-4709-aa64-abcada66b864-00-1nrc1mfg9b6dq.riker.replit.dev/src/components/admin/AdminUserManager.tsx:31:21)
+    at div
+    at https://edff7402-d9f8-4709-aa64-abcada66b864-00-1nrc1mfg9b6dq.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-HHXO34L7.js?v=988174e5:43:13
+    at Presence (https://edff7402-d9f8-4709-aa64-abcada66b864-00-1nrc1mfg9b6dq.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-Y6N5KRR3.js?v=988174e5:24:11)
+    at https://edff7402-d9f8-4709-aa64-abcada66b864-00-1nrc1mfg9b6dq.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tabs.js?v=988174e5:389:13
+    at _c5 (https://edff7402-d9f8-4709-aa64-abcada66b864-00-1nrc1mfg9b6dq.riker.replit.dev/src/components/ui/tabs.tsx:72:12)
+    at div
+    at https://edff7402-d9f8-4709-aa64-abcada66b864-00-1nrc1mfg9b6dq.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-HHXO34L7.js?v=988174e5:43:13
+    at Provider (https://edff7402-d9f8-4709-aa64-abcada66b864-00-1nrc1mfg9b6dq.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-LDBYYPSY.js?v=988174e5:22:15)
+    at https://edff7402-d9f8-4709-aa64-abcada66b864-00-1nrc1mfg9b6dq.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tabs.js?v=988174e5:266:7
+    at div
+    at div
+    at Admin (https://edff7402-d9f8-4709-aa64-abcada66b864-00-1nrc1mfg9b6dq.riker.replit.dev/src/pages/Admin.tsx:35:37)
+    at Route (https://edff7402-d9f8-4709-aa64-abcada66b864-00-1nrc1mfg9b6dq.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=988174e5:280:16)
+    at Switch (https://edff7402-d9f8-4709-aa64-abcada66b864-00-1nrc1mfg9b6dq.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=988174e5:336:17)
+    at Router
+    at Provider (https://edff7402-d9f8-4709-aa64-abcada66b864-00-1nrc1mfg9b6dq.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-LDBYYPSY.js?v=988174e5:22:15)
+    at TooltipProvider (https://edff7402-d9f8-4709-aa64-abcada66b864-00-1nrc1mfg9b6dq.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=988174e5:2238:5)
+    at QueryClientProvider (https://edff7402-d9f8-4709-aa64-abcada66b864-00-1nrc1mfg9b6dq.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=988174e5:2933:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+logCapturedError @ chunk-EMBGZOEE.js?v=988174e5:14032
+update.callback @ chunk-EMBGZOEE.js?v=988174e5:14052
+callCallback @ chunk-EMBGZOEE.js?v=988174e5:11248
+commitUpdateQueue @ chunk-EMBGZOEE.js?v=988174e5:11265
+commitLayoutEffectOnFiber @ chunk-EMBGZOEE.js?v=988174e5:17093
+commitLayoutMountEffects_complete @ chunk-EMBGZOEE.js?v=988174e5:17980
+commitLayoutEffects_begin @ chunk-EMBGZOEE.js?v=988174e5:17969
+commitLayoutEffects @ chunk-EMBGZOEE.js?v=988174e5:17920
+commitRootImpl @ chunk-EMBGZOEE.js?v=988174e5:19353
+commitRoot @ chunk-EMBGZOEE.js?v=988174e5:19277
+performSyncWorkOnRoot @ chunk-EMBGZOEE.js?v=988174e5:18895
+flushSyncCallbacks @ chunk-EMBGZOEE.js?v=988174e5:9119
+(익명) @ chunk-EMBGZOEE.js?v=988174e5:18627
+setTimeout
+defaultScheduler @ @tanstack_react-query.js?v=988174e5:565
+flush @ @tanstack_react-query.js?v=988174e5:589
+batch @ @tanstack_react-query.js?v=988174e5:607
+dispatch_fn @ @tanstack_react-query.js?v=988174e5:1040
+setData @ @tanstack_react-query.js?v=988174e5:718
+onSuccess @ @tanstack_react-query.js?v=988174e5:940
+resolve @ @tanstack_react-query.js?v=988174e5:475
+Promise.then
+run @ @tanstack_react-query.js?v=988174e5:517
+start @ @tanstack_react-query.js?v=988174e5:555
+fetch @ @tanstack_react-query.js?v=988174e5:969
+executeFetch_fn @ @tanstack_react-query.js?v=988174e5:2279
+setOptions @ @tanstack_react-query.js?v=988174e5:2040
+(익명) @ @tanstack_react-query.js?v=988174e5:3156
+commitHookEffectListMount @ chunk-EMBGZOEE.js?v=988174e5:16915
+commitPassiveMountOnFiber @ chunk-EMBGZOEE.js?v=988174e5:18156
+commitPassiveMountEffects_complete @ chunk-EMBGZOEE.js?v=988174e5:18129
+commitPassiveMountEffects_begin @ chunk-EMBGZOEE.js?v=988174e5:18119
+commitPassiveMountEffects @ chunk-EMBGZOEE.js?v=988174e5:18109
+flushPassiveEffectsImpl @ chunk-EMBGZOEE.js?v=988174e5:19490
+flushPassiveEffects @ chunk-EMBGZOEE.js?v=988174e5:19447
+commitRootImpl @ chunk-EMBGZOEE.js?v=988174e5:19416
+commitRoot @ chunk-EMBGZOEE.js?v=988174e5:19277
+performSyncWorkOnRoot @ chunk-EMBGZOEE.js?v=988174e5:18895
+flushSyncCallbacks @ chunk-EMBGZOEE.js?v=988174e5:9119
+(익명) @ chunk-EMBGZOEE.js?v=988174e5:18627이 오류 이해하기
+chunk-EMBGZOEE.js?v=988174e5:9934 Uncaught Error: Objects are not valid as a React child (found: object with keys {lastName, firstName, phoneticLastName, phoneticFirstName}). If you meant to render a collection of children, use an array instead.
+    at throwOnInvalidObjectType (chunk-EMBGZOEE.js?v=988174e5:9934:17)
+    at reconcileChildFibers2 (chunk-EMBGZOEE.js?v=988174e5:10564:15)
+    at reconcileChildren (chunk-EMBGZOEE.js?v=988174e5:14290:37)
+    at updateHostComponent (chunk-EMBGZOEE.js?v=988174e5:14807:11)
+    at beginWork (chunk-EMBGZOEE.js?v=988174e5:15935:22)
+    at beginWork$1 (chunk-EMBGZOEE.js?v=988174e5:19753:22)
+    at performUnitOfWork (chunk-EMBGZOEE.js?v=988174e5:19198:20)
+    at workLoopSync (chunk-EMBGZOEE.js?v=988174e5:19137:13)
+    at renderRootSync (chunk-EMBGZOEE.js?v=988174e5:19116:15)
+    at recoverFromConcurrentError (chunk-EMBGZOEE.js?v=988174e5:18736:28)
+throwOnInvalidObjectType @ chunk-EMBGZOEE.js?v=988174e5:9934
+reconcileChildFibers2 @ chunk-EMBGZOEE.js?v=988174e5:10564
+reconcileChildren @ chunk-EMBGZOEE.js?v=988174e5:14290
+updateHostComponent @ chunk-EMBGZOEE.js?v=988174e5:14807
+beginWork @ chunk-EMBGZOEE.js?v=988174e5:15935
+beginWork$1 @ chunk-EMBGZOEE.js?v=988174e5:19753
+performUnitOfWork @ chunk-EMBGZOEE.js?v=988174e5:19198
+workLoopSync @ chunk-EMBGZOEE.js?v=988174e5:19137
+renderRootSync @ chunk-EMBGZOEE.js?v=988174e5:19116
+recoverFromConcurrentError @ chunk-EMBGZOEE.js?v=988174e5:18736
+performSyncWorkOnRoot @ chunk-EMBGZOEE.js?v=988174e5:18879
+flushSyncCallbacks @ chunk-EMBGZOEE.js?v=988174e5:9119
+(익명) @ chunk-EMBGZOEE.js?v=988174e5:18627
+setTimeout
+defaultScheduler @ @tanstack_react-query.js?v=988174e5:565
+flush @ @tanstack_react-query.js?v=988174e5:589
+batch @ @tanstack_react-query.js?v=988174e5:607
+dispatch_fn @ @tanstack_react-query.js?v=988174e5:1040
+setData @ @tanstack_react-query.js?v=988174e5:718
+onSuccess @ @tanstack_react-query.js?v=988174e5:940
+resolve @ @tanstack_react-query.js?v=988174e5:475
+Promise.then
+run @ @tanstack_react-query.js?v=988174e5:517
+start @ @tanstack_react-query.js?v=988174e5:555
+fetch @ @tanstack_react-query.js?v=988174e5:969
+executeFetch_fn @ @tanstack_react-query.js?v=988174e5:2279
+setOptions @ @tanstack_react-query.js?v=988174e5:2040
+(익명) @ @tanstack_react-query.js?v=988174e5:3156
+commitHookEffectListMount @ chunk-EMBGZOEE.js?v=988174e5:16915
+commitPassiveMountOnFiber @ chunk-EMBGZOEE.js?v=988174e5:18156
+commitPassiveMountEffects_complete @ chunk-EMBGZOEE.js?v=988174e5:18129
+commitPassiveMountEffects_begin @ chunk-EMBGZOEE.js?v=988174e5:18119
+commitPassiveMountEffects @ chunk-EMBGZOEE.js?v=988174e5:18109
+flushPassiveEffectsImpl @ chunk-EMBGZOEE.js?v=988174e5:19490
+flushPassiveEffects @ chunk-EMBGZOEE.js?v=988174e5:19447
+commitRootImpl @ chunk-EMBGZOEE.js?v=988174e5:19416
+commitRoot @ chunk-EMBGZOEE.js?v=988174e5:19277
+performSyncWorkOnRoot @ chunk-EMBGZOEE.js?v=988174e5:18895
+flushSyncCallbacks @ chunk-EMBGZOEE.js?v=988174e5:9119
+(익명) @ chunk-EMBGZOEE.js?v=988174e5:18627이 오류 이해하기
