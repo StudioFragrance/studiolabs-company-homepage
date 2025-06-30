@@ -1,4 +1,5 @@
 #!/usr/bin/env tsx
+import "reflect-metadata";
 import { AppDataSource } from "../ormconfig";
 import { exit } from "process";
 
