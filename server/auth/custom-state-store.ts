@@ -1,4 +1,5 @@
 import { Request } from 'express';
+import crypto from 'crypto';
 
 /**
  * 커스텀 State Store - Docker 환경 호환성을 위한 개선된 세션 기반 state 관리
@@ -123,7 +124,6 @@ export class CustomStateStore {
    * 보안 강화된 state 생성
    */
   private generateSecureState(): string {
-    const crypto = require('crypto');
     return crypto.randomBytes(32).toString('base64url');
   }
 }
