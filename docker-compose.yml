@@ -35,6 +35,7 @@ services:
       - NODE_ENV=production
       - DATABASE_URL=postgresql://postgres:postgres123@postgres:5432/studiofragrance
       - PORT=5000
+      - DOCKER_CALLBACK_URL=http://localhost:5000/auth/naver-works/callback
     ports:
       - "5000:5000"
     depends_on:
