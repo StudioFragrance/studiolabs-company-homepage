@@ -22,29 +22,7 @@ Studiolabs는 Docker를 사용하여 PostgreSQL 데이터베이스와 함께 실
 - Docker
 - Docker Compose
 
-### 🚀 원클릭 배포 (권장)
-```bash
-# 프로젝트 클론
-git clone <repository-url>
-cd studiolabs-homepage
-
-# 환경 변수 설정 (필요한 경우)
-cp .env.example .env
-
-# 원클릭 배포 스크립트 실행
-./deploy.sh
-```
-
-이 스크립트는 다음 작업을 자동으로 수행합니다:
-1. Docker 컨테이너 빌드 및 실행
-2. PostgreSQL 헬스체크 대기
-3. 데이터베이스 마이그레이션 실행
-4. 시드 데이터 적용
-5. 서비스 상태 확인
-
-### 수동 배포 방법
-
-#### 1. 프로젝트 클론
+### 1. 프로젝트 클론
 ```bash
 git clone <repository-url>
 cd studiolabs-homepage
