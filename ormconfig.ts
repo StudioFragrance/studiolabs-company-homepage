@@ -22,8 +22,6 @@ export const AppDataSource = new DataSource({
   url: process.env.DATABASE_URL,
   entities: [User, SiteContent, AdminUser],
   synchronize: false,
-  logging: process.env.NODE_ENV === 'development',
-  migrations: migrationPaths,
   migrationsTableName: "migrations",
   ssl: false,
 });
