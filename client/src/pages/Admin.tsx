@@ -92,20 +92,14 @@ export default function Admin() {
   };
 
   return (
-    <div 
-      className="min-h-screen bg-gray-50 dark:bg-gray-900" 
-      style={{ 
-        cursor: 'auto',
-        '--custom-cursor-visible': 'none'
-      } as React.CSSProperties}
-    >
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
       <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Studio fragrance 관리자
+                Studiolabs Homepage 관리 시스템
               </h1>
               <p className="text-gray-600 dark:text-gray-400">
                 사이트 콘텐츠 관리 시스템
