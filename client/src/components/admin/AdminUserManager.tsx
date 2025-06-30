@@ -123,6 +123,17 @@ export default function AdminUserManager() {
   };
 
   const handleDeleteUser = (id: number) => {
+    const userToDelete = adminUsers?.find(user => user.id === id);
+    
+    if (userToDelete?.email === 'partis98@studiolabs.co.kr') {
+      toast({
+        title: "삭제 불가",
+        description: "대표자 계정은 보안상 삭제할 수 없습니다.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     if (confirm("정말로 이 관리자 사용자를 삭제하시겠습니까?")) {
       deleteMutation.mutate(id);
     }
@@ -380,8 +391,9 @@ function AdminUserItem({
               variant="destructive"
               size="sm"
               onClick={onDelete}
-              disabled={isDeleting}
+              disabled={isDeleting || user.email === 'partis98@studiolabs.co.kr'}
               className="flex items-center gap-1"
+              title={user.email === 'partis98@studiolabs.co.kr' ? '대표자 계정은 삭제할 수 없습니다.' : ''}
             >
               <Trash2 className="h-4 w-4" />
               삭제

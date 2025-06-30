@@ -16,6 +16,7 @@ export interface IStorage {
   
   // Admin User CRUD
   getAdminUser(email: string): Promise<AdminUser | undefined>;
+  getAdminUserById(id: number): Promise<AdminUser | undefined>;
   getAllAdminUsers(): Promise<AdminUser[]>;
   createAdminUser(adminUser: InsertAdminUser): Promise<AdminUser>;
   updateAdminUser(id: number, updates: Partial<InsertAdminUser>): Promise<AdminUser | undefined>;
@@ -125,6 +126,16 @@ export class DatabaseStorage implements IStorage {
       return adminUser || undefined;
     } catch (error) {
       console.error(`Error fetching admin user with email ${email}:`, error);
+      throw error;
+    }
+  }
+
+  async getAdminUserById(id: number): Promise<AdminUser | undefined> {
+    try {
+      const adminUser = await this.adminUserRepository.findOne({ where: { id } });
+      return adminUser || undefined;
+    } catch (error) {
+      console.error(`Error fetching admin user with id ${id}:`, error);
       throw error;
     }
   }
