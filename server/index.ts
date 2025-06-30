@@ -69,16 +69,15 @@ console.log('세션 설정:', { isDocker, NODE_ENV: process.env.NODE_ENV });
 
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key',
-  resave: false,
-  saveUninitialized: false,
+  resave: true, // Docker HTTP 환경에서 true로 변경
+  saveUninitialized: true, // 초기화되지 않은 세션도 저장
   cookie: {
-    secure: false, // Docker 환경에서는 HTTP도 허용
-    httpOnly: true,
+    secure: false, // HTTP 허용
+    httpOnly: false, // 클라이언트 접근 허용 (디버깅용)
     maxAge: 24 * 60 * 60 * 1000, // 24시간
-    sameSite: isDocker ? 'lax' : 'strict', // Docker에서는 lax로 설정
-    domain: isDocker ? undefined : undefined, // 도메인 제한 없음
+    sameSite: false, // HTTP localhost에서 sameSite 비활성화
   },
-  name: 'studiofragrance.sid', // 세션 쿠키 이름 명시
+  name: 'connect.sid', // 기본 세션 쿠키 이름 사용
 }));
 
 // Passport 초기화

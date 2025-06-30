@@ -36,7 +36,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       'user-agent': req.get('user-agent'),
       'referer': req.get('referer'),
       'x-forwarded-for': req.get('x-forwarded-for'),
-      'host': req.get('host')
+      'host': req.get('host'),
+      'cookie': req.get('cookie')
+    });
+    console.log('3. 콜백 세션 상태:', {
+      sessionID: req.sessionID,
+      hasSession: !!req.session,
+      sessionKeys: req.session ? Object.keys(req.session) : [],
+      cookies: req.cookies
     });
     
     passport.authenticate('naver-works', async (err: any, user: any, info: any) => {
