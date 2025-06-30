@@ -1,5 +1,6 @@
 import { User, type InsertUser } from "./entities/User";
 import { SiteContent, type InsertSiteContent } from "./entities/SiteContent";
+import { AdminUser, type InsertAdminUser } from "./entities/AdminUser";
 import { AppDataSource } from "./db";
 
 export interface IStorage {
@@ -12,6 +13,14 @@ export interface IStorage {
   getAllSiteContent(): Promise<SiteContent[]>;
   createSiteContent(content: InsertSiteContent): Promise<SiteContent>;
   updateSiteContent(key: string, data: any): Promise<SiteContent | undefined>;
+  
+  // Admin User CRUD
+  getAdminUser(email: string): Promise<AdminUser | undefined>;
+  getAllAdminUsers(): Promise<AdminUser[]>;
+  createAdminUser(adminUser: InsertAdminUser): Promise<AdminUser>;
+  updateAdminUser(id: number, updates: Partial<InsertAdminUser>): Promise<AdminUser | undefined>;
+  deleteAdminUser(id: number): Promise<boolean>;
+  isAdminUser(email: string): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -24,6 +33,10 @@ export class DatabaseStorage implements IStorage {
 
   private get siteContentRepository() {
     return AppDataSource.getRepository(SiteContent);
+  }
+
+  private get adminUserRepository() {
+    return AppDataSource.getRepository(AdminUser);
   }
 
   private isCacheValid(timestamp: number): boolean {
@@ -103,6 +116,87 @@ export class DatabaseStorage implements IStorage {
     // 캐시 무효화 및 갱신
     this.setCachedContent(key, updated);
     return updated;
+  }
+
+  // Admin User CRUD 메서드들
+  async getAdminUser(email: string): Promise<AdminUser | undefined> {
+    try {
+      const adminUser = await this.adminUserRepository.findOne({ where: { email } });
+      return adminUser || undefined;
+    } catch (error) {
+      console.error(`Error fetching admin user with email ${email}:`, error);
+      throw error;
+    }
+  }
+
+  async getAllAdminUsers(): Promise<AdminUser[]> {
+    try {
+      return await this.adminUserRepository.find({
+        order: { createdAt: 'DESC' }
+      });
+    } catch (error) {
+      console.error('Error fetching all admin users:', error);
+      throw error;
+    }
+  }
+
+  async createAdminUser(insertAdminUser: InsertAdminUser): Promise<AdminUser> {
+    const repository = this.adminUserRepository;
+    
+    try {
+      const adminUser = repository.create(insertAdminUser);
+      return await repository.save(adminUser);
+    } catch (error) {
+      console.error('Error creating admin user:', error);
+      throw error;
+    }
+  }
+
+  async updateAdminUser(id: number, updates: Partial<InsertAdminUser>): Promise<AdminUser | undefined> {
+    const repository = this.adminUserRepository;
+    
+    try {
+      const existingAdminUser = await repository.findOne({ where: { id } });
+      
+      if (!existingAdminUser) {
+        return undefined;
+      }
+      
+      const updatedAdminUser = await repository.save({
+        ...existingAdminUser,
+        ...updates,
+        updatedAt: new Date()
+      });
+      
+      return updatedAdminUser;
+    } catch (error) {
+      console.error(`Error updating admin user with id ${id}:`, error);
+      throw error;
+    }
+  }
+
+  async deleteAdminUser(id: number): Promise<boolean> {
+    const repository = this.adminUserRepository;
+    
+    try {
+      const result = await repository.delete(id);
+      return result.affected !== null && result.affected > 0;
+    } catch (error) {
+      console.error(`Error deleting admin user with id ${id}:`, error);
+      throw error;
+    }
+  }
+
+  async isAdminUser(email: string): Promise<boolean> {
+    try {
+      const adminUser = await this.adminUserRepository.findOne({ 
+        where: { email, isActive: true } 
+      });
+      return !!adminUser;
+    } catch (error) {
+      console.error(`Error checking admin user status for ${email}:`, error);
+      return false;
+    }
   }
 }
 
