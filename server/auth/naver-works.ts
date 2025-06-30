@@ -57,9 +57,22 @@ export function setupNaverWorksAuth() {
       'User-Agent': 'Studio-Fragrance-OAuth-Client/1.0'
     }
   }, async (req: Request, accessToken: string, refreshToken: string, profile: any, done: any) => {
-    console.log('OAuth 콜백 실행됨:', { accessToken: accessToken?.substring(0, 20) + '...' });
+    console.log('=== OAuth 콜백 디버깅 시작 ===');
+    console.log('1. 받은 파라미터:', {
+      accessToken: accessToken?.substring(0, 20) + '...',
+      refreshToken: refreshToken?.substring(0, 20) + '...',
+      profile: profile ? 'exists' : 'null'
+    });
+    
     try {
       // 사용자 프로필 정보 가져오기
+      console.log('2. 네이버웍스 API 요청 시작');
+      console.log('   URL:', NAVER_WORKS_PROFILE_URL);
+      console.log('   Headers:', {
+        'Authorization': `Bearer ${accessToken?.substring(0, 20)}...`,
+        'Content-Type': 'application/json'
+      });
+      
       const response = await fetch(NAVER_WORKS_PROFILE_URL, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -67,11 +80,20 @@ export function setupNaverWorksAuth() {
         },
       });
 
+      console.log('3. 네이버웍스 API 응답:', {
+        status: response.status,
+        statusText: response.statusText,
+        headers: Object.fromEntries(response.headers.entries())
+      });
+
       if (!response.ok) {
-        throw new Error('사용자 정보를 가져올 수 없습니다.');
+        const errorText = await response.text();
+        console.error('4. API 오류 응답:', errorText);
+        throw new Error(`네이버웍스 API 오류: ${response.status} ${response.statusText}`);
       }
 
       const userInfo = await response.json();
+      console.log('5. 성공적으로 받은 사용자 정보 크기:', JSON.stringify(userInfo).length, 'bytes');
       console.log('네이버웍스 사용자 정보:', JSON.stringify(userInfo, null, 2));
       
       // name 객체에서 문자열로 변환
