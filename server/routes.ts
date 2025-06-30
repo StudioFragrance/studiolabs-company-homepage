@@ -12,19 +12,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // 네이버웍스 OAuth 시작
-  app.get('/auth/naver-works', passport.authenticate('naver-works'));
+  app.get('/auth/naver-works', (req, res, next) => {
+    console.log('=== OAuth 시작 라우트 디버깅 ===');
+    console.log('1. OAuth 시작 요청 헤더:', {
+      'user-agent': req.get('user-agent'),
+      'referer': req.get('referer'),
+      'host': req.get('host')
+    });
+    console.log('2. OAuth 시작 세션 정보:', {
+      sessionID: req.sessionID,
+      hasSession: !!req.session,
+      isAuthenticated: req.isAuthenticated ? req.isAuthenticated() : false
+    });
+    
+    passport.authenticate('naver-works')(req, res, next);
+  });
 
   // 네이버웍스 OAuth 콜백
   app.get('/auth/naver-works/callback', (req, res, next) => {
-    console.log('네이버웍스 OAuth 콜백 수신:', req.query);
+    console.log('=== OAuth 콜백 라우트 디버깅 ===');
+    console.log('1. 콜백 수신된 쿼리 파라미터:', req.query);
+    console.log('2. 콜백 수신된 헤더:', {
+      'user-agent': req.get('user-agent'),
+      'referer': req.get('referer'),
+      'x-forwarded-for': req.get('x-forwarded-for'),
+      'host': req.get('host')
+    });
     
     passport.authenticate('naver-works', async (err: any, user: any, info: any) => {
+      console.log('3. Passport 인증 결과:', {
+        hasError: !!err,
+        hasUser: !!user,
+        infoType: typeof info,
+        info: info
+      });
+      
       if (err) {
-        console.error('OAuth 콜백 오류:', err);
+        console.error('4. OAuth 콜백 오류 상세:', {
+          error: err,
+          message: err.message,
+          stack: err.stack
+        });
         return res.redirect('/login?error=callback_error');
       }
       if (!user) {
-        console.error('OAuth 콜백 사용자 정보 없음:', info);
+        console.error('5. OAuth 콜백 사용자 정보 없음:', {
+          info: info,
+          infoString: JSON.stringify(info)
+        });
         return res.redirect('/login?error=no_user_callback');
       }
       
