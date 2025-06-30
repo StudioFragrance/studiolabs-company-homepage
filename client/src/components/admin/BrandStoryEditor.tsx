@@ -75,7 +75,7 @@ export default function BrandStoryEditor({ initialData }: BrandStoryEditorProps)
   const { fields: contentFields, append: appendContent, remove: removeContent } = useFieldArray({
     control: form.control,
     name: "content"
-  });
+  } as any);
 
   const { fields: statisticsFields, append: appendStatistic, remove: removeStatistic } = useFieldArray({
     control: form.control,

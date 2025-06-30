@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 import "reflect-metadata";
-import { AppDataSource } from "../ormconfig";
+import { AppDataSource } from "../server/db";
 import { exit } from "process";
 
 const command = process.argv[2];

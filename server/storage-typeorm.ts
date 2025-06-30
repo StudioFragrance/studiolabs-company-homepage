@@ -191,7 +191,7 @@ export class DatabaseStorage implements IStorage {
     
     try {
       const result = await repository.delete(id);
-      return result.affected !== null && result.affected > 0;
+      return (result.affected ?? 0) > 0;
     } catch (error) {
       console.error(`Error deleting admin user with id ${id}:`, error);
       throw error;

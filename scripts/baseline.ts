@@ -1,5 +1,5 @@
 #!/usr/bin/env tsx
-import { AppDataSource } from "../ormconfig";
+import { AppDataSource } from "../server/db";
 import { exit } from "process";
 
 async function createBaseline() {
