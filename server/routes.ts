@@ -350,15 +350,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // 사용자 목록을 필터링하고 정제
       const filteredUsers = orgUsers
         .filter((orgUser: any) => orgUser.email && orgUser.email.includes('@'))
-        .map((orgUser: any) => ({
-          userId: orgUser.userId || orgUser.id,
-          email: orgUser.email || orgUser.emailAddress,
-          name: orgUser.name || orgUser.displayName || orgUser.userName,
-          department: orgUser.department || orgUser.orgUnit?.name,
-          position: orgUser.position || orgUser.title,
-          status: orgUser.status || 'active',
-          isAdministrator: orgUser.isAdministrator || false
-        }))
+        .map((orgUser: any) => {
+          // name 객체에서 문자열로 변환
+          let userName = 'Unknown User';
+          if (orgUser.name && typeof orgUser.name === 'object') {
+            const nameObj = orgUser.name;
+            const lastName = nameObj.lastName || '';
+            const firstName = nameObj.firstName || '';
+            userName = `${lastName}${firstName}`.trim() || 'Unknown User';
+          } else if (typeof orgUser.name === 'string') {
+            userName = orgUser.name;
+          } else if (orgUser.displayName || orgUser.userName) {
+            userName = orgUser.displayName || orgUser.userName;
+          }
+
+          // 조직 정보에서 부서/직책 추출
+          const primaryOrg = orgUser.organizations?.find((org: any) => org.primary === true) || orgUser.organizations?.[0];
+          const department = primaryOrg?.orgUnitName || orgUser.department;
+          const position = primaryOrg?.positionName || orgUser.position || orgUser.title;
+
+          return {
+            userId: orgUser.userId || orgUser.id,
+            email: orgUser.email || orgUser.emailAddress,
+            name: userName,
+            department: department,
+            position: position,
+            status: orgUser.status || 'active',
+            isAdministrator: orgUser.isAdministrator || false
+          };
+        })
         .sort((a: any, b: any) => a.email.localeCompare(b.email));
 
       console.log(`네이버웍스 사용자 목록 조회 성공: ${filteredUsers.length}명`);
