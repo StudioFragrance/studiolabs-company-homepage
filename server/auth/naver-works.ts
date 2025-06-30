@@ -62,14 +62,17 @@ export function setupNaverWorksAuth() {
       }
 
       const userInfo = await response.json();
+      console.log('네이버웍스 사용자 정보:', JSON.stringify(userInfo, null, 2));
       
       const user: NaverWorksUser = {
-        id: userInfo.userId,
-        email: userInfo.email,
-        name: userInfo.userName,
-        profileImage: userInfo.profileImageUrl,
-        domainId: userInfo.domainId,
+        id: userInfo.userId || userInfo.id,
+        email: userInfo.email || userInfo.emailAddress,
+        name: userInfo.userName || userInfo.name || userInfo.displayName,
+        profileImage: userInfo.profileImageUrl || userInfo.profileImage,
+        domainId: userInfo.domainId || userInfo.domain,
       };
+      
+      console.log('변환된 사용자 객체:', JSON.stringify(user, null, 2));
 
       return done(null, user);
     } catch (error) {
