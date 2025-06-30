@@ -111,7 +111,7 @@ export default function Admin() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Studiolabs Homepage 관리 시스템
+                Studiolabs Company Site
               </h1>
               <p className="text-gray-600 dark:text-gray-400">
                 사이트 콘텐츠 관리 시스템
