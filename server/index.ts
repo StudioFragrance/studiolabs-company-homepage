@@ -65,8 +65,7 @@ app.use(express.urlencoded({ extended: false, limit: '1mb' })); // URL-encoded �
 
 // 세션 설정 (환경별 최적화)
 const isProduction = process.env.NODE_ENV === 'production';
-const isDocker = process.env.DOCKER === 'true' || process.env.NODE_ENV === 'docker';
-console.log('세션 설정:', { isProduction, isDocker, NODE_ENV: process.env.NODE_ENV });
+console.log('세션 설정:', { isProduction, NODE_ENV: process.env.NODE_ENV });
 
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key',

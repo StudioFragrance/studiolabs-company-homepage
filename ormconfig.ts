@@ -10,10 +10,10 @@ if (!process.env.DATABASE_URL) {
   );
 }
 
-// 환경에 따라 엔티티 경로 설정 - Docker에서는 TypeScript 파일 직접 사용
+// 환경에 따라 경로 설정 - Docker 프로덕션에서는 컴파일된 JS 파일 사용
 const isProduction = process.env.NODE_ENV === 'production';
-const entityPaths = ["server/entities/*.ts"]; // Docker에서 tsx로 실행
-const migrationPaths = ["migrations/*.ts"]; // Docker에서 tsx로 실행
+const entityPaths = isProduction ? ["dist/server/entities/*.js"] : ["server/entities/*.ts"];
+const migrationPaths = isProduction ? ["dist/migrations/*.js"] : ["migrations/*.ts"];
 
 export const AppDataSource = new DataSource({
   type: "postgres",

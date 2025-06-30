@@ -19,7 +19,8 @@ COPY . .
 # TypeScript 컴파일 및 클라이언트 빌드
 RUN pnpm run build
 
-# TypeScript 모듈들은 tsx로 실행할 예정이므로 추가 컴파일 불필요
+# 마이그레이션과 스크립트 파일들도 JavaScript로 컴파일
+RUN npx tsc migrations/*.ts scripts/*.ts server/entities/*.ts --outDir dist --target es2020 --module esnext --moduleResolution node --esModuleInterop --allowSyntheticDefaultImports --skipLibCheck || true
 
 # Stage 2: 프로덕션 단계
 FROM node:20-alpine AS production
@@ -54,4 +55,4 @@ EXPOSE 5000
 ENV NODE_ENV=production
 
 # 데이터베이스 대기 후 마이그레이션 실행 및 애플리케이션 시작
-CMD ["sh", "-c", "echo 'Starting Studiolabs application...' && npx wait-on tcp:postgres:5432 -t 60000 && echo 'Running database migrations...' && npx tsx --tsconfig tsconfig.node.json scripts/migration.ts run && echo 'Seeding initial data...' && npx tsx --tsconfig tsconfig.node.json scripts/seed-data.ts && echo 'Starting the server...' && node dist/index.js"]
+CMD ["sh", "-c", "echo 'Starting Studiolabs application...' && npx wait-on tcp:postgres:5432 -t 60000 && echo 'Running database migrations...' && node dist/scripts/migration.js run && echo 'Seeding initial data...' && node dist/scripts/seed-data.js && echo 'Starting the server...' && node dist/index.js"]
