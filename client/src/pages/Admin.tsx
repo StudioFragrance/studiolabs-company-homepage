@@ -116,7 +116,15 @@ export default function Admin() {
                 <div className="flex items-center gap-3">
                   <div className="text-right">
                     <p className="text-sm font-medium text-gray-900 dark:text-white">
-                      {String(user.name || 'Unknown User')}
+                      {(() => {
+                        if (typeof user.name === 'string') {
+                          return user.name;
+                        } else if (user.name && typeof user.name === 'object') {
+                          const nameObj = user.name as any;
+                          return `${nameObj.lastName || ''}${nameObj.firstName || ''}`.trim() || 'Unknown User';
+                        }
+                        return 'Unknown User';
+                      })()}
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
                       {String(user.email || 'No Email')}
