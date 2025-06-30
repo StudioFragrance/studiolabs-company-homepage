@@ -1,13 +1,31 @@
 import "dotenv/config";
 import "reflect-metadata";
 import express, { type Request, Response, NextFunction } from "express";
+import session from "express-session";
+import passport from "passport";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { initializeDatabase } from "./db";
+import { setupNaverWorksAuth } from "./auth/naver-works";
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// 세션 설정
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'your-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 24 * 60 * 60 * 1000, // 24시간
+  },
+}));
+
+// Passport 초기화
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use((req, res, next) => {
   const start = Date.now();
@@ -42,6 +60,14 @@ app.use((req, res, next) => {
 (async () => {
   // Initialize database connection
   await initializeDatabase();
+
+  // 네이버웍스 인증 설정
+  const isAuthEnabled = setupNaverWorksAuth();
+  if (isAuthEnabled) {
+    log("네이버웍스 OAuth 인증이 활성화되었습니다.");
+  } else {
+    log("네이버웍스 OAuth 환경변수가 없어 인증이 비활성화되었습니다.");
+  }
 
   const server = await registerRoutes(app);
 

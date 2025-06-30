@@ -2,9 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Edit, Save, Eye, RefreshCw } from "lucide-react";
-import { useState } from "react";
+import { Edit, Save, Eye, RefreshCw, LogOut, User } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
 import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/hooks/useAuth";
 import HeroEditor from "@/components/admin/HeroEditor";
 import BrandStoryEditor from "@/components/admin/BrandStoryEditor";
 import CompanyHistoryEditor from "@/components/admin/CompanyHistoryEditor";
@@ -22,12 +24,36 @@ interface SiteContent {
 
 export default function Admin() {
   const [activeTab, setActiveTab] = useState("overview");
+  const [, setLocation] = useLocation();
+  const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
 
-  const { data: allContent, isLoading, refetch } = useQuery<SiteContent[]>({
+  const { data: allContent, isLoading: isContentLoading, refetch } = useQuery<SiteContent[]>({
     queryKey: ["/api/site-content"],
   });
 
-  if (isLoading) {
+  // 인증 확인 및 리다이렉트
+  useEffect(() => {
+    if (!isAuthLoading && !isAuthenticated) {
+      setLocation("/login");
+    }
+  }, [isAuthenticated, isAuthLoading, setLocation]);
+
+  if (isAuthLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-gray-600">인증 확인 중...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return null; // 리다이렉트 처리 중
+  }
+
+  if (isContentLoading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
         <div className="max-w-7xl mx-auto">
@@ -76,15 +102,49 @@ export default function Admin() {
                 사이트 콘텐츠 관리 시스템
               </p>
             </div>
-            <div className="flex items-center space-x-4">
-              <Button variant="outline" size="sm" onClick={() => refetch()}>
-                <RefreshCw className="h-4 w-4 mr-2" />
-                새로고침
-              </Button>
-              <Button variant="outline" size="sm">
-                <Eye className="h-4 w-4 mr-2" />
-                사이트 보기
-              </Button>
+            <div className="flex items-center gap-4">
+              {user && (
+                <div className="flex items-center gap-3">
+                  <div className="text-right">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      {user.name}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      {user.email}
+                    </p>
+                  </div>
+                  {user.profileImage && (
+                    <img
+                      src={user.profileImage}
+                      alt={user.name}
+                      className="h-8 w-8 rounded-full object-cover"
+                    />
+                  )}
+                </div>
+              )}
+              
+              <div className="flex items-center space-x-2">
+                <Button variant="outline" size="sm" onClick={() => refetch()}>
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  새로고침
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => window.open('/', '_blank')}
+                >
+                  <Eye className="h-4 w-4 mr-2" />
+                  사이트 보기
+                </Button>
+                <Button
+                  onClick={() => window.location.href = '/auth/logout'}
+                  variant="outline"
+                  size="sm"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  로그아웃
+                </Button>
+              </div>
             </div>
           </div>
         </div>

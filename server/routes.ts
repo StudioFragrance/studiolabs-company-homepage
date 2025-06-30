@@ -1,9 +1,49 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import passport from "passport";
 import { storage } from "./storage-typeorm";
+import { requireAuth, requireAdmin } from "./auth/naver-works";
 
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // 인증 라우트
+  app.get('/auth/login', (req, res) => {
+    res.redirect('/auth/naver-works');
+  });
+
+  // 네이버웍스 OAuth 시작
+  app.get('/auth/naver-works', passport.authenticate('naver-works'));
+
+  // 네이버웍스 OAuth 콜백
+  app.get('/auth/naver-works/callback', 
+    passport.authenticate('naver-works', { 
+      failureRedirect: '/auth/login?error=1' 
+    }),
+    (req, res) => {
+      // 인증 성공 시 관리자 페이지로 리다이렉트
+      res.redirect('/admin');
+    }
+  );
+
+  // 로그아웃
+  app.get('/auth/logout', (req, res) => {
+    req.logout((err) => {
+      if (err) {
+        console.error('로그아웃 오류:', err);
+      }
+      res.redirect('/');
+    });
+  });
+
+  // 현재 사용자 정보 가져오기
+  app.get('/api/auth/user', (req, res) => {
+    if (req.isAuthenticated && req.isAuthenticated()) {
+      res.json(req.user);
+    } else {
+      res.status(401).json({ message: '인증되지 않음' });
+    }
+  });
+
   // Site Content API routes
   
   // Get all site content
@@ -34,8 +74,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Update site content
-  app.put("/api/site-content/:key", async (req, res) => {
+  // Update site content (관리자 권한 필요)
+  app.put("/api/site-content/:key", requireAdmin, async (req, res) => {
     try {
       const { key } = req.params;
       const data = req.body.data || req.body;
