@@ -6,6 +6,13 @@ export default function CustomCursor() {
   const [isHovering, setIsHovering] = useState(false);
   const animationRef = useRef<number>();
 
+  // 관리자 페이지에서는 커스텀 커서 비활성화
+  const isAdminPage = window.location.pathname.includes('/admin') || window.location.pathname.includes('/login');
+  
+  if (isAdminPage) {
+    return null;
+  }
+
   useEffect(() => {
     const updateMousePosition = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });

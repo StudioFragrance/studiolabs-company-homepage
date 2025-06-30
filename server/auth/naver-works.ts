@@ -64,10 +64,19 @@ export function setupNaverWorksAuth() {
       const userInfo = await response.json();
       console.log('네이버웍스 사용자 정보:', JSON.stringify(userInfo, null, 2));
       
+      // name 객체에서 문자열로 변환
+      let userName = 'Unknown User';
+      if (userInfo.name && typeof userInfo.name === 'object') {
+        const { lastName = '', firstName = '' } = userInfo.name;
+        userName = `${lastName}${firstName}`.trim() || 'Unknown User';
+      } else if (userInfo.userName || userInfo.displayName) {
+        userName = userInfo.userName || userInfo.displayName;
+      }
+
       const user: NaverWorksUser = {
         id: userInfo.userId || userInfo.id,
         email: userInfo.email || userInfo.emailAddress,
-        name: userInfo.userName || userInfo.name || userInfo.displayName,
+        name: userName,
         profileImage: userInfo.profileImageUrl || userInfo.profileImage,
         domainId: userInfo.domainId || userInfo.domain,
       };
