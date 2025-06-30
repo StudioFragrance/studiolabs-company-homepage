@@ -14,23 +14,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // 네이버웍스 OAuth 시작
   app.get('/auth/naver-works', (req, res, next) => {
     console.log('네이버웍스 OAuth 로그인 요청 시작');
-    passport.authenticate('naver-works', (err: any, user: any, info: any) => {
-      if (err) {
-        console.error('OAuth 인증 오류:', err);
-        return res.redirect('/login?error=oauth_error');
-      }
-      if (!user) {
-        console.error('OAuth 사용자 정보 없음:', info);
-        return res.redirect('/login?error=no_user');
-      }
-      req.logIn(user, (err) => {
-        if (err) {
-          console.error('로그인 세션 오류:', err);
-          return res.redirect('/login?error=session_error');
-        }
-        return res.redirect('/admin');
-      });
-    })(req, res, next);
+    passport.authenticate('naver-works')(req, res, next);
   });
 
   // 네이버웍스 OAuth 콜백
