@@ -1,0 +1,34 @@
+studiofragrance_app  | Starting Studiolabs application...
+studiofragrance_app  | Running database migrations...
+studiofragrance_app  | [dotenv@17.0.0] injecting env (0) from .env – 🔐 encrypt with dotenvx: https://dotenvx.com
+studiofragrance_app  | 데이터베이스 연결 성공
+studiofragrance_app  | 3개의 마이그레이션이 실행되었습니다:
+studiofragrance_app  | - InitialMigration1751189400000
+studiofragrance_app  | - AddMonthFieldToTimeline1751204700000                                                                                                                                                                                                                                                  
+studiofragrance_app  | - AddAdminUserTable1751260113000
+studiofragrance_app  | Seeding initial data...                                                                                                                                                                                                                                                                 
+studiofragrance_app  | [dotenv@17.0.0] injecting env (0) from .env – 🔐 encrypt with dotenvx: https://dotenvx.com
+studiofragrance_app  | 데이터베이스 연결 성공
+studiofragrance_app  | 기본 관리자 사용자 확인 중...
+studiofragrance_app  | - 기본 관리자 사용자가 이미 존재합니다.                                                                                                                                                                                                                                                 
+studiofragrance_app  | 초기 사이트 콘텐츠를 생성합니다...                                                                                                                                                                                                                                                      
+studiofragrance_app  | - hero 콘텐츠 생성됨                                                                                                                                                                                                                                                                    
+studiofragrance_app  | - brandStory 콘텐츠 생성됨
+studiofragrance_app  | - companyHistory 콘텐츠 생성됨                                                                                                                                                                                                                                                          
+studiofragrance_app  | - mvc 콘텐츠 생성됨                                                                                                                                                                                                                                                                     
+studiofragrance_app  | - contact 콘텐츠 생성됨                                                                                                                                                                                                                                                                 
+studiofragrance_app  | 초기 사이트 콘텐츠 생성이 완료되었습니다.
+studiofragrance_app  | Starting the server...                                                                                                                                                                                                                                                                  
+studiofragrance_app  | Warning: connect.session() MemoryStore is not
+studiofragrance_app  | designed for a production environment, as it will leak
+studiofragrance_app  | memory, and will not scale past a single process.                                                                                                                                                                                                                                       
+studiofragrance_app  | Database connection established                                                                                                                                                                                                                                                         
+studiofragrance_app  | OAuth 설정 정보: {
+studiofragrance_app  |   authorizationURL: 'https://auth.worksmobile.com/oauth2/v2.0/authorize',                                                                                                                                                                                                               
+studiofragrance_app  |   tokenURL: 'https://auth.worksmobile.com/oauth2/v2.0/token',                                                                                                                                                                                                                           
+studiofragrance_app  |   clientID: 'NUBxtYPCMy...',                                                                                                                                                                                                                                                            
+studiofragrance_app  |   callbackURL: 'http://localhost:5000/auth/naver-works/callback',
+studiofragrance_app  |   scope: [ 'user.read', 'user.email.read' ]                                                                                                                                                                                                                                             
+studiofragrance_app  | }                                                                                                                                                                                                                                                                                       
+studiofragrance_app  | 6:30:00 AM [express] 네이버웍스 OAuth 인증이 활성화되었습니다.                                                                                                                                                                                                                          
+studiofragrance_app  | 6:30:00 AM [express] serving on 0.0.0.0:5000

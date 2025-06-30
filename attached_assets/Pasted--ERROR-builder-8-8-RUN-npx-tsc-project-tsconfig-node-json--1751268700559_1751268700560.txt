@@ -1,0 +1,39 @@
+ => ERROR [builder 8/8] RUN npx tsc --project tsconfig.node.json                                                                                                                                                                                                                                          3.1s 
+------
+ > [builder 8/8] RUN npx tsc --project tsconfig.node.json:
+3.033 server/auth/naver-works.ts(105,11): error TS18046: 'userInfo' is of type 'unknown'.
+3.033 server/auth/naver-works.ts(105,35): error TS18046: 'userInfo' is of type 'unknown'.
+3.033 server/auth/naver-works.ts(106,25): error TS18046: 'userInfo' is of type 'unknown'.
+3.033 server/auth/naver-works.ts(111,25): error TS18046: 'userInfo' is of type 'unknown'.
+3.033 server/auth/naver-works.ts(112,20): error TS18046: 'userInfo' is of type 'unknown'.
+3.033 server/auth/naver-works.ts(113,18): error TS18046: 'userInfo' is of type 'unknown'.
+3.033 server/auth/naver-works.ts(113,39): error TS18046: 'userInfo' is of type 'unknown'.
+3.033 server/auth/naver-works.ts(114,20): error TS18046: 'userInfo' is of type 'unknown'.
+3.034 server/auth/naver-works.ts(114,41): error TS18046: 'userInfo' is of type 'unknown'.
+3.034 server/auth/naver-works.ts(118,13): error TS18046: 'userInfo' is of type 'unknown'.
+3.034 server/auth/naver-works.ts(118,32): error TS18046: 'userInfo' is of type 'unknown'.
+3.034 server/auth/naver-works.ts(119,16): error TS18046: 'userInfo' is of type 'unknown'.
+3.034 server/auth/naver-works.ts(119,34): error TS18046: 'userInfo' is of type 'unknown'.
+3.034 server/auth/naver-works.ts(121,23): error TS18046: 'userInfo' is of type 'unknown'.
+3.035 server/auth/naver-works.ts(121,51): error TS18046: 'userInfo' is of type 'unknown'.
+3.035 server/auth/naver-works.ts(122,19): error TS18046: 'userInfo' is of type 'unknown'.
+3.035 server/auth/naver-works.ts(122,40): error TS18046: 'userInfo' is of type 'unknown'.
+3.035 server/auth/naver-works.ts(123,26): error TS18046: 'userInfo' is of type 'unknown'.
+3.035 server/auth/naver-works.ts(124,20): error TS18046: 'userInfo' is of type 'unknown'.
+3.035 server/auth/naver-works.ts(125,19): error TS18046: 'userInfo' is of type 'unknown'.
+3.035 server/auth/naver-works.ts(227,23): error TS18046: 'data' is of type 'unknown'.
+3.035 server/auth/naver-works.ts(227,39): error TS18046: 'data' is of type 'unknown'.
+3.036 server/auth/naver-works.ts(227,53): error TS18046: 'data' is of type 'unknown'.
+3.036 server/vite.ts(39,5): error TS2322: Type '{ middlewareMode: boolean; hmr: { server: Server<typeof IncomingMessage, typeof ServerResponse>; }; allowedHosts: boolean; }' is not assignable to type 'ServerOptions'.
+3.036   Types of property 'allowedHosts' are incompatible.
+3.036     Type 'boolean' is not assignable to type 'true | string[] | undefined'.
+------
+Dockerfile:23
+--------------------
+  21 |
+  22 |     # TypeScript 프로젝트 전체를 컴파일 (ormconfig.ts 포함)
+  23 | >>> RUN npx tsc --project tsconfig.node.json
+  24 |
+  25 |     # Stage 2: 프로덕션 단계
+--------------------
+failed to solve: process "/bin/sh -c npx tsc --project tsconfig.node.json" did not complete successfully: exit code: 2
