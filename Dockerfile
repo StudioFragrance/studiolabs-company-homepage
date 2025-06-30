@@ -13,6 +13,9 @@ RUN pnpm install
 # 프론트엔드 빌드
 RUN pnpm run build
 
+# 마이그레이션 컴파일 (TypeScript → JavaScript)
+RUN npx tsc migrations/*.ts --outDir dist/migrations --target ES2020 --module ESNext --moduleResolution node
+
 # 포트 노출
 EXPOSE 5000
 

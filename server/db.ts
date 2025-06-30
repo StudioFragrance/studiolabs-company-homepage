@@ -16,7 +16,9 @@ export const AppDataSource = new DataSource({
   entities: [User, SiteContent, AdminUser],
   synchronize: false, // 마이그레이션을 통해서만 테이블 관리
   logging: process.env.NODE_ENV === "development",
+  migrations: [process.env.DOCKER_ENV === 'true' ? "dist/migrations/*.js" : "migrations/*.ts"],
   migrationsTableName: "migrations",
+  ssl: false,
   // Docker 네트워크 연결을 위한 추가 설정
   connectTimeoutMS: 60000,
   extra: {
