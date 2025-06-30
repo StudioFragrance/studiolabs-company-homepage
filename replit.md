@@ -113,6 +113,10 @@ Studio fragrance is a modern web application that provides personalized fragranc
 - Future-ready for database integration when needed
 
 ## Changelog
+- June 30, 2025: **관리자 페이지 편집 기능 완전 구현** - 모든 주요 섹션(히어로, 브랜드 스토리, 회사 연혁, 철학, 연락처) 편집기 완료, 실시간 미리보기와 데이터 저장 기능 정상 작동
+- June 30, 2025: **연락처 편집기 구현 완료** - ContactEditor 컴포넌트 추가, 협업/입점 문의 및 채용 정보 편집 기능, Switch 컴포넌트로 채용 활성화 토글 구현
+- June 30, 2025: **철학(MVC) 편집기 구현 완료** - MVCEditor 컴포넌트 추가, 미션/비전/핵심가치 편집 기능, 3열 그리드 미리보기 디자인
+- June 30, 2025: **API 요청 매개변수 순서 오류 해결** - apiRequest 함수 호출 시 method, url, data 순서로 수정하여 저장 기능 정상화
 - June 29, 2025: **siteConfig 파일 완전 삭제** - 모든 컴포넌트가 데이터베이스에서 직접 콘텐츠 로드, 정적 설정 파일 제거로 완전한 동적 CMS 구축
 - June 29, 2025: **siteConfig 파일 정리 완료** - 사용되지 않는 company 섹션 제거로 설정 파일 간소화
 - June 29, 2025: **프론트엔드 타입 안전성 개선** - HeroSection의 mainTitle 접근 시 null 체크 추가

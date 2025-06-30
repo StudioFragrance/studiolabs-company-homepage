@@ -38,21 +38,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put("/api/site-content/:key", async (req, res) => {
     try {
       const { key } = req.params;
-      console.log(`Updating site content for key: ${key}`);
-      console.log("Full request body:", JSON.stringify(req.body, null, 2));
-      
-      // 데이터가 직접 body에 있는지 확인
       const data = req.body.data || req.body;
-      console.log("Data to save:", JSON.stringify(data, null, 2));
       
       const content = await storage.updateSiteContent(key, data);
       
       if (!content) {
-        console.log(`Content not found for key: ${key}`);
         return res.status(404).json({ error: "Content not found" });
       }
       
-      console.log(`Content updated successfully for key: ${key}`);
       res.json(content);
     } catch (error) {
       console.error("Error updating site content:", error);
