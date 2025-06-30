@@ -51,7 +51,7 @@ export function setupNaverWorksAuth() {
     clientSecret,
     callbackURL,
     scope: ['user.read', 'user.email.read'],
-    state: false,  // Docker 환경 state 검증 문제 해결을 위해 비활성화
+    state: true,  // CSRF 방지용 state 파라미터 활성화
     passReqToCallback: true,
     customHeaders: {
       'User-Agent': 'Studio-Fragrance-OAuth-Client/1.0'
