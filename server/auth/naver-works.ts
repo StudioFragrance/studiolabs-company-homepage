@@ -30,12 +30,9 @@ export function setupNaverWorksAuth() {
     return false;
   }
 
-  // Docker 환경에서 동적 콜백 URL 생성
-  if (!callbackURL || callbackURL.includes('localhost')) {
-    // Docker 환경에서는 실제 접근 가능한 URL 필요
-    // 일반적으로 Docker에서 외부 접근 시 실제 호스트 IP나 도메인 사용
-    callbackURL = process.env.DOCKER_CALLBACK_URL || `http://localhost:5000/auth/naver-works/callback`;
-    console.log('Docker 환경 콜백 URL 설정:', callbackURL);
+  if (!callbackURL) {
+    console.warn('NAVER_WORKS_REDIRECT_URI 환경변수가 설정되지 않았습니다. 인증 기능이 비활성화됩니다.');
+    return false;
   }
 
   console.log('OAuth 설정 정보:', {
@@ -54,7 +51,7 @@ export function setupNaverWorksAuth() {
     clientSecret,
     callbackURL,
     scope: ['user.read', 'user.email.read'],
-    state: process.env.NODE_ENV === 'production' ? false : true,  // Docker 환경에서는 state 비활성화
+    state: false,  // Docker 환경 state 검증 문제 해결을 위해 비활성화
     passReqToCallback: true,
     customHeaders: {
       'User-Agent': 'Studio-Fragrance-OAuth-Client/1.0'
