@@ -1,0 +1,25 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "allowImportingTsExtensions": false,
+    "noEmit": false,
+    "outDir": "./dist",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "target": "ES2022",
+    "lib": ["ES2022"]
+  },
+  "include": [
+    "server/**/*",
+    "scripts/**/*", 
+    "migrations/**/*",
+    "ormconfig.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "client/**/*",
+    "**/*.test.ts"
+  ]
+}
