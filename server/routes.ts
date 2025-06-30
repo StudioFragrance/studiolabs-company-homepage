@@ -75,11 +75,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         req.logIn(user, (err) => {
           if (err) {
-            console.error('콜백 로그인 세션 오류:', err);
+            console.error('6. 콜백 로그인 세션 오류:', {
+              error: err,
+              message: err.message,
+              sessionID: req.sessionID,
+              hasSession: !!req.session
+            });
             return res.redirect('/login?error=session_error');
           }
-          console.log('OAuth 로그인 성공:', user.email);
-          return res.redirect('/admin');
+          
+          console.log('7. OAuth 로그인 성공:', {
+            email: user.email,
+            sessionID: req.sessionID,
+            isAuthenticated: req.isAuthenticated()
+          });
+          
+          // 세션 강제 저장 후 리다이렉트
+          req.session.save((saveErr) => {
+            if (saveErr) {
+              console.error('8. 세션 저장 오류:', saveErr);
+              return res.redirect('/login?error=session_error');
+            }
+            console.log('9. 세션 저장 완료, 관리자 페이지로 리다이렉트');
+            return res.redirect('/admin');
+          });
         });
       } catch (error) {
         console.error('권한 확인 중 오류:', error);
