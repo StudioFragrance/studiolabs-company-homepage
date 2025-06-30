@@ -25,6 +25,14 @@ export function setupNaverWorksAuth() {
     return false;
   }
 
+  console.log('OAuth 설정 정보:', {
+    authorizationURL: NAVER_WORKS_AUTH_URL,
+    tokenURL: NAVER_WORKS_TOKEN_URL,
+    clientID: clientID?.substring(0, 10) + '...',
+    callbackURL,
+    scope: ['user.read']
+  });
+
   // 네이버웍스 OAuth2 전략 설정
   passport.use('naver-works', new OAuth2Strategy({
     authorizationURL: NAVER_WORKS_AUTH_URL,
@@ -32,9 +40,10 @@ export function setupNaverWorksAuth() {
     clientID,
     clientSecret,
     callbackURL,
-    scope: ['user'],
+    scope: ['user.read'],
     passReqToCallback: true,
   }, async (req: Request, accessToken: string, refreshToken: string, profile: any, done: any) => {
+    console.log('OAuth 콜백 실행됨:', { accessToken: accessToken?.substring(0, 20) + '...' });
     try {
       // 사용자 프로필 정보 가져오기
       const response = await fetch(NAVER_WORKS_PROFILE_URL, {
