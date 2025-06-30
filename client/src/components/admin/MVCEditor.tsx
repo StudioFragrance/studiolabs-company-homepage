@@ -79,7 +79,6 @@ export default function MVCEditor({ initialData }: MVCEditorProps) {
 
   const updateMutation = useMutation({
     mutationFn: async (data: MVCFormData) => {
-      console.log("MVC data being sent:", data);
       return apiRequest("PUT", "/api/site-content/mvc", data);
     },
     onSuccess: () => {
