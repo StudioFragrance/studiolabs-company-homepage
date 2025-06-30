@@ -1,7 +1,4 @@
 import { DataSource } from "typeorm";
-import { User } from "./server/entities/User";
-import { SiteContent } from "./server/entities/SiteContent";
-import { AdminUser } from "./server/entities/AdminUser";
 import dotenv from "dotenv";
 
 // 환경 변수 로드
@@ -13,13 +10,23 @@ if (!process.env.DATABASE_URL) {
   );
 }
 
+// 환경에 따라 엔티티 경로 설정
+const isProduction = process.env.NODE_ENV === 'production';
+const entityPaths = isProduction 
+  ? ["dist/server/entities/*.js"]
+  : ["server/entities/*.ts"];
+
+const migrationPaths = isProduction 
+  ? ["dist/migrations/*.js"] 
+  : ["migrations/*.ts"];
+
 export const AppDataSource = new DataSource({
   type: "postgres",
   url: process.env.DATABASE_URL,
-  entities: [User, SiteContent, AdminUser],
+  entities: entityPaths,
   synchronize: false,
   logging: process.env.NODE_ENV === 'development',
-  migrations: [process.env.NODE_ENV === 'production' ? "dist/migrations/*.js" : "migrations/*.ts"],
+  migrations: migrationPaths,
   migrationsTableName: "migrations",
   ssl: false, // Docker 환경에서는 SSL 비활성화
 });
