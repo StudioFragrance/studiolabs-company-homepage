@@ -113,6 +113,7 @@ Studio fragrance is a modern web application that provides personalized fragranc
 - Future-ready for database integration when needed
 
 ## Changelog
+- June 30, 2025: **환경별 세션 보안 설정 완성** - 개발환경에서는 HTTP 허용, 프로덕션에서는 HTTPS만 허용하도록 환경별 세션 쿠키 설정 구현. sameSite 정책도 환경에 따라 자동 조정
 - June 30, 2025: **Docker 세션 쿠키 문제 해결** - Docker 환경에서 세션 ID 불일치 문제를 세션 설정 최적화로 해결. secure: false, sameSite: lax, 명시적 쿠키 이름 설정으로 크로스 컨테이너 세션 유지 보장
 - June 30, 2025: **커스텀 State Store OAuth 시스템 완성** - passport-oauth2의 state 검증 실패 문제를 커스텀 state store로 해결. 세션 강제 저장, 상세 디버깅 로그, Docker 환경 호환성 구현. Replit 환경에서 정상 작동 확인
 - June 30, 2025: **Docker 환경 OAuth 설정 완료** - Docker에서 콜백 URL localhost 문제와 state 검증 실패 해결. 동적 콜백 URL 생성, 환경별 state 설정, Docker Compose 환경 변수 추가. DOCKER_OAUTH_SETUP.md 가이드 문서 작성
