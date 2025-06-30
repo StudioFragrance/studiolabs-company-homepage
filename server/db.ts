@@ -42,13 +42,19 @@ export const initializeDatabase = async () => {
           executedMigrations.forEach(migration => {
             console.log(`- ${migration.name}`);
           });
+          
+          // 마이그레이션 실행 후에만 시드 데이터 생성
+          console.log("Running initial data seeding after migrations...");
+          await seedInitialData();
         } else {
           console.log("No pending migrations to run");
+          // 마이그레이션이 없어도 시드 데이터는 확인
+          await seedInitialData();
         }
+      } else {
+        // 마이그레이션 테이블 자체가 없으면 시드 데이터도 실행
+        await seedInitialData();
       }
-      
-      // 시드 데이터 생성
-      await seedInitialData();
     }
   } catch (error) {
     console.error("Error during database initialization:", error);
