@@ -2,7 +2,7 @@ import passport from 'passport';
 import { Strategy as OAuth2Strategy } from 'passport-oauth2';
 import type { Request } from 'express';
 
-// 네이버웍스 OAuth 설정
+// 네이버웍스 OAuth 설정 (정확한 API 엔드포인트)
 const NAVER_WORKS_AUTH_URL = 'https://auth.worksmobile.com/oauth2/v2.0/authorize';
 const NAVER_WORKS_TOKEN_URL = 'https://auth.worksmobile.com/oauth2/v2.0/token';
 const NAVER_WORKS_PROFILE_URL = 'https://www.worksapis.com/v1.0/users/me';
@@ -30,7 +30,7 @@ export function setupNaverWorksAuth() {
     tokenURL: NAVER_WORKS_TOKEN_URL,
     clientID: clientID?.substring(0, 10) + '...',
     callbackURL,
-    scope: ['user.read']
+    scope: ['user.read', 'user.email.read']
   });
 
   // 네이버웍스 OAuth2 전략 설정
@@ -40,8 +40,12 @@ export function setupNaverWorksAuth() {
     clientID,
     clientSecret,
     callbackURL,
-    scope: ['user.read'],
+    scope: ['user.read', 'user.email.read'],
+    state: true,  // CSRF 방지용 state 파라미터 활성화
     passReqToCallback: true,
+    customHeaders: {
+      'User-Agent': 'Studio-Fragrance-OAuth-Client/1.0'
+    }
   }, async (req: Request, accessToken: string, refreshToken: string, profile: any, done: any) => {
     console.log('OAuth 콜백 실행됨:', { accessToken: accessToken?.substring(0, 20) + '...' });
     try {
