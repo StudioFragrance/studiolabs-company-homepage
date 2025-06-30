@@ -181,7 +181,7 @@ export default function BrandStoryEditor({ initialData }: BrandStoryEditorProps)
                     type="button"
                     variant="outline"
                     size="sm"
-                    onClick={() => appendContent("")}
+                    onClick={() => appendContent("" as any)}
                   >
                     <Plus className="h-4 w-4 mr-1" />
                     문단 추가

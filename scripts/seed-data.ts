@@ -46,10 +46,10 @@ async function seedData() {
                     content: [
                         "수많은 기대와 망설임 속에서 나에게 꼭 맞는 향을 찾는 여정은 늘 쉽지 않았습니다.",
                         "어렵게 느껴졌던 향수의 세계, 그 막막함을 저희는 이해합니다.",
-                        "Studio fragrance는 당신의 감각과 취향에 귀 기울입니다. 흩어져 있던 향들 속에서 당신만을 위한 향을 찾아, 당신의 손에 건네 드립니다."
+                        "Studiolabs는 당신의 감각과 취향에 귀 기울입니다. 흩어져 있던 향들 속에서 당신만을 위한 향을 찾아, 당신의 손에 건네 드립니다."
                     ],
                     ctaButton: {
-                        text: "Studio fragrance 바로가기",
+                        text: "Studiolabs 바로가기",
                         url: "https://www.studiofragrance.co.kr"
                     },
                     image: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
@@ -71,7 +71,7 @@ async function seedData() {
                 key: 'companyHistory',
                 data: {
                     title: "회사 연혁",
-                    subtitle: "Studio fragrance의 성장 여정",
+                    subtitle: "Studiolabs의 성장 여정",
                     timeline: [
                         {
                             date: "2024.01",

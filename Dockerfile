@@ -1,5 +1,5 @@
-# Node.js 기반 이미지 사용
-FROM node:20-alpine
+# Stage 1: 빌드 단계
+FROM node:20-alpine AS builder
 
 # 작업 디렉토리 설정
 WORKDIR /app
@@ -10,10 +10,10 @@ RUN npm install -g pnpm
 # package.json과 pnpm-lock.yaml 복사
 COPY package.json pnpm-lock.yaml ./
 
-# 의존성 설치
+# 의존성 설치 (개발 의존성 포함)
 RUN pnpm install --frozen-lockfile
 
-# 모든 소스 코드 복사
+# 소스 코드 복사
 COPY . .
 
 # TypeScript 컴파일 및 클라이언트 빌드
@@ -22,12 +22,34 @@ RUN pnpm run build
 # 마이그레이션 파일들을 JavaScript로 컴파일
 RUN npx esbuild migrations/*.ts --platform=node --packages=external --format=esm --outdir=dist/migrations
 
-# 빌드 결과 확인 (디버깅용)
-RUN ls -la dist/
-RUN ls -la dist/migrations/
+# Stage 2: 프로덕션 단계
+FROM node:20-alpine AS production
+
+# 작업 디렉토리 설정
+WORKDIR /app
+
+# pnpm 설치
+RUN npm install -g pnpm
+
+# package.json과 pnpm-lock.yaml 복사
+COPY package.json pnpm-lock.yaml ./
+
+# 프로덕션 의존성만 설치
+RUN pnpm install --frozen-lockfile --prod
+
+# 필요한 스크립트와 설정 파일들 복사
+COPY ormconfig.ts ./
+COPY scripts/ scripts/
+COPY migrations/ migrations/
+
+# 빌드된 파일들 복사
+COPY --from=builder /app/dist ./dist
 
 # 포트 노출
 EXPOSE 5000
 
+# 환경 변수 설정
+ENV NODE_ENV=production
+
 # 데이터베이스 대기 후 마이그레이션 실행 및 애플리케이션 시작
-CMD ["sh", "-c", "echo 'Starting Studio Fragrance application...' && npx wait-on tcp:postgres:5432 -t 60000 && echo 'Running database migrations...' && npx tsx scripts/migration.ts run && echo 'Seeding initial data...' && npx tsx scripts/seed-data.ts && echo 'Starting the server...' && node dist/index.js"]
+CMD ["sh", "-c", "echo 'Starting Studiolabs application...' && npx wait-on tcp:postgres:5432 -t 60000 && echo 'Running database migrations...' && npx tsx scripts/migration.ts run && echo 'Seeding initial data...' && npx tsx scripts/seed-data.ts && echo 'Starting the server...' && node dist/index.js"]

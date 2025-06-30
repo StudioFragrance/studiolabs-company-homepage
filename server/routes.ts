@@ -14,7 +14,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // 네이버웍스 OAuth 시작
   app.get('/auth/naver-works', (req, res, next) => {
     console.log('네이버웍스 OAuth 로그인 요청 시작');
-    passport.authenticate('naver-works', (err, user, info) => {
+    passport.authenticate('naver-works', (err: any, user: any, info: any) => {
       if (err) {
         console.error('OAuth 인증 오류:', err);
         return res.redirect('/login?error=oauth_error');
@@ -37,7 +37,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/auth/naver-works/callback', (req, res, next) => {
     console.log('네이버웍스 OAuth 콜백 수신:', req.query);
     
-    passport.authenticate('naver-works', (err, user, info) => {
+    passport.authenticate('naver-works', (err: any, user: any, info: any) => {
       if (err) {
         console.error('OAuth 콜백 오류:', err);
         return res.redirect('/login?error=callback_error');
