@@ -167,27 +167,59 @@ export function requireAdmin(req: Request, res: any, next: any) {
 
 // 네이버웍스 조직 사용자 목록 조회 함수
 export async function getOrganizationUsers(accessToken: string, domainId: number): Promise<any[]> {
+  const endpoints = [
+    `https://www.worksapis.com/v1.0/users`, // 기본 사용자 목록
+    `https://www.worksapis.com/v1.0/directory/users`, // Directory API
+    `https://www.worksapis.com/v1.0/orgs/${domainId}/users`, // 조직 사용자 목록
+    `https://www.worksapis.com/v1.0/domains/${domainId}/users`, // 도메인 사용자 목록
+  ];
+
+  for (const endpoint of endpoints) {
+    try {
+      console.log(`네이버웍스 API 시도: ${endpoint}`);
+      const response = await fetch(endpoint, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('네이버웍스 사용자 목록 응답:', { endpoint, data });
+        
+        // 응답 구조에 따라 사용자 목록 반환
+        const users = data.members || data.users || data.data || data || [];
+        if (Array.isArray(users) && users.length > 0) {
+          return users;
+        }
+        continue;
+      } else {
+        console.log(`엔드포인트 실패: ${endpoint} - ${response.status} ${response.statusText}`);
+      }
+    } catch (error) {
+      console.log(`엔드포인트 오류: ${endpoint} - ${error}`);
+      continue;
+    }
+  }
+
+  // 모든 엔드포인트가 실패한 경우, 현재 사용자 정보라도 반환
   try {
-    // 네이버웍스 API 2.0 사용자 목록 조회
-    const response = await fetch(`https://www.worksapis.com/v1.0/orgs/${domainId}/members`, {
+    console.log('사용자 목록 조회 실패, 현재 사용자 정보만 반환');
+    const meResponse = await fetch('https://www.worksapis.com/v1.0/users/me', {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });
 
-    if (!response.ok) {
-      console.error('네이버웍스 사용자 목록 조회 실패:', response.status, response.statusText);
-      throw new Error('사용자 목록을 가져올 수 없습니다.');
+    if (meResponse.ok) {
+      const userData = await meResponse.json();
+      return [userData]; // 현재 사용자만 배열로 반환
     }
-
-    const data = await response.json();
-    console.log('네이버웍스 사용자 목록 응답:', data);
-    
-    // 응답 구조에 따라 사용자 목록 반환
-    return data.members || data.users || data || [];
   } catch (error) {
-    console.error('네이버웍스 사용자 목록 조회 오류:', error);
-    throw error;
+    console.error('현재 사용자 정보도 가져올 수 없음:', error);
   }
+
+  throw new Error('사용자 목록을 가져올 수 없습니다. API 권한을 확인해주세요.');
 }
