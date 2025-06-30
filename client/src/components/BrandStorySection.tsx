@@ -88,7 +88,7 @@ export default function BrandStorySection() {
               <p className="italic text-brand-coral font-medium">
                 "{brandStoryData.quote}"
               </p>
-              {brandStoryData.content.map((paragraph, index) => (
+              {brandStoryData.content.map((paragraph: string, index: number) => (
                 <p key={index} className={index === brandStoryData.content.length - 1 ? "font-medium" : ""}>
                   {paragraph}
                 </p>

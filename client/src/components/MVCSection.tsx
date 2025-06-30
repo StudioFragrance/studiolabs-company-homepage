@@ -118,7 +118,7 @@ export default function MVCSection() {
                 <h3 className="text-2xl font-bold gradient-text mb-4">Core Values</h3>
               </div>
               <div className="space-y-6">
-                {mvcData.coreValues.map((value, valueIndex) => (
+                {mvcData.coreValues.map((value: any, valueIndex: number) => (
                   <motion.div
                     key={valueIndex}
                     initial={{ opacity: 0, x: -20 }}

@@ -113,6 +113,7 @@ Studio fragrance is a modern web application that provides personalized fragranc
 - Future-ready for database integration when needed
 
 ## Changelog
+- June 30, 2025: **프로젝트 전면 최적화 완료** - 멀티스테이지 Dockerfile, TypeScript 오류 수정, 불필요한 파일 정리, 마이그레이션/Seed 데이터 업데이트, README.md 전면 개편
 - June 30, 2025: **API 보안 및 성능 최적화 완료** - 권한 기반 접근 제어, 입력 검증, 레이트 리미팅, 보안 헤더, 메모리 캐싱 시스템 구축. SECURITY_AUDIT_REPORT.md 생성
 - June 30, 2025: **사용자 정보 표시 문제 해결** - 네이버웍스 name 객체를 문자열로 변환하는 로직 완성, 관리자 페이지 마우스 포인터 효과 제거
 - June 30, 2025: **관리자 페이지 편집 기능 완전 구현** - 모든 주요 섹션(히어로, 브랜드 스토리, 회사 연혁, 철학, 연락처) 편집기 완료, 실시간 미리보기와 데이터 저장 기능 정상 작동

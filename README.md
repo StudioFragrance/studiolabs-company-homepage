@@ -1,4 +1,4 @@
-# Studio Fragrance - AI 향수 추천 플랫폼
+# Studiolabs Homepage - AI 향수 추천 플랫폼
 
 AI 기술을 활용한 개인 맞춤형 향수 추천 웹 애플리케이션입니다.
 
@@ -7,13 +7,16 @@ AI 기술을 활용한 개인 맞춤형 향수 추천 웹 애플리케이션입�
 - **Frontend**: React 18, TypeScript, Tailwind CSS, shadcn/ui
 - **Backend**: Node.js, Express.js, TypeScript
 - **데이터베이스**: TypeORM + PostgreSQL (Docker 네트워크 지원)
-- **빌드 도구**: Vite, ESBuild
+- **빌드 도구**: Vite, ESBuild (멀티스테이지 Docker 빌드)
 - **상태 관리**: TanStack Query
 - **애니메이션**: Framer Motion
+- **보안**: Express Rate Limit, Helmet.js, 입력 검증
+- **성능**: 메모리 캐싱 (5분 TTL), DB 쿼리 최적화
+- **인증**: Naver Works OAuth 2.0
 
 ## 프로젝트 실행 방법
 
-Studio Fragrance는 Docker를 사용하여 PostgreSQL 데이터베이스와 함께 실행됩니다.
+Studiolabs는 Docker를 사용하여 PostgreSQL 데이터베이스와 함께 실행됩니다.
 
 ### 필수 요구사항
 - Docker
@@ -22,7 +25,7 @@ Studio Fragrance는 Docker를 사용하여 PostgreSQL 데이터베이스와 함�
 ### 1. 프로젝트 클론
 ```bash
 git clone <repository-url>
-cd studio-fragrance
+cd studiolabs-homepage
 ```
 
 ### 2. Docker로 전체 시스템 실행
@@ -223,10 +226,29 @@ PUT /api/site-content/:key      # 콘텐츠 업데이트
 
 ## 성능 최적화
 
-- Vite를 통한 빠른 빌드
-- 코드 스플리팅 및 지연 로딩
-- TanStack Query를 통한 효율적인 데이터 캐싱
-- 프로덕션 빌드에서 최적화된 번들 크기
+### 빌드 최적화
+- **멀티스테이지 Docker 빌드**: 개발 의존성과 프로덕션 의존성 분리
+- **Vite**: 빠른 개발 서버와 최적화된 프로덕션 빌드
+- **ESBuild**: TypeScript 및 마이그레이션 파일 고속 컴파일
+
+### 런타임 최적화
+- **메모리 캐싱**: 5분 TTL로 DB 쿼리 결과 캐싱
+- **TanStack Query**: 클라이언트 사이드 데이터 캐싱 및 무효화
+- **데이터베이스 최적화**: 일관된 정렬 및 인덱스 활용
+
+## 보안 강화
+
+### API 보안
+- **권한 기반 접근 제어**: 관리자 전용 API 보호
+- **레이트 리미팅**: 일반 API 100회/15분, 관리자 API 30회/15분
+- **입력 검증**: 파라미터 타입/길이 검증, 화이트리스트 기반 접근
+- **보안 헤더**: Helmet.js를 통한 CSP, XSS 방지
+
+### 인증 시스템
+- **OAuth 2.0**: Naver Works를 통한 안전한 관리자 인증
+- **세션 관리**: 안전한 세션 쿠키 및 토큰 관리
+
+자세한 보안 감사 내용은 `SECURITY_AUDIT_REPORT.md`를 참조하세요.
 
 ## 프로젝트 아키텍처
 
@@ -238,15 +260,24 @@ PUT /api/site-content/:key      # 콘텐츠 업데이트
 - **외부 접근**: `localhost:5432` (PostgreSQL), `localhost:5000` (애플리케이션)
 
 ### 환경 변수
-Docker Compose에서 자동 설정:
+
+#### 기본 설정 (Docker Compose 자동 설정)
 ```bash
 NODE_ENV=production
 PORT=5000
 DATABASE_URL=postgresql://postgres:postgres123@postgres:5432/studiofragrance
-POSTGRES_DB=studiofragrance
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=postgres123
 ```
+
+#### 관리자 인증 (선택사항)
+Naver Works OAuth를 통한 관리자 페이지 접근:
+```bash
+NAVER_WORKS_CLIENT_ID=your_client_id
+NAVER_WORKS_CLIENT_SECRET=your_client_secret
+NAVER_WORKS_REDIRECT_URI=https://your-domain/auth/naver-works/callback
+SESSION_SECRET=your_session_secret
+```
+
+`.env` 파일을 생성하여 환경 변수를 설정하면 Docker Compose에서 자동으로 로드됩니다.
 
 ### 데이터 지속성
 - PostgreSQL 데이터는 `studiofragrance_postgres_data` Docker 볼륨에 저장

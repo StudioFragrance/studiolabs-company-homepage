@@ -79,14 +79,14 @@ export default function HeroSection() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4, duration: 0.6 }}
             >
-              {Array.from(heroData.mainTitle.line1 || "").map((char: string, index: number) => (
+              {Array.from(heroData.mainTitle.line1 || "").map((char, index) => (
                 <motion.span
                   key={index}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.4 + index * 0.05, duration: 0.05 }}
                 >
-                  {char}
+                  {char as string}
                 </motion.span>
               ))}
             </motion.span>
@@ -96,14 +96,14 @@ export default function HeroSection() {
               animate={{ opacity: 1 }}
               transition={{ delay: 1.2, duration: 0.6 }}
             >
-              {Array.from(heroData.mainTitle.line2 || "").map((char: string, index: number) => (
+              {Array.from(heroData.mainTitle.line2 || "").map((char, index) => (
                 <motion.span
                   key={index}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1.2 + index * 0.05, duration: 0.05 }}
                 >
-                  {char}
+                  {char as string}
                 </motion.span>
               ))}
             </motion.span>
