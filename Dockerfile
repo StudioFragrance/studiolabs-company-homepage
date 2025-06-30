@@ -40,7 +40,6 @@ RUN pnpm install --frozen-lockfile
 COPY ormconfig.ts ./
 COPY tsconfig.json ./
 COPY tsconfig.node.json ./
-COPY .env ./
 COPY scripts/ scripts/
 COPY migrations/ migrations/
 COPY server/entities/ server/entities/
