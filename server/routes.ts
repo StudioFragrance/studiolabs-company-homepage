@@ -347,24 +347,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { getOrganizationUsers } = await import('./auth/naver-works');
       const orgUsers = await getOrganizationUsers(accessToken, user.domainId);
       
-      // 네이버웍스 원시 데이터 상세 로그
-      console.log('=== 네이버웍스 원시 사용자 데이터 ===');
-      orgUsers.forEach((orgUser: any, index: number) => {
-        console.log(`사용자 ${index + 1}:`, JSON.stringify(orgUser, null, 2));
-      });
-      console.log('========================================');
-      
+
       // 사용자 목록을 필터링하고 정제
       const filteredUsers = orgUsers
         .filter((orgUser: any) => orgUser.email && orgUser.email.includes('@'))
         .map((orgUser: any) => {
-          console.log(`\n--- 변환 처리 중: ${orgUser.email} ---`);
-          
           // name 객체에서 문자열로 변환
           let userName = 'Unknown User';
-          console.log('원본 name 데이터:', orgUser.name);
-          console.log('원본 displayName 데이터:', orgUser.displayName);
-          console.log('원본 userName 데이터:', orgUser.userName);
           
           // displayName이나 userName이 객체인 경우 처리
           if (orgUser.displayName && typeof orgUser.displayName === 'object') {
@@ -372,38 +361,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
             const lastName = nameObj.lastName || '';
             const firstName = nameObj.firstName || '';
             userName = `${lastName}${firstName}`.trim() || 'Unknown User';
-            console.log(`displayName 객체 변환: ${lastName} + ${firstName} = ${userName}`);
           } else if (orgUser.userName && typeof orgUser.userName === 'object') {
             const nameObj = orgUser.userName;
             const lastName = nameObj.lastName || '';
             const firstName = nameObj.firstName || '';
             userName = `${lastName}${firstName}`.trim() || 'Unknown User';
-            console.log(`userName 객체 변환: ${lastName} + ${firstName} = ${userName}`);
           } else if (orgUser.name && typeof orgUser.name === 'object') {
             const nameObj = orgUser.name;
             const lastName = nameObj.lastName || '';
             const firstName = nameObj.firstName || '';
             userName = `${lastName}${firstName}`.trim() || 'Unknown User';
-            console.log(`name 객체 변환: ${lastName} + ${firstName} = ${userName}`);
           } else if (typeof orgUser.name === 'string') {
             userName = orgUser.name;
-            console.log(`name 문자열: ${userName}`);
           } else if (typeof orgUser.displayName === 'string') {
             userName = orgUser.displayName;
-            console.log(`displayName 문자열: ${userName}`);
           } else if (typeof orgUser.userName === 'string') {
             userName = orgUser.userName;
-            console.log(`userName 문자열: ${userName}`);
           }
 
           // 조직 정보에서 부서/직책 추출
           const primaryOrg = orgUser.organizations?.find((org: any) => org.primary === true) || orgUser.organizations?.[0];
           const department = primaryOrg?.orgUnitName || orgUser.department;
           const position = primaryOrg?.positionName || orgUser.position || orgUser.title;
-          
-          console.log('조직 정보:', { primaryOrg: primaryOrg?.orgUnitName, department, position });
 
-          const result = {
+          return {
             userId: orgUser.userId || orgUser.id,
             email: orgUser.email || orgUser.emailAddress,
             name: userName,
@@ -412,11 +393,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
             status: orgUser.status || 'active',
             isAdministrator: orgUser.isAdministrator || false
           };
-          
-          console.log('최종 변환 결과:', result);
-          console.log('--- 변환 완료 ---\n');
-          
-          return result;
         })
         .sort((a: any, b: any) => a.email.localeCompare(b.email));
 

@@ -176,7 +176,6 @@ export async function getOrganizationUsers(accessToken: string, domainId: number
 
   for (const endpoint of endpoints) {
     try {
-      console.log(`네이버웍스 API 시도: ${endpoint}`);
       const response = await fetch(endpoint, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -186,7 +185,6 @@ export async function getOrganizationUsers(accessToken: string, domainId: number
 
       if (response.ok) {
         const data = await response.json();
-        console.log('네이버웍스 사용자 목록 응답:', { endpoint, data });
         
         // 응답 구조에 따라 사용자 목록 반환
         const users = data.members || data.users || data.data || data || [];
@@ -194,18 +192,14 @@ export async function getOrganizationUsers(accessToken: string, domainId: number
           return users;
         }
         continue;
-      } else {
-        console.log(`엔드포인트 실패: ${endpoint} - ${response.status} ${response.statusText}`);
       }
     } catch (error) {
-      console.log(`엔드포인트 오류: ${endpoint} - ${error}`);
       continue;
     }
   }
 
   // 모든 엔드포인트가 실패한 경우, 현재 사용자 정보라도 반환
   try {
-    console.log('사용자 목록 조회 실패, 현재 사용자 정보만 반환');
     const meResponse = await fetch('https://www.worksapis.com/v1.0/users/me', {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -218,7 +212,7 @@ export async function getOrganizationUsers(accessToken: string, domainId: number
       return [userData]; // 현재 사용자만 배열로 반환
     }
   } catch (error) {
-    console.error('현재 사용자 정보도 가져올 수 없음:', error);
+    // 현재 사용자 정보도 가져올 수 없는 경우 무시
   }
 
   throw new Error('사용자 목록을 가져올 수 없습니다. API 권한을 확인해주세요.');
