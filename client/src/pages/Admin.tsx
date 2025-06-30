@@ -12,6 +12,7 @@ import BrandStoryEditor from "@/components/admin/BrandStoryEditor";
 import CompanyHistoryEditor from "@/components/admin/CompanyHistoryEditor";
 import MVCEditor from "@/components/admin/MVCEditor";
 import ContactEditor from "@/components/admin/ContactEditor";
+import AdminUserManager from "@/components/admin/AdminUserManager";
 import { useSiteContent } from "@/hooks/useSiteContent";
 
 interface SiteContent {
@@ -175,13 +176,14 @@ export default function Admin() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto p-6">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="overview">전체 현황</TabsTrigger>
             <TabsTrigger value="hero">히어로</TabsTrigger>
             <TabsTrigger value="brandStory">브랜드</TabsTrigger>
             <TabsTrigger value="companyHistory">연혁</TabsTrigger>
             <TabsTrigger value="mvc">철학</TabsTrigger>
             <TabsTrigger value="contact">연락처</TabsTrigger>
+            <TabsTrigger value="adminUsers">관리자</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="mt-6">
@@ -292,6 +294,10 @@ export default function Admin() {
 
           <TabsContent value="contact" className="mt-6">
             <ContactEditor initialData={getContentByKey("contact")?.data} />
+          </TabsContent>
+
+          <TabsContent value="adminUsers" className="mt-6">
+            <AdminUserManager />
           </TabsContent>
 
           {contentSections.filter(s => !["hero", "brandStory", "companyHistory", "mvc", "contact"].includes(s.key)).map((section) => (

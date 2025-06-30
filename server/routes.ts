@@ -37,7 +37,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/auth/naver-works/callback', (req, res, next) => {
     console.log('네이버웍스 OAuth 콜백 수신:', req.query);
     
-    passport.authenticate('naver-works', (err: any, user: any, info: any) => {
+    passport.authenticate('naver-works', async (err: any, user: any, info: any) => {
       if (err) {
         console.error('OAuth 콜백 오류:', err);
         return res.redirect('/login?error=callback_error');
@@ -47,25 +47,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.redirect('/login?error=no_user_callback');
       }
       
-      // 관리자 권한 확인 (naver-works.ts의 requireAdmin과 동일한 로직)
-      const adminEmails: string[] = ['partis98@studiolabs.co.kr'];
-      const hasAdminRights = user.isAdministrator === true || 
-                           (user.executive === true && user.email && user.email.endsWith('@studiolabs.co.kr')) ||
-                           (user.email && adminEmails.includes(user.email));
-      
-      if (!hasAdminRights) {
-        console.log('관리자 권한 없음:', user.email);
-        return res.redirect('/login?error=no_permission&email=' + encodeURIComponent(user.email));
-      }
-      
-      req.logIn(user, (err) => {
-        if (err) {
-          console.error('콜백 로그인 세션 오류:', err);
-          return res.redirect('/login?error=session_error');
+      try {
+        // 관리자 권한 확인 (데이터베이스 기반)
+        const permissionsModule = await import('./auth/permissions');
+        const hasAdminRights = await permissionsModule.hasAdminPermission(user);
+        
+        if (!hasAdminRights) {
+          console.log('관리자 권한 없음:', user.email);
+          return res.redirect('/login?error=no_permission&email=' + encodeURIComponent(user.email));
         }
-        console.log('OAuth 로그인 성공:', user.email);
-        return res.redirect('/admin');
-      });
+        
+        req.logIn(user, (err) => {
+          if (err) {
+            console.error('콜백 로그인 세션 오류:', err);
+            return res.redirect('/login?error=session_error');
+          }
+          console.log('OAuth 로그인 성공:', user.email);
+          return res.redirect('/admin');
+        });
+      } catch (error) {
+        console.error('권한 확인 중 오류:', error);
+        return res.redirect('/login?error=permission_check_error');
+      }
     })(req, res, next);
   });
 
@@ -207,6 +210,101 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error checking site content status:", error);
       res.status(500).json({ error: "Failed to check site content status" });
+    }
+  });
+
+  // Admin User Management API routes
+
+  // Get all admin users (관리자 전용)
+  app.get("/api/admin/users", requireAdmin, async (req, res) => {
+    try {
+      const adminUsers = await storage.getAllAdminUsers();
+      res.json(adminUsers);
+    } catch (error) {
+      console.error("Error fetching admin users:", error);
+      res.status(500).json({ error: "Failed to fetch admin users" });
+    }
+  });
+
+  // Add new admin user (관리자 전용)
+  app.post("/api/admin/users", requireAdmin, async (req, res) => {
+    try {
+      const { email, name, note } = req.body;
+      
+      // 입력 검증
+      if (!email || typeof email !== 'string' || !email.includes('@')) {
+        return res.status(400).json({ error: "Valid email is required" });
+      }
+      
+      // 중복 확인
+      const existingUser = await storage.getAdminUser(email);
+      if (existingUser) {
+        return res.status(409).json({ error: "Admin user already exists" });
+      }
+      
+      const adminUser = await storage.createAdminUser({
+        email: email.trim().toLowerCase(),
+        name: name?.trim() || undefined,
+        note: note?.trim() || undefined,
+        isActive: true
+      });
+      
+      console.log(`New admin user created: ${email} by ${(req.user as any)?.email}`);
+      res.status(201).json(adminUser);
+    } catch (error) {
+      console.error("Error creating admin user:", error);
+      res.status(500).json({ error: "Failed to create admin user" });
+    }
+  });
+
+  // Update admin user (관리자 전용)
+  app.put("/api/admin/users/:id", requireAdmin, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { name, note, isActive } = req.body;
+      
+      if (!id || isNaN(Number(id))) {
+        return res.status(400).json({ error: "Valid user ID is required" });
+      }
+      
+      const adminUser = await storage.updateAdminUser(Number(id), {
+        name: name?.trim() || undefined,
+        note: note?.trim() || undefined,
+        isActive: Boolean(isActive)
+      });
+      
+      if (!adminUser) {
+        return res.status(404).json({ error: "Admin user not found" });
+      }
+      
+      console.log(`Admin user updated: ${adminUser.email} by ${(req.user as any)?.email}`);
+      res.json(adminUser);
+    } catch (error) {
+      console.error("Error updating admin user:", error);
+      res.status(500).json({ error: "Failed to update admin user" });
+    }
+  });
+
+  // Delete admin user (관리자 전용)
+  app.delete("/api/admin/users/:id", requireAdmin, async (req, res) => {
+    try {
+      const { id } = req.params;
+      
+      if (!id || isNaN(Number(id))) {
+        return res.status(400).json({ error: "Valid user ID is required" });
+      }
+      
+      const success = await storage.deleteAdminUser(Number(id));
+      
+      if (!success) {
+        return res.status(404).json({ error: "Admin user not found" });
+      }
+      
+      console.log(`Admin user deleted: ID ${id} by ${(req.user as any)?.email}`);
+      res.json({ message: "Admin user deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting admin user:", error);
+      res.status(500).json({ error: "Failed to delete admin user" });
     }
   });
 

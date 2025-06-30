@@ -138,33 +138,25 @@ export function requireAdmin(req: Request, res: any, next: any) {
     domainId: user.domainId
   });
 
-  // 관리자 권한 확인: 네이버웍스에서 isAdministrator가 true인 경우만 허용
-  if (user.isAdministrator === true) {
-    console.log('관리자 권한 승인: isAdministrator = true');
-    return next();
-  }
-
-  // 추가 권한 확인: executive가 true이고 특정 도메인인 경우
-  if (user.executive === true && user.email && user.email.endsWith('@studiolabs.co.kr')) {
-    console.log('관리자 권한 승인: executive = true + studiolabs 도메인');
-    return next();
-  }
-
-  // 특정 사용자 화이트리스트 (필요시 추가)
-  const adminEmails: string[] = [
-    'partis98@studiolabs.co.kr',
-    // 필요한 관리자 이메일을 여기에 추가
-  ];
-  
-  if (user.email && adminEmails.includes(user.email)) {
-    console.log('관리자 권한 승인: 화이트리스트 이메일');
-    return next();
-  }
-
-  console.log('관리자 권한 거부:', user.email);
-  return res.status(403).json({ 
-    message: '관리자 권한이 필요합니다.',
-    email: user.email,
-    hasAdminRights: false
+  // 비동기 권한 확인을 위해 hasAdminPermission 사용
+  import('../auth/permissions').then(({ hasAdminPermission }) => {
+    hasAdminPermission(user).then(hasPermission => {
+      if (hasPermission) {
+        return next();
+      } else {
+        console.log('관리자 권한 거부:', user.email);
+        return res.status(403).json({ 
+          message: '관리자 권한이 필요합니다.',
+          email: user.email,
+          hasAdminRights: false
+        });
+      }
+    }).catch(error => {
+      console.error('권한 확인 중 오류:', error);
+      return res.status(500).json({ message: '권한 확인 중 오류가 발생했습니다.' });
+    });
+  }).catch(error => {
+    console.error('권한 모듈 로드 오류:', error);
+    return res.status(500).json({ message: '시스템 오류가 발생했습니다.' });
   });
 }
