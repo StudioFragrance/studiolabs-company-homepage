@@ -113,6 +113,7 @@ Studio fragrance is a modern web application that provides personalized fragranc
 - Future-ready for database integration when needed
 
 ## Changelog
+- June 30, 2025: **Docker 마이그레이션 중복 실행 문제 해결** - 테이블 존재 여부 확인 로직 추가로 기존 데이터가 있는 환경에서도 안전한 배포 가능
 - June 30, 2025: **Docker 배포 완전 최적화 완료** - 엔티티 파일 복사, reflect-metadata 설정, 환경 파일 포함, TypeScript 경로 단순화로 Docker 배포 안정성 보장
 - June 30, 2025: **네이버웍스 조직 구성원 목록 기능 완성** - OAuth 토큰 세션 저장, 여러 API 엔드포인트 자동 시도, name 객체 문자열 변환, React 렌더링 오류 해결. 관리자 추가 시 조직 구성원 선택 가능
 - June 30, 2025: **대표자 계정 삭제 방지 시스템 구축** - 웹 콘솔에서 대표자 계정 삭제 불가하도록 백엔드/프론트엔드 이중 보호 구현
