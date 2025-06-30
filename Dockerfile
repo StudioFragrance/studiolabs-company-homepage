@@ -50,6 +50,10 @@ COPY client/ client/
 # 빌드된 파일들 복사
 COPY --from=builder /app/dist ./dist
 
+# 정적 파일 서빙을 위해 server/public 디렉토리 생성 및 복사
+RUN mkdir -p server/public
+COPY --from=builder /app/dist ./server/public
+
 # 포트 노출
 EXPOSE 5000
 
