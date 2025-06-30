@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -55,22 +55,31 @@ export default function MVCEditor({ initialData }: MVCEditorProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
+  const defaultValues = {
+    title: "Mission · Vision · Core Value",
+    subtitle: "우리의 가치와 비전",
+    mission: {
+      title: "",
+      description: "",
+    },
+    vision: {
+      title: "",
+      description: "",
+    },
+    coreValues: [],
+  };
+
   const form = useForm<MVCFormData>({
     resolver: zodResolver(mvcSchema),
-    defaultValues: initialData || {
-      title: "Mission · Vision · Core Value",
-      subtitle: "우리의 가치와 비전",
-      mission: {
-        title: "",
-        description: "",
-      },
-      vision: {
-        title: "",
-        description: "",
-      },
-      coreValues: [],
-    },
+    defaultValues: initialData || defaultValues,
   });
+
+  // initialData가 변경되면 폼을 다시 초기화
+  useEffect(() => {
+    if (initialData) {
+      form.reset(initialData);
+    }
+  }, [initialData, form]);
 
   const { fields: coreValueFields, append: appendCoreValue, remove: removeCoreValue } = useFieldArray({
     control: form.control,

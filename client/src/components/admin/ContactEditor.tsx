@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -62,28 +62,37 @@ export default function ContactEditor({ initialData }: ContactEditorProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
+  const defaultValues = {
+    title: "함께 성장하실 여러분들의 연락을 기다립니다",
+    email: "contact@studiolabs.co.kr",
+    businessInquiry: {
+      title: "협업/입점 문의",
+      description: "비즈니스 파트너십 및 제휴 문의",
+      buttonText: "문의하기",
+      icon: "fa-handshake",
+    },
+    recruitment: {
+      title: "채용 공고 보기",
+      description: "함께 성장할 팀원을 찾고 있습니다",
+      buttonText: "채용 정보 확인",
+      icon: "fa-users",
+      isActive: false,
+      inactiveMessage: "현재 진행 중인 공고가 없습니다",
+    },
+    teamImage: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+  };
+
   const form = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
-    defaultValues: initialData || {
-      title: "함께 성장하실 여러분들의 연락을 기다립니다",
-      email: "contact@studiolabs.co.kr",
-      businessInquiry: {
-        title: "협업/입점 문의",
-        description: "비즈니스 파트너십 및 제휴 문의",
-        buttonText: "문의하기",
-        icon: "fa-handshake",
-      },
-      recruitment: {
-        title: "채용 공고 보기",
-        description: "함께 성장할 팀원을 찾고 있습니다",
-        buttonText: "채용 정보 확인",
-        icon: "fa-users",
-        isActive: false,
-        inactiveMessage: "현재 진행 중인 공고가 없습니다",
-      },
-      teamImage: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
-    },
+    defaultValues: initialData || defaultValues,
   });
+
+  // initialData가 변경되면 폼을 다시 초기화
+  useEffect(() => {
+    if (initialData) {
+      form.reset(initialData);
+    }
+  }, [initialData, form]);
 
   const updateMutation = useMutation({
     mutationFn: async (data: ContactFormData) => {
