@@ -323,6 +323,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get Naver Works organization users (관리자 전용)
+  app.get("/api/admin/naver-works/users", requireAdmin, async (req, res) => {
+    try {
+      const user = req.user as any;
+      
+      if (!user || !user.id) {
+        return res.status(401).json({ error: "User not authenticated" });
+      }
+
+      // 현재 사용자의 액세스 토큰 가져오기
+      const accessToken = user.accessToken;
+      
+      if (!accessToken) {
+        console.log('액세스 토큰이 없습니다. 사용자 재인증이 필요합니다.');
+        return res.status(401).json({ 
+          error: "Access token not found", 
+          message: "사용자 재인증이 필요합니다.",
+          requiresReauth: true
+        });
+      }
+
+      const { getOrganizationUsers } = await import('./auth/naver-works');
+      const orgUsers = await getOrganizationUsers(accessToken, user.domainId);
+      
+      // 사용자 목록을 필터링하고 정제
+      const filteredUsers = orgUsers
+        .filter((orgUser: any) => orgUser.email && orgUser.email.includes('@'))
+        .map((orgUser: any) => ({
+          userId: orgUser.userId || orgUser.id,
+          email: orgUser.email || orgUser.emailAddress,
+          name: orgUser.name || orgUser.displayName || orgUser.userName,
+          department: orgUser.department || orgUser.orgUnit?.name,
+          position: orgUser.position || orgUser.title,
+          status: orgUser.status || 'active',
+          isAdministrator: orgUser.isAdministrator || false
+        }))
+        .sort((a: any, b: any) => a.email.localeCompare(b.email));
+
+      console.log(`네이버웍스 사용자 목록 조회 성공: ${filteredUsers.length}명`);
+      res.json({ users: filteredUsers, total: filteredUsers.length });
+    } catch (error) {
+      console.error("Error fetching Naver Works users:", error);
+      res.status(500).json({ 
+        error: "Failed to fetch organization users",
+        message: "조직 사용자 목록을 가져오는데 실패했습니다."
+      });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;
