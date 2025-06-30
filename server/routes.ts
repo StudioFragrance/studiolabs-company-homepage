@@ -38,10 +38,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put("/api/site-content/:key", async (req, res) => {
     try {
       const { key } = req.params;
-      const { data } = req.body;
-      
       console.log(`Updating site content for key: ${key}`);
-      console.log("Data received:", JSON.stringify(data, null, 2));
+      console.log("Full request body:", JSON.stringify(req.body, null, 2));
+      
+      // 데이터가 직접 body에 있는지 확인
+      const data = req.body.data || req.body;
+      console.log("Data to save:", JSON.stringify(data, null, 2));
       
       const content = await storage.updateSiteContent(key, data);
       
