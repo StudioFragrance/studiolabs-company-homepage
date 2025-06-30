@@ -67,8 +67,13 @@ export function setupNaverWorksAuth() {
       // name 객체에서 문자열로 변환
       let userName = 'Unknown User';
       if (userInfo.name && typeof userInfo.name === 'object') {
-        const { lastName = '', firstName = '' } = userInfo.name;
+        const nameObj = userInfo.name;
+        const lastName = nameObj.lastName || '';
+        const firstName = nameObj.firstName || '';
         userName = `${lastName}${firstName}`.trim() || 'Unknown User';
+        console.log('이름 변환:', { lastName, firstName, userName });
+      } else if (typeof userInfo.name === 'string') {
+        userName = userInfo.name;
       } else if (userInfo.userName || userInfo.displayName) {
         userName = userInfo.userName || userInfo.displayName;
       }
