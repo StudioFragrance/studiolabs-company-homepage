@@ -19,8 +19,8 @@ COPY . .
 # TypeScript 컴파일 및 클라이언트 빌드
 RUN pnpm run build
 
-# 마이그레이션과 스크립트 파일들도 JavaScript로 컴파일
-RUN npx tsc migrations/*.ts scripts/*.ts server/entities/*.ts --outDir dist --target es2020 --module esnext --moduleResolution node --esModuleInterop --allowSyntheticDefaultImports --skipLibCheck || true
+# TypeScript 프로젝트 전체를 컴파일 (ormconfig.ts 포함)
+RUN npx tsc --project tsconfig.node.json
 
 # Stage 2: 프로덕션 단계
 FROM node:20-alpine AS production
