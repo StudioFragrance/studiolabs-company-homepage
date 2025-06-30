@@ -89,7 +89,6 @@
 @layer base {
   * {
     @apply border-border;
-    cursor: none;
   }
 
   body {
@@ -147,6 +146,11 @@
     pointer-events: none;
     z-index: 9999;
     transition: transform 0.1s ease;
+  }
+  
+  /* 홈페이지에서만 기본 커서 숨김 */
+  .homepage-cursor * {
+    cursor: none !important;
   }
   
   .custom-cursor-follower {
