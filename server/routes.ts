@@ -12,18 +12,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // 네이버웍스 OAuth 시작
-  app.get('/auth/naver-works', passport.authenticate('naver-works'));
+  app.get('/auth/naver-works', (req, res, next) => {
+    console.log('네이버웍스 OAuth 로그인 요청 시작');
+    passport.authenticate('naver-works', (err, user, info) => {
+      if (err) {
+        console.error('OAuth 인증 오류:', err);
+        return res.redirect('/login?error=oauth_error');
+      }
+      if (!user) {
+        console.error('OAuth 사용자 정보 없음:', info);
+        return res.redirect('/login?error=no_user');
+      }
+      req.logIn(user, (err) => {
+        if (err) {
+          console.error('로그인 세션 오류:', err);
+          return res.redirect('/login?error=session_error');
+        }
+        return res.redirect('/admin');
+      });
+    })(req, res, next);
+  });
 
   // 네이버웍스 OAuth 콜백
-  app.get('/auth/naver-works/callback', 
-    passport.authenticate('naver-works', { 
-      failureRedirect: '/auth/login?error=1' 
-    }),
-    (req, res) => {
-      // 인증 성공 시 관리자 페이지로 리다이렉트
-      res.redirect('/admin');
-    }
-  );
+  app.get('/auth/naver-works/callback', (req, res, next) => {
+    console.log('네이버웍스 OAuth 콜백 수신:', req.query);
+    
+    passport.authenticate('naver-works', (err, user, info) => {
+      if (err) {
+        console.error('OAuth 콜백 오류:', err);
+        return res.redirect('/login?error=callback_error');
+      }
+      if (!user) {
+        console.error('OAuth 콜백 사용자 정보 없음:', info);
+        return res.redirect('/login?error=no_user_callback');
+      }
+      
+      req.logIn(user, (err) => {
+        if (err) {
+          console.error('콜백 로그인 세션 오류:', err);
+          return res.redirect('/login?error=session_error');
+        }
+        console.log('OAuth 로그인 성공:', user.email);
+        return res.redirect('/admin');
+      });
+    })(req, res, next);
+  });
 
   // 로그아웃
   app.get('/auth/logout', (req, res) => {
