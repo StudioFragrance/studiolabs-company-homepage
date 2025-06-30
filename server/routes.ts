@@ -14,6 +14,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // 네이버웍스 OAuth 시작
   app.get('/auth/naver-works', (req, res, next) => {
     console.log('네이버웍스 OAuth 로그인 요청 시작');
+    console.log('OAuth 설정:', {
+      clientID: process.env.NAVER_WORKS_CLIENT_ID,
+      callbackURL: process.env.NAVER_WORKS_REDIRECT_URI,
+      currentHost: req.get('host'),
+      currentProtocol: req.protocol
+    });
     passport.authenticate('naver-works')(req, res, next);
   });
 
