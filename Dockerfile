@@ -13,11 +13,14 @@ RUN pnpm install
 # 프론트엔드 빌드
 RUN pnpm run build
 
-# 마이그레이션 컴파일 (TypeScript → JavaScript)
-RUN npx tsc migrations/*.ts --outDir dist/migrations --target ES2020 --module ESNext --moduleResolution node
+# 스크립트 실행 권한 부여
+RUN chmod +x migrate.sh docker-entrypoint.sh
+
+# PostgreSQL 클라이언트 설치 (pg_isready 사용)
+RUN apk add --no-cache postgresql-client
 
 # 포트 노출
 EXPOSE 5000
 
-# 애플리케이션 실행
-CMD ["pnpm", "start"]
+# Docker 엔트리포인트 스크립트 실행
+ENTRYPOINT ["./docker-entrypoint.sh"]

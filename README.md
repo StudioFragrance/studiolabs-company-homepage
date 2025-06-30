@@ -28,7 +28,16 @@ git clone <repository-url>
 cd studiolabs-homepage
 ```
 
-### 2. Docker로 전체 시스템 실행
+### 2. 환경 변수 설정
+Docker 실행 전에 `.env.docker` 파일에서 실제 OAuth 키를 설정하세요:
+```bash
+# .env.docker 파일 편집
+NAVER_WORKS_CLIENT_ID=실제_클라이언트_ID
+NAVER_WORKS_CLIENT_SECRET=실제_클라이언트_시크릿
+NAVER_WORKS_REDIRECT_URI=http://localhost:5000/auth/naver-works/callback
+```
+
+### 3. Docker로 전체 시스템 실행
 ```bash
 # PostgreSQL과 애플리케이션을 함께 실행
 docker compose up --build
@@ -36,6 +45,12 @@ docker compose up --build
 # 백그라운드 실행
 docker compose up -d --build
 ```
+
+실행 과정에서 다음이 자동으로 실행됩니다:
+- 📡 데이터베이스 연결 대기
+- 🔧 마이그레이션 실행 (`./migrate.sh run`)
+- 🌱 초기 데이터 시딩 (`scripts/seed-data.ts`)
+- 🎯 웹 서버 시작
 
 ### 3. 애플리케이션 접속
 애플리케이션이 시작되면 `http://localhost:5000`에서 접속할 수 있습니다.

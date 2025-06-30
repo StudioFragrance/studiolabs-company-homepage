@@ -113,6 +113,7 @@ Studio fragrance is a modern web application that provides personalized fragranc
 - Future-ready for database integration when needed
 
 ## Changelog
+- June 30, 2025: **Docker 마이그레이션 시스템 완전 통합** - migrate.sh와 scripts/seed-data.ts를 Docker에 완전 통합. docker-entrypoint.sh로 DB 대기 → 마이그레이션 → 시딩 → 앱 시작 자동화. .env.docker로 환경 분리
 - June 30, 2025: **Docker 환경 분리 완료** - DOCKER_ENV 플래그로 Docker/개발 환경 분리. 로컬 Docker에서는 항상 production 모드, Replit에서는 development 모드. 환경별 복잡한 조건문 제거하고 단순화
 - June 30, 2025: **Docker 정적 파일 서빙 경로 문제 해결** - Vite 빌드 출력이 dist/public/에 생성되므로 COPY 명령을 /app/dist/public/ → /app/server/public/로 수정. index.html 파일 위치 오류 해결
 - June 30, 2025: **Docker 필수 설정 파일 누락 문제 해결** - vite.config.ts, postcss.config.js, tailwind.config.ts, components.json, client/ 디렉토리 복사 추가. server/vite.ts에서 필요한 모든 설정 파일들이 Docker 환경에서 접근 가능하도록 구성 완료

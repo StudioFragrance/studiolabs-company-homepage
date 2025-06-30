@@ -29,8 +29,16 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: studiofragrance_app
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres:postgres123@postgres:5432/studiofragrance
+      - PORT=5000
+      - SESSION_SECRET=${SESSION_SECRET:-your-super-secure-session-secret-change-this-in-production}
+      - NAVER_WORKS_CLIENT_ID=${NAVER_WORKS_CLIENT_ID}
+      - NAVER_WORKS_CLIENT_SECRET=${NAVER_WORKS_CLIENT_SECRET}
+      - NAVER_WORKS_REDIRECT_URI=${NAVER_WORKS_REDIRECT_URI}
     env_file:
-      - .env
+      - .env.docker
     ports:
       - "5000:5000"
     depends_on:
