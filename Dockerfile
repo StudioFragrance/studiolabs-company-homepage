@@ -64,5 +64,5 @@ EXPOSE 5000
 # 환경 변수 설정
 ENV NODE_ENV=production
 
-# 데이터베이스 대기 후 마이그레이션 실행 및 애플리케이션 시작 (tsx 사용)
-CMD ["sh", "-c", "echo 'Starting Studiolabs application...' && npx wait-on tcp:postgres:5432 -t 60000 && echo 'Running database migrations...' && npx tsx scripts/migration.ts run && echo 'Seeding initial data...' && npx tsx scripts/seed-data.ts && echo 'Starting the server...' && npx tsx server/index.ts"]
+# 데이터베이스 대기 후 애플리케이션 시작
+CMD ["sh", "-c", "echo 'Starting Studiolabs application...' && npx wait-on tcp:postgres:5432 -t 60000 && echo 'Starting the server...' && npx tsx server/index.ts"]
