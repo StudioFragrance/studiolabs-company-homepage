@@ -1,0 +1,23 @@
+studiofragrance_app  | 6:30:36 AM [express] GET /api/site-content/hero 200 in 62ms :: {"id":1,"key":"hero","data":{"subtitl…                                                                                                                                                                                   
+studiofragrance_app  | 6:30:36 AM [express] GET /api/site-content/brandStory 200 in 53ms :: {"id":2,"key":"brandStory","dat…
+studiofragrance_app  | 6:30:36 AM [express] GET /api/site-content/companyHistory 200 in 58ms :: {"id":3,"key":"companyHisto…                                                                                                                                                                                   
+studiofragrance_app  | 6:30:36 AM [express] GET /api/site-content/mvc 200 in 61ms :: {"id":4,"key":"mvc","data":{"title":"M…                                                                                                                                                                                   
+studiofragrance_app  | 6:30:36 AM [express] GET /api/site-content/contact 200 in 62ms :: {"id":5,"key":"contact","data":{"e…
+studiofragrance_app  | 6:30:39 AM [express] GET /api/auth/user 401 in 1ms :: {"message":"인증되지 않음"}                                                                                                                                                                                                       
+studiofragrance_app  | 6:30:39 AM [express] GET /api/site-content 200 in 4ms :: [{"id":2,"key":"brandStory","data":{"image"…
+studiofragrance_app  | 6:30:39 AM [express] GET /api/auth/user 401 in 1ms :: {"message":"인증되지 않음"}                                                                                                                                                                                                       
+studiofragrance_app  | 네이버웍스 OAuth 콜백 수신: {
+studiofragrance_app  |   code: 'kr1VW05V0pUcXBEQVQ1Z0N1aA==',
+studiofragrance_app  |   state: 'CUEBH1DvUiOSSSJm6YrD34Un'                                                                                                                                                                                                                                                     
+studiofragrance_app  | }                                                                                                                                                                                                                                                                                       
+studiofragrance_app  | OAuth 콜백 사용자 정보 없음: { message: 'Unable to verify authorization request state.' }                                                                                                                                                                                               
+studiofragrance_app  | 6:30:47 AM [express] GET /api/auth/user 401 in 1ms :: {"message":"인증되지 않음"}                                                                                                                                                                                                       
+studiofragrance_app  | 6:31:49 AM [express] GET /api/auth/user 401 in 1ms :: {"message":"인증되지 않음"}
+studiofragrance_app  | 6:31:52 AM [express] GET /api/auth/user 401 in 1ms :: {"message":"인증되지 않음"}
+studiofragrance_app  | 6:32:01 AM [express] GET /api/auth/user 401 in 1ms :: {"message":"인증되지 않음"}
+studiofragrance_app  | OAuth 콜백 사용자 정보 없음: { message: 'Unable to verify authorization request state.' }
+studiofragrance_app  | 네이버웍스 OAuth 콜백 수신: {
+studiofragrance_app  |   code: 'kr1OHBqeFFOMmQwN053X0xpbw==',                                                                                                                                                                                                                                                  
+studiofragrance_app  |   state: '65ClcIAWR01qbC9GImx1k36M'                                                                                                                                                                                                                                                     
+studiofragrance_app  | }                                                                                                                                                                                                                                                                                       
+studiofragrance_app  | 6:32:05 AM [express] GET /api/auth/user 401 in 1ms :: {"message":"인증되지 않음"}
