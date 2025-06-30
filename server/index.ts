@@ -139,10 +139,7 @@ app.use((req, res, next) => {
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route
   // doesn't interfere with the other routes
-  // Docker 환경에서는 항상 정적 파일 서빙 사용
-  if (process.env.DOCKER_ENV === 'true') {
-    serveStatic(app);
-  } else if (app.get("env") === "development") {
+  if (app.get("env") === "development") {
     await setupVite(app, server);
   } else {
     serveStatic(app);
