@@ -16,6 +16,8 @@ export interface NaverWorksUser {
   isAdministrator?: boolean;
   executive?: boolean;
   orgUnits?: any[];
+  accessToken?: string;
+  refreshToken?: string;
 }
 
 export function setupNaverWorksAuth() {
@@ -90,6 +92,8 @@ export function setupNaverWorksAuth() {
         isAdministrator: userInfo.isAdministrator || false,
         executive: userInfo.executive || false,
         orgUnits: userInfo.organizations?.[0]?.orgUnits || [],
+        accessToken: accessToken, // 액세스 토큰 저장
+        refreshToken: refreshToken, // 리프레시 토큰 저장
       };
       
       console.log('변환된 사용자 객체:', JSON.stringify(user, null, 2));
@@ -159,4 +163,31 @@ export function requireAdmin(req: Request, res: any, next: any) {
     console.error('권한 모듈 로드 오류:', error);
     return res.status(500).json({ message: '시스템 오류가 발생했습니다.' });
   });
+}
+
+// 네이버웍스 조직 사용자 목록 조회 함수
+export async function getOrganizationUsers(accessToken: string, domainId: number): Promise<any[]> {
+  try {
+    // 네이버웍스 API 2.0 사용자 목록 조회
+    const response = await fetch(`https://www.worksapis.com/v1.0/orgs/${domainId}/members`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      console.error('네이버웍스 사용자 목록 조회 실패:', response.status, response.statusText);
+      throw new Error('사용자 목록을 가져올 수 없습니다.');
+    }
+
+    const data = await response.json();
+    console.log('네이버웍스 사용자 목록 응답:', data);
+    
+    // 응답 구조에 따라 사용자 목록 반환
+    return data.members || data.users || data || [];
+  } catch (error) {
+    console.error('네이버웍스 사용자 목록 조회 오류:', error);
+    throw error;
+  }
 }

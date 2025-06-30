@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { Trash2, Plus, Edit, Save, X } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Trash2, Plus, Edit, Save, X, Users } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 
@@ -27,11 +28,22 @@ interface AdminUserFormData {
   isActive: boolean;
 }
 
+interface NaverWorksUser {
+  userId: string;
+  email: string;
+  name: string;
+  department?: string;
+  position?: string;
+  status: string;
+  isAdministrator: boolean;
+}
+
 export default function AdminUserManager() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [showNaverWorksUsers, setShowNaverWorksUsers] = useState(false);
   const [newUserForm, setNewUserForm] = useState<AdminUserFormData>({
     email: '',
     name: '',
@@ -41,6 +53,12 @@ export default function AdminUserManager() {
 
   const { data: adminUsers, isLoading } = useQuery<AdminUser[]>({
     queryKey: ["/api/admin/users"],
+  });
+
+  const { data: naverWorksUsers, isLoading: isLoadingNaverWorksUsers } = useQuery<{ users: NaverWorksUser[], total: number }>({
+    queryKey: ["/api/admin/naver-works/users"],
+    enabled: showNaverWorksUsers, // 필요할 때만 로드
+    retry: false, // 실패 시 재시도 안함 (권한 문제일 수 있음)
   });
 
   const createMutation = useMutation({
@@ -118,6 +136,16 @@ export default function AdminUserManager() {
     createMutation.mutate(newUserForm);
   };
 
+  const handleSelectNaverWorksUser = (user: NaverWorksUser) => {
+    setNewUserForm({
+      email: user.email,
+      name: user.name,
+      note: user.department && user.position ? `${user.department} - ${user.position}` : (user.department || user.position || ''),
+      isActive: true
+    });
+    setShowNaverWorksUsers(false);
+  };
+
   const handleUpdateUser = (id: number, updates: Partial<AdminUserFormData>) => {
     updateMutation.mutate({ id, data: updates });
   };
@@ -182,6 +210,58 @@ export default function AdminUserManager() {
           <Card className="border-blue-200 bg-blue-50">
             <CardContent className="pt-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="md:col-span-2">
+                  <label className="text-sm font-medium mb-2 block">네이버웍스에서 선택하기</label>
+                  <div className="flex gap-2">
+                    <Button 
+                      type="button"
+                      variant="outline"
+                      onClick={() => setShowNaverWorksUsers(!showNaverWorksUsers)}
+                      disabled={isLoadingNaverWorksUsers}
+                      className="flex items-center gap-2"
+                    >
+                      <Users className="h-4 w-4" />
+                      {showNaverWorksUsers ? "목록 숨기기" : "조직 구성원 목록 보기"}
+                    </Button>
+                    {isLoadingNaverWorksUsers && (
+                      <span className="text-sm text-gray-500 self-center">로딩 중...</span>
+                    )}
+                  </div>
+                  
+                  {showNaverWorksUsers && naverWorksUsers && (
+                    <div className="mt-3 max-h-60 overflow-y-auto border rounded-md bg-white">
+                      {naverWorksUsers.users.length > 0 ? (
+                        <div className="space-y-1 p-2">
+                          {naverWorksUsers.users.map((user) => (
+                            <div 
+                              key={user.userId}
+                              className="flex items-center justify-between p-2 hover:bg-gray-50 rounded cursor-pointer"
+                              onClick={() => handleSelectNaverWorksUser(user)}
+                            >
+                              <div>
+                                <div className="font-medium text-sm">{user.name}</div>
+                                <div className="text-xs text-gray-500">{user.email}</div>
+                                {(user.department || user.position) && (
+                                  <div className="text-xs text-gray-400">
+                                    {[user.department, user.position].filter(Boolean).join(" - ")}
+                                  </div>
+                                )}
+                              </div>
+                              <Badge variant={user.isAdministrator ? "default" : "secondary"} className="text-xs">
+                                {user.isAdministrator ? "관리자" : "일반"}
+                              </Badge>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="p-4 text-center text-gray-500 text-sm">
+                          조직 구성원을 찾을 수 없습니다.
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+                
                 <div>
                   <label className="text-sm font-medium mb-2 block">이메일 *</label>
                   <Input
