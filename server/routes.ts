@@ -294,13 +294,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Valid user ID is required" });
       }
       
+      // 삭제하려는 사용자 정보 확인
+      const userToDelete = await storage.getAdminUserById(Number(id));
+      
+      if (!userToDelete) {
+        return res.status(404).json({ error: "Admin user not found" });
+      }
+      
+      // 대표자 계정 삭제 방지
+      if (userToDelete.email === 'partis98@studiolabs.co.kr') {
+        return res.status(403).json({ 
+          error: "대표자 계정은 삭제할 수 없습니다.",
+          message: "The founder account cannot be deleted for security reasons."
+        });
+      }
+      
       const success = await storage.deleteAdminUser(Number(id));
       
       if (!success) {
         return res.status(404).json({ error: "Admin user not found" });
       }
       
-      console.log(`Admin user deleted: ID ${id} by ${(req.user as any)?.email}`);
+      console.log(`Admin user deleted: ${userToDelete.email} (ID: ${id}) by ${(req.user as any)?.email}`);
       res.json({ message: "Admin user deleted successfully" });
     } catch (error) {
       console.error("Error deleting admin user:", error);
