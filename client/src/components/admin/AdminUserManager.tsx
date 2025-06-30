@@ -234,7 +234,7 @@ export default function AdminUserManager() {
                         <div className="space-y-1 p-2">
                           {naverWorksUsers.users.map((user) => (
                             <div 
-                              key={user.userId}
+                              key={user.userId || user.email}
                               className="flex items-center justify-between p-2 hover:bg-gray-50 rounded cursor-pointer"
                               onClick={() => handleSelectNaverWorksUser(user)}
                             >
