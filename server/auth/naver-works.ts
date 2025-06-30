@@ -1,6 +1,7 @@
 import passport from 'passport';
 import { Strategy as OAuth2Strategy } from 'passport-oauth2';
 import type { Request } from 'express';
+import { CustomStateStore } from './custom-state-store';
 
 // 네이버웍스 OAuth 설정 (정확한 API 엔드포인트)
 const NAVER_WORKS_AUTH_URL = 'https://auth.worksmobile.com/oauth2/v2.0/authorize';
@@ -43,8 +44,11 @@ export function setupNaverWorksAuth() {
     scope: ['user.read', 'user.email.read']
   });
 
+  // 커스텀 state store 생성
+  const customStateStore = new CustomStateStore({ key: 'oauth2:naver-works' });
+
   // 네이버웍스 OAuth2 전략 설정
-  passport.use('naver-works', new OAuth2Strategy({
+  const strategy = new OAuth2Strategy({
     authorizationURL: NAVER_WORKS_AUTH_URL,
     tokenURL: NAVER_WORKS_TOKEN_URL,
     clientID,
@@ -130,7 +134,13 @@ export function setupNaverWorksAuth() {
       console.error('네이버웍스 인증 오류:', error);
       return done(error, null);
     }
-  }));
+  });
+
+  // 커스텀 state store를 strategy에 연결
+  (strategy as any)._stateStore = customStateStore;
+  
+  // strategy를 passport에 등록
+  passport.use('naver-works', strategy);
 
   // 세션 직렬화
   passport.serializeUser((user: any, done) => {
