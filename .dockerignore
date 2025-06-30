@@ -1,50 +1,16 @@
-# Dependencies
 node_modules
-npm-debug.log*
-pnpm-debug.log*
-
-# Environment files
-.env
-.env.local
-.env.development
-.env.test
-.env.production
-
-# Logs
-logs
-*.log
-
-# Development files
+npm-debug.log
 .git
 .gitignore
 README.md
-.replit
-replit.md
-
-# Build artifacts (will be generated in container)
-dist
-build
-
-# Test files
-**/*.test.ts
-**/*.test.js
-__tests__
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Editor files
+.env.local
+.env.development
+.env.test
+coverage
+.nyc_output
 .vscode
 .idea
-*.swp
-*.swo
-
-# Cache directories
-.cache
-.parcel-cache
-.vite
-
-# Temporary files
-tmp
-temp
+*.md
+.DS_Store
+dist/
+*.log
