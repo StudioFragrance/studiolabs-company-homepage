@@ -113,6 +113,7 @@ Studio fragrance is a modern web application that provides personalized fragranc
 - Future-ready for database integration when needed
 
 ## Changelog
+- June 30, 2025: **프로젝트 구조 최적화 완료** - 불필요한 파일 정리, DataSource 중복 제거, 마이그레이션 파일 gitignore 추가. 수동 마이그레이션/시드 실행 방식으로 변경하여 Docker 환경 안정성 확보
 - June 30, 2025: **시드 데이터 완전성 보장** - 누락된 companyHistory, mvc, contact 콘텐츠 추가하여 모든 페이지 섹션 완성. 처음 실행 시 5개 핵심 콘텐츠(hero, brandStory, companyHistory, mvc, contact) 자동 생성 확인
 - June 30, 2025: **처음 실행 시나리오 테스트 완료** - 깨끗한 데이터베이스에서 마이그레이션 → 시드 데이터 생성 순서 수정. 초기 실행 시 모든 시스템 정상 작동 검증 완료
 - June 30, 2025: **Docker 정적 파일 서빙 경로 문제 해결** - Vite 빌드 출력이 dist/public/에 생성되므로 COPY 명령을 /app/dist/public/ → /app/server/public/로 수정. index.html 파일 위치 오류 해결

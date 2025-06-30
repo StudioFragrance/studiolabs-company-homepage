@@ -10,4 +10,9 @@ vite.config.ts.*
 .vscode
 .vs
 
+# Environment files
 .env
+
+# Database migrations
+migrations/*.ts
+migrations/*.js
