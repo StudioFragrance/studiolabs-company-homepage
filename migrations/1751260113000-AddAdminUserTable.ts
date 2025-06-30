@@ -21,7 +21,7 @@ export class AddAdminUserTable1751260113000 implements MigrationInterface {
         // 기본 관리자 사용자 추가
         await queryRunner.query(`
             INSERT INTO "admin_users" ("email", "name", "note") 
-            VALUES ('partis98@studiolabs.co.kr', '배성준', '시스템 기본 관리자')
+            VALUES ('partis98@studiolabs.co.kr', '배성준', '대표자')
         `);
     }
 

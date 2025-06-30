@@ -2,6 +2,7 @@ import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { SiteContent } from "./entities/SiteContent";
 import { User } from "./entities/User";
+import { AdminUser } from "./entities/AdminUser";
 
 if (!process.env.DATABASE_URL) {
   throw new Error(
@@ -12,7 +13,7 @@ if (!process.env.DATABASE_URL) {
 export const AppDataSource = new DataSource({
   type: "postgres",
   url: process.env.DATABASE_URL,
-  entities: [User, SiteContent],
+  entities: [User, SiteContent, AdminUser],
   synchronize: false, // 마이그레이션을 통해서만 테이블 관리
   logging: process.env.NODE_ENV === 'development',
   migrations: [process.env.NODE_ENV === 'production' ? "dist/migrations/*.js" : "migrations/*.ts"],
