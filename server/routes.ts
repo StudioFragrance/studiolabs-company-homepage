@@ -40,12 +40,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { key } = req.params;
       const { data } = req.body;
       
+      console.log(`Updating site content for key: ${key}`);
+      console.log("Data received:", JSON.stringify(data, null, 2));
+      
       const content = await storage.updateSiteContent(key, data);
       
       if (!content) {
+        console.log(`Content not found for key: ${key}`);
         return res.status(404).json({ error: "Content not found" });
       }
       
+      console.log(`Content updated successfully for key: ${key}`);
       res.json(content);
     } catch (error) {
       console.error("Error updating site content:", error);
