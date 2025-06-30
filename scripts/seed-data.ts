@@ -1,4 +1,5 @@
 #!/usr/bin/env tsx
+import "reflect-metadata";
 import { AppDataSource } from "../ormconfig";
 import { SiteContent } from "../server/entities/SiteContent";
 import { AdminUser } from "../server/entities/AdminUser";
