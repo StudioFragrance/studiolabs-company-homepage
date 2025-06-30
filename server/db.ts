@@ -121,6 +121,103 @@ async function seedInitialData() {
               }
             ]
           }
+        },
+        {
+          key: 'companyHistory',
+          data: {
+            title: "Our Journey",
+            subtitle: "향기로 써내려가는 혁신의 역사",
+            timeline: [
+              {
+                date: "2021.03",
+                year: 2021,
+                month: 3,
+                icon: "🚀",
+                title: "스튜디오프래그런스 창립",
+                description: "AI 기반 향수 추천 서비스 개발 시작",
+                isFuture: false
+              },
+              {
+                date: "2021.09",
+                year: 2021,
+                month: 9,
+                icon: "🧪",
+                title: "첫 번째 AI 알고리즘 완성",
+                description: "개인 맞춤형 향수 추천 엔진 1.0 출시",
+                isFuture: false
+              },
+              {
+                date: "2022.06",
+                year: 2022,
+                month: 6,
+                icon: "🏆",
+                title: "베타 서비스 론칭",
+                description: "1,000명의 베타 사용자와 함께 서비스 검증",
+                isFuture: false
+              },
+              {
+                date: "2023.01",
+                year: 2023,
+                month: 1,
+                icon: "🌟",
+                title: "정식 서비스 오픈",
+                description: "AI 향수 추천 플랫폼 공식 출시",
+                isFuture: false
+              },
+              {
+                date: "2024.Q2",
+                year: 2024,
+                month: 6,
+                icon: "🔮",
+                title: "글로벌 확장 예정",
+                description: "아시아 시장 진출 및 다국어 서비스 계획",
+                isFuture: true
+              }
+            ]
+          }
+        },
+        {
+          key: 'mvc',
+          data: {
+            title: "Philosophy",
+            mission: {
+              title: "Mission",
+              description: "AI 기술을 통해 모든 사람이 자신만의 완벽한 향기를 찾을 수 있도록 돕는다",
+              icon: "🎯"
+            },
+            vision: {
+              title: "Vision",
+              description: "향수 추천의 새로운 패러다임을 제시하여 글로벌 향수 시장을 혁신한다",
+              icon: "🔭"
+            },
+            coreValues: {
+              title: "Core Values",
+              description: "개인화, 혁신, 품질을 통해 고객에게 최고의 향기 경험을 제공한다",
+              icon: "💎"
+            }
+          }
+        },
+        {
+          key: 'contact',
+          data: {
+            title: "Contact Us",
+            email: "hello@studiofragrance.com",
+            businessInquiry: {
+              title: "비즈니스 문의",
+              description: "협업 및 입점 제안을 위한 비즈니스 문의",
+              buttonText: "비즈니스 문의하기",
+              icon: "💼"
+            },
+            recruitment: {
+              title: "채용 문의",
+              description: "함께 성장할 인재를 찾고 있습니다",
+              buttonText: "채용 정보 보기",
+              icon: "👥",
+              isActive: true,
+              inactiveMessage: "현재 채용이 진행되지 않고 있습니다"
+            },
+            teamImage: "/team-image.jpg"
+          }
         }
       ];
       
