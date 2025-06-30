@@ -38,6 +38,7 @@ RUN pnpm install --frozen-lockfile
 
 # 필요한 스크립트와 설정 파일들 복사
 COPY ormconfig.ts ./
+COPY tsconfig.json ./
 COPY tsconfig.node.json ./
 COPY scripts/ scripts/
 COPY migrations/ migrations/
