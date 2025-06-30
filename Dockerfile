@@ -16,11 +16,8 @@ RUN pnpm install --frozen-lockfile
 # 소스 코드 복사
 COPY . .
 
-# TypeScript 컴파일 및 클라이언트 빌드
+# 클라이언트 빌드만 실행 (서버는 tsx로 런타임 실행)
 RUN pnpm run build
-
-# TypeScript 프로젝트 전체를 컴파일 (ormconfig.ts 포함, vite.ts 제외)
-RUN npx tsc --project tsconfig.node.json --skipLibCheck || true
 
 # Stage 2: 프로덕션 단계
 FROM node:20-alpine AS production
@@ -43,7 +40,7 @@ COPY tsconfig.json ./
 COPY tsconfig.node.json ./
 COPY scripts/ scripts/
 COPY migrations/ migrations/
-COPY server/entities/ server/entities/
+COPY server/ server/
 
 # 빌드된 파일들 복사
 COPY --from=builder /app/dist ./dist
@@ -54,5 +51,5 @@ EXPOSE 5000
 # 환경 변수 설정
 ENV NODE_ENV=production
 
-# 데이터베이스 대기 후 마이그레이션 실행 및 애플리케이션 시작
-CMD ["sh", "-c", "echo 'Starting Studiolabs application...' && npx wait-on tcp:postgres:5432 -t 60000 && echo 'Running database migrations...' && node dist/scripts/migration.js run && echo 'Seeding initial data...' && node dist/scripts/seed-data.js && echo 'Starting the server...' && node dist/server/index.js"]
+# 데이터베이스 대기 후 마이그레이션 실행 및 애플리케이션 시작 (tsx 사용)
+CMD ["sh", "-c", "echo 'Starting Studiolabs application...' && npx wait-on tcp:postgres:5432 -t 60000 && echo 'Running database migrations...' && npx tsx scripts/migration.ts run && echo 'Seeding initial data...' && npx tsx scripts/seed-data.ts && echo 'Starting the server...' && npx tsx server/index.ts"]
