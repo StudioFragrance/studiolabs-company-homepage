@@ -113,6 +113,7 @@ Studio fragrance is a modern web application that provides personalized fragranc
 - Future-ready for database integration when needed
 
 ## Changelog
+- June 30, 2025: **Docker 필수 설정 파일 누락 문제 해결** - vite.config.ts, postcss.config.js, tailwind.config.ts, components.json, client/ 디렉토리 복사 추가. server/vite.ts에서 필요한 모든 설정 파일들이 Docker 환경에서 접근 가능하도록 구성 완료
 - June 30, 2025: **Docker ESNext + ESM 런타임 실행 구조 완성** - tsx 직접 실행으로 TypeScript 컴파일 과정 제거. ESNext + ESM 모던 구조 유지하면서 Docker 환경에서 모듈 해결 문제 완전 회피. 개발/프로덕션 환경 일관성 확보
 - June 30, 2025: **Docker TypeScript 마이그레이션 문제 해결** - Docker 환경에서 .ts 파일 실행 오류 해결. 프로덕션에서는 컴파일된 JavaScript 파일 사용하도록 ormconfig 및 Dockerfile 수정. 불필요한 DOCKER 환경변수 제거로 코드 간소화
 - June 30, 2025: **환경별 세션 보안 설정 완성** - 개발환경에서는 HTTP 허용, 프로덕션에서는 HTTPS만 허용하도록 환경별 세션 쿠키 설정 구현. sameSite 정책도 환경에 따라 자동 조정

@@ -38,9 +38,14 @@ RUN pnpm install --frozen-lockfile
 COPY ormconfig.ts ./
 COPY tsconfig.json ./
 COPY tsconfig.node.json ./
+COPY vite.config.ts ./
+COPY postcss.config.js ./
+COPY tailwind.config.ts ./
+COPY components.json ./
 COPY scripts/ scripts/
 COPY migrations/ migrations/
 COPY server/ server/
+COPY client/ client/
 
 # 빌드된 파일들 복사
 COPY --from=builder /app/dist ./dist
