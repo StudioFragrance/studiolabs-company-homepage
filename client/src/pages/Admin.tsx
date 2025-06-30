@@ -38,8 +38,19 @@ export default function Admin() {
   useEffect(() => {
     if (!isAuthLoading && !isAuthenticated) {
       setLocation("/login");
+    } else if (!isAuthLoading && isAuthenticated && user) {
+      // 관리자 권한 확인
+      const adminEmails: string[] = ['partis98@studiolabs.co.kr'];
+      const hasAdminRights = user.isAdministrator === true || 
+                           (user.executive === true && user.email && user.email.endsWith('@studiolabs.co.kr')) ||
+                           (user.email && adminEmails.includes(user.email));
+      
+      if (!hasAdminRights) {
+        console.log('관리자 권한 없음, 로그인 페이지로 리다이렉트:', user.email);
+        setLocation("/login?error=no_permission&email=" + encodeURIComponent(user.email));
+      }
     }
-  }, [isAuthenticated, isAuthLoading, setLocation]);
+  }, [isAuthenticated, isAuthLoading, user, setLocation]);
 
   if (isAuthLoading) {
     return (

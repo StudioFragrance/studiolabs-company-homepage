@@ -6,6 +6,8 @@ export interface AuthUser {
   name: string;
   profileImage?: string;
   domainId: string;
+  isAdministrator?: boolean;
+  executive?: boolean;
 }
 
 export function useAuth() {
