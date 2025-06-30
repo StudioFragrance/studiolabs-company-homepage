@@ -55,4 +55,4 @@ EXPOSE 5000
 ENV NODE_ENV=production
 
 # 데이터베이스 대기 후 마이그레이션 실행 및 애플리케이션 시작
-CMD ["sh", "-c", "echo 'Starting Studiolabs application...' && npx wait-on tcp:postgres:5432 -t 60000 && echo 'Running database migrations...' && node dist/scripts/migration.js run && echo 'Seeding initial data...' && node dist/scripts/seed-data.js && echo 'Starting the server...' && node dist/index.js"]
+CMD ["sh", "-c", "echo 'Starting Studiolabs application...' && npx wait-on tcp:postgres:5432 -t 60000 && echo 'Running database migrations...' && node dist/scripts/migration.js run && echo 'Seeding initial data...' && node dist/scripts/seed-data.js && echo 'Starting the server...' && node dist/server/index.js"]
