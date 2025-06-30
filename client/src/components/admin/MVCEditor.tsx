@@ -88,7 +88,7 @@ export default function MVCEditor({ initialData }: MVCEditorProps) {
 
   const updateMutation = useMutation({
     mutationFn: async (data: MVCFormData) => {
-      return apiRequest("PUT", "/api/site-content/mvc", data);
+      return apiRequest("/api/site-content/mvc", "PUT", data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/site-content"] });

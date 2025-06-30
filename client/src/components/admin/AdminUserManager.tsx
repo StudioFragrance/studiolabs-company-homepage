@@ -369,9 +369,9 @@ function AdminUserItem({
   isDeleting 
 }: AdminUserItemProps) {
   const [editForm, setEditForm] = useState({
-    name: user.name || '',
-    note: user.note || '',
-    isActive: user.isActive
+    name: user.name ?? '',
+    note: user.note ?? '',
+    isActive: user.isActive ?? true
   });
 
   const handleSave = () => {
