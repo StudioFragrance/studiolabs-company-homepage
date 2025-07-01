@@ -67,7 +67,7 @@ export function setupNaverWorksAuth() {
       refreshToken: refreshToken?.substring(0, 20) + '...',
       profile: profile ? 'exists' : 'null'
     });
-    
+
     try {
       // 사용자 프로필 정보 가져오기
       console.log('2. 네이버웍스 API 요청 시작');
@@ -76,7 +76,7 @@ export function setupNaverWorksAuth() {
         'Authorization': `Bearer ${accessToken?.substring(0, 20)}...`,
         'Content-Type': 'application/json'
       });
-      
+
       const response = await fetch(NAVER_WORKS_PROFILE_URL, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -99,34 +99,35 @@ export function setupNaverWorksAuth() {
       const userInfo = await response.json();
       console.log('5. 성공적으로 받은 사용자 정보 크기:', JSON.stringify(userInfo).length, 'bytes');
       console.log('네이버웍스 사용자 정보:', JSON.stringify(userInfo, null, 2));
-      
+
       // name 객체에서 문자열로 변환
+      const userInfoAny = userInfo as any;
       let userName = 'Unknown User';
-      if (userInfo.name && typeof userInfo.name === 'object') {
-        const nameObj = userInfo.name;
+      if (userInfoAny.name && typeof userInfoAny.name === 'object') {
+        const nameObj = userInfoAny.name;
         const lastName = nameObj.lastName || '';
         const firstName = nameObj.firstName || '';
         userName = `${lastName}${firstName}`.trim() || 'Unknown User';
         console.log('이름 변환:', { lastName, firstName, userName });
-      } else if (typeof userInfo.name === 'string') {
-        userName = userInfo.name;
-      } else if (userInfo.userName || userInfo.displayName) {
-        userName = userInfo.userName || userInfo.displayName;
+      } else if (typeof userInfoAny.name === 'string') {
+        userName = userInfoAny.name;
+      } else if (userInfoAny.userName || userInfoAny.displayName) {
+        userName = userInfoAny.userName || userInfoAny.displayName;
       }
 
       const user: NaverWorksUser = {
-        id: userInfo.userId || userInfo.id,
-        email: userInfo.email || userInfo.emailAddress,
+        id: userInfoAny.userId || userInfoAny.id,
+        email: userInfoAny.email || userInfoAny.emailAddress,
         name: userName,
-        profileImage: userInfo.profileImageUrl || userInfo.profileImage,
-        domainId: userInfo.domainId || userInfo.domain,
-        isAdministrator: userInfo.isAdministrator || false,
-        executive: userInfo.executive || false,
-        orgUnits: userInfo.organizations?.[0]?.orgUnits || [],
+        profileImage: userInfoAny.profileImageUrl || userInfoAny.profileImage,
+        domainId: userInfoAny.domainId || userInfoAny.domain,
+        isAdministrator: userInfoAny.isAdministrator || false,
+        executive: userInfoAny.executive || false,
+        orgUnits: userInfoAny.organizations?.[0]?.orgUnits || [],
         accessToken: accessToken, // 액세스 토큰 저장
         refreshToken: refreshToken, // 리프레시 토큰 저장
       };
-      
+
       console.log('변환된 사용자 객체:', JSON.stringify(user, null, 2));
 
       return done(null, user);
@@ -138,7 +139,7 @@ export function setupNaverWorksAuth() {
 
   // 커스텀 state store를 strategy에 연결
   (strategy as any)._stateStore = customStateStore;
-  
+
   // strategy를 passport에 등록
   passport.use('naver-works', strategy);
 
@@ -159,7 +160,7 @@ export function requireAuth(req: Request, res: any, next: any) {
   if (req.isAuthenticated && req.isAuthenticated()) {
     return next();
   }
-  
+
   // 인증되지 않은 경우 로그인 페이지로 리다이렉트
   res.redirect('/auth/login');
 }
@@ -186,7 +187,7 @@ export function requireAdmin(req: Request, res: any, next: any) {
         return next();
       } else {
         console.log('관리자 권한 거부:', user.email);
-        return res.status(403).json({ 
+        return res.status(403).json({
           message: '관리자 권한이 필요합니다.',
           email: user.email,
           hasAdminRights: false
@@ -222,9 +223,10 @@ export async function getOrganizationUsers(accessToken: string, domainId: number
 
       if (response.ok) {
         const data = await response.json();
-        
+
         // 응답 구조에 따라 사용자 목록 반환
-        const users = data.members || data.users || data.data || data || [];
+        const dataAny = data as any;
+        const users = dataAny.members || dataAny.users || dataAny.data || dataAny || [];
         if (Array.isArray(users) && users.length > 0) {
           return users;
         }

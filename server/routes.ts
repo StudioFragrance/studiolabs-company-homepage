@@ -13,60 +13,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // 네이버웍스 OAuth 시작
   app.get('/auth/naver-works', (req, res, next) => {
-    console.log('=== OAuth 시작 라우트 디버깅 ===');
-    console.log('1. OAuth 시작 요청 헤더:', {
-      'user-agent': req.get('user-agent'),
-      'referer': req.get('referer'),
-      'host': req.get('host')
-    });
-    console.log('2. OAuth 시작 세션 정보:', {
-      sessionID: req.sessionID,
-      hasSession: !!req.session,
-      isAuthenticated: req.isAuthenticated ? req.isAuthenticated() : false
-    });
-    
     passport.authenticate('naver-works')(req, res, next);
   });
 
   // 네이버웍스 OAuth 콜백
   app.get('/auth/naver-works/callback', (req, res, next) => {
-    console.log('=== OAuth 콜백 라우트 디버깅 ===');
-    console.log('1. 콜백 수신된 쿼리 파라미터:', req.query);
-    console.log('2. 콜백 수신된 헤더:', {
-      'user-agent': req.get('user-agent'),
-      'referer': req.get('referer'),
-      'x-forwarded-for': req.get('x-forwarded-for'),
-      'host': req.get('host'),
-      'cookie': req.get('cookie')
-    });
-    console.log('3. 콜백 세션 상태:', {
-      sessionID: req.sessionID,
-      hasSession: !!req.session,
-      sessionKeys: req.session ? Object.keys(req.session) : [],
-      cookies: req.cookies
-    });
-    
     passport.authenticate('naver-works', async (err: any, user: any, info: any) => {
-      console.log('3. Passport 인증 결과:', {
-        hasError: !!err,
-        hasUser: !!user,
-        infoType: typeof info,
-        info: info
-      });
-      
       if (err) {
-        console.error('4. OAuth 콜백 오류 상세:', {
-          error: err,
-          message: err.message,
-          stack: err.stack
-        });
         return res.redirect('/login?error=callback_error');
       }
       if (!user) {
-        console.error('5. OAuth 콜백 사용자 정보 없음:', {
-          info: info,
-          infoString: JSON.stringify(info)
-        });
         return res.redirect('/login?error=no_user_callback');
       }
       
@@ -100,10 +56,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // 세션 강제 저장 후 리다이렉트
           req.session.save((saveErr) => {
             if (saveErr) {
-              console.error('8. 세션 저장 오류:', saveErr);
               return res.redirect('/login?error=session_error');
             }
-            console.log('9. 세션 저장 완료, 관리자 페이지로 리다이렉트');
             return res.redirect('/admin');
           });
         });
