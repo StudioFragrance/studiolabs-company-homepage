@@ -1,3 +1,4 @@
+import 'dotenv/config';       // 👈 이 줄을 가장 위에 추가하세요!
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { SiteContent } from "./entities/SiteContent";
@@ -15,10 +16,8 @@ export const AppDataSource = new DataSource({
   url: process.env.DATABASE_URL,
   entities: [User, SiteContent, AdminUser],
   synchronize: false, // 마이그레이션을 통해서만 테이블 관리
-  logging: process.env.NODE_ENV === 'development',
-  migrations: [process.env.NODE_ENV === 'production' ? "dist/migrations/*.js" : "migrations/*.ts"],
+  migrations: ["migrations/*.ts"],
   migrationsTableName: "migrations",
-  ssl: false, // Docker 환경에서는 SSL 비활성화
   // Docker 네트워크 연결을 위한 추가 설정
   connectTimeoutMS: 60000,
   extra: {

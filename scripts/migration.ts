@@ -2,6 +2,7 @@
 import "reflect-metadata";
 import { AppDataSource } from "../server/db";
 import { exit } from "process";
+import { execSync } from "child_process";
 
 const command = process.argv[2];
 
@@ -37,9 +38,25 @@ async function runMigrations() {
                 break;
 
             case "generate":
-                console.log("마이그레이션 생성은 수동으로 진행해주세요.");
-                console.log("migrations/ 폴더에 새 파일을 생성하고 timestamp를 포함한 이름을 사용하세요.");
-                break;
+                const migrationName = process.argv[3];
+                if (!migrationName) {
+                    console.error("❌ 마이그레이션 파일 이름을 입력해주세요.");
+                    console.log("\n  예시: npx tsx scripts/migration.ts generate CreateUsersTable\n");
+                    process.exit(1);
+                }
+
+                console.log(`... '${migrationName}' 마이그레이션 생성 중 ...`);
+
+                try {
+                    // TypeORM CLI의 migration:generate 명령어를 실행합니다.
+                    const command = `npx tsx ./node_modules/typeorm/cli.js migration:generate -d server/db.ts migrations/${migrationName}`;
+                    execSync(command, { stdio: "inherit", env: { ...process.env } });
+                    console.log(`✅ 마이그레이션 파일이 성공적으로 생성되었습니다.`);
+                } catch (error) {
+                    // execSync는 실패 시 에러를 던지므로, 여기서 잡아줍니다.
+                    console.error("\n🚨 마이그레이션 생성에 실패했습니다.");
+                }
+                break; // 👈 여기까지 교체
 
             default:
                 console.log("사용법:");

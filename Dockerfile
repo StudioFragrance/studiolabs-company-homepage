@@ -51,8 +51,5 @@ COPY --from=builder /app/dist ./dist
 # 포트 노출
 EXPOSE 5000
 
-# 환경 변수 설정
-ENV NODE_ENV=production
-
-# 데이터베이스 대기 후 마이그레이션 실행 및 애플리케이션 시작
-CMD ["sh", "-c", "echo 'Starting Studiolabs application...' && npx wait-on tcp:postgres:5432 -t 60000 && echo 'Running database migrations...' && node dist/scripts/migration.js run && echo 'Seeding initial data...' && node dist/scripts/seed-data.js && echo 'Starting the server...' && node dist/index.js"]
+# 데이터베이스 대기 후 마이그레이션 실행 및 애플리케이션 시작 (tsx 사용)
+CMD ["sh", "-c", "echo 'Starting Studiolabs application...' && npx wait-on tcp:postgres:5432 -t 60000 && echo 'Running database migrations...' && npx tsx scripts/migration.ts run && echo 'Seeding initial data...' && npx tsx scripts/seed-data.ts && echo 'Starting the server...' && npx tsx server/index.ts"]
