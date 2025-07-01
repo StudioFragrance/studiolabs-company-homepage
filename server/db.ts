@@ -22,7 +22,7 @@ export const AppDataSource = new DataSource({
   connectTimeoutMS: 60000,
   extra: {
     connectionLimit: 10,
-  },
+  }
 });
 
 export const initializeDatabase = async () => {

@@ -25,17 +25,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!user) {
         return res.redirect('/login?error=no_user_callback');
       }
-      
+
       try {
         // 관리자 권한 확인 (데이터베이스 기반)
         const permissionsModule = await import('./auth/permissions');
         const hasAdminRights = await permissionsModule.hasAdminPermission(user);
-        
+
         if (!hasAdminRights) {
           console.log('관리자 권한 없음:', user.email);
           return res.redirect('/login?error=no_permission&email=' + encodeURIComponent(user.email));
         }
-        
+
         req.logIn(user, (err) => {
           if (err) {
             console.error('6. 콜백 로그인 세션 오류:', {
@@ -46,13 +46,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
             });
             return res.redirect('/login?error=session_error');
           }
-          
+
           console.log('7. OAuth 로그인 성공:', {
             email: user.email,
             sessionID: req.sessionID,
             isAuthenticated: req.isAuthenticated()
           });
-          
+
           // 세션 강제 저장 후 리다이렉트
           req.session.save((saveErr) => {
             if (saveErr) {
@@ -88,7 +88,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Site Content API routes
-  
+
   // Get all site content (공개 API - 프론트엔드에서 사용)
   app.get("/api/site-content", async (req, res) => {
     try {
@@ -112,24 +112,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/site-content/:key", async (req, res) => {
     try {
       const { key } = req.params;
-      
+
       // 파라미터 검증
       if (!key || typeof key !== 'string' || key.length > 50) {
         return res.status(400).json({ error: "Invalid content key" });
       }
-      
+
       // 허용된 키만 조회 가능
       const allowedKeys = ['hero', 'brandStory', 'companyHistory', 'mvc', 'contact'];
       if (!allowedKeys.includes(key)) {
         return res.status(404).json({ error: "Content not found" });
       }
-      
+
       const content = await storage.getSiteContent(key);
-      
+
       if (!content) {
         return res.status(404).json({ error: "Content not found" });
       }
-      
+
       // 공개 정보만 반환
       const publicContent = {
         id: content.id,
@@ -138,7 +138,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         createdAt: content.createdAt,
         updatedAt: content.updatedAt
       };
-      
+
       res.json(publicContent);
     } catch (error) {
       console.error("Error fetching site content:", error);
@@ -150,41 +150,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put("/api/site-content/:key", requireAdmin, async (req, res) => {
     try {
       const { key } = req.params;
-      
+
       // 파라미터 검증
       if (!key || typeof key !== 'string' || key.length > 50) {
         return res.status(400).json({ error: "Invalid content key" });
       }
-      
+
       // 허용된 키만 수정 가능
       const allowedKeys = ['hero', 'brandStory', 'companyHistory', 'mvc', 'contact'];
       if (!allowedKeys.includes(key)) {
         return res.status(404).json({ error: "Content not found" });
       }
-      
+
       // 요청 본문 검증
       if (!req.body || typeof req.body !== 'object') {
         return res.status(400).json({ error: "Invalid request body" });
       }
-      
+
       // data 필드가 있으면 사용, 없으면 전체 body 사용 (하지만 안전하게)
       const data = req.body.data !== undefined ? req.body.data : req.body;
-      
+
       // 데이터 크기 제한 (1MB)
       const dataString = JSON.stringify(data);
       if (dataString.length > 1024 * 1024) {
         return res.status(413).json({ error: "Data too large" });
       }
-      
+
       const content = await storage.updateSiteContent(key, data);
-      
+
       if (!content) {
         return res.status(404).json({ error: "Content not found" });
       }
-      
+
       // 업데이트 로그
       console.log(`Content updated by admin: ${key}, user: ${(req.user as any)?.email}`);
-      
+
       res.json(content);
     } catch (error) {
       console.error("Error updating site content:", error);
@@ -197,7 +197,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/admin/site-content/status", requireAdmin, async (req, res) => {
     try {
       const allContent = await storage.getAllSiteContent();
-      res.json({ 
+      res.json({
         message: "Site content status",
         contentCount: allContent.length,
         sections: allContent.map(c => c.key),
@@ -226,25 +226,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/admin/users", requireAdmin, async (req, res) => {
     try {
       const { email, name, note } = req.body;
-      
+
       // 입력 검증
       if (!email || typeof email !== 'string' || !email.includes('@')) {
         return res.status(400).json({ error: "Valid email is required" });
       }
-      
+
       // 중복 확인
       const existingUser = await storage.getAdminUser(email);
       if (existingUser) {
         return res.status(409).json({ error: "Admin user already exists" });
       }
-      
+
       const adminUser = await storage.createAdminUser({
         email: email.trim().toLowerCase(),
         name: name?.trim() || undefined,
         note: note?.trim() || undefined,
         isActive: true
       });
-      
+
       console.log(`New admin user created: ${email} by ${(req.user as any)?.email}`);
       res.status(201).json(adminUser);
     } catch (error) {
@@ -258,21 +258,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { id } = req.params;
       const { name, note, isActive } = req.body;
-      
+
       if (!id || isNaN(Number(id))) {
         return res.status(400).json({ error: "Valid user ID is required" });
       }
-      
+
       const adminUser = await storage.updateAdminUser(Number(id), {
         name: name?.trim() || undefined,
         note: note?.trim() || undefined,
         isActive: Boolean(isActive)
       });
-      
+
       if (!adminUser) {
         return res.status(404).json({ error: "Admin user not found" });
       }
-      
+
       console.log(`Admin user updated: ${adminUser.email} by ${(req.user as any)?.email}`);
       res.json(adminUser);
     } catch (error) {
@@ -285,32 +285,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete("/api/admin/users/:id", requireAdmin, async (req, res) => {
     try {
       const { id } = req.params;
-      
+
       if (!id || isNaN(Number(id))) {
         return res.status(400).json({ error: "Valid user ID is required" });
       }
-      
+
       // 삭제하려는 사용자 정보 확인
       const userToDelete = await storage.getAdminUserById(Number(id));
-      
+
       if (!userToDelete) {
         return res.status(404).json({ error: "Admin user not found" });
       }
-      
+
       // 대표자 계정 삭제 방지
       if (userToDelete.email === 'partis98@studiolabs.co.kr') {
-        return res.status(403).json({ 
+        return res.status(403).json({
           error: "대표자 계정은 삭제할 수 없습니다.",
           message: "The founder account cannot be deleted for security reasons."
         });
       }
-      
+
       const success = await storage.deleteAdminUser(Number(id));
-      
+
       if (!success) {
         return res.status(404).json({ error: "Admin user not found" });
       }
-      
+
       console.log(`Admin user deleted: ${userToDelete.email} (ID: ${id}) by ${(req.user as any)?.email}`);
       res.json({ message: "Admin user deleted successfully" });
     } catch (error) {
@@ -323,18 +323,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/admin/naver-works/users", requireAdmin, async (req, res) => {
     try {
       const user = req.user as any;
-      
+
       if (!user || !user.id) {
         return res.status(401).json({ error: "User not authenticated" });
       }
 
       // 현재 사용자의 액세스 토큰 가져오기
       const accessToken = user.accessToken;
-      
+
       if (!accessToken) {
         console.log('액세스 토큰이 없습니다. 사용자 재인증이 필요합니다.');
-        return res.status(401).json({ 
-          error: "Access token not found", 
+        return res.status(401).json({
+          error: "Access token not found",
           message: "사용자 재인증이 필요합니다.",
           requiresReauth: true
         });
@@ -342,61 +342,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const { getOrganizationUsers } = await import('./auth/naver-works');
       const orgUsers = await getOrganizationUsers(accessToken, user.domainId);
-      
+
 
       // 사용자 목록을 필터링하고 정제
       const filteredUsers = orgUsers
-        .filter((orgUser: any) => orgUser.email && orgUser.email.includes('@'))
-        .map((orgUser: any) => {
-          // name 객체에서 문자열로 변환
-          let userName = 'Unknown User';
-          
-          // displayName이나 userName이 객체인 경우 처리
-          if (orgUser.displayName && typeof orgUser.displayName === 'object') {
-            const nameObj = orgUser.displayName;
-            const lastName = nameObj.lastName || '';
-            const firstName = nameObj.firstName || '';
-            userName = `${lastName}${firstName}`.trim() || 'Unknown User';
-          } else if (orgUser.userName && typeof orgUser.userName === 'object') {
-            const nameObj = orgUser.userName;
-            const lastName = nameObj.lastName || '';
-            const firstName = nameObj.firstName || '';
-            userName = `${lastName}${firstName}`.trim() || 'Unknown User';
-          } else if (orgUser.name && typeof orgUser.name === 'object') {
-            const nameObj = orgUser.name;
-            const lastName = nameObj.lastName || '';
-            const firstName = nameObj.firstName || '';
-            userName = `${lastName}${firstName}`.trim() || 'Unknown User';
-          } else if (typeof orgUser.name === 'string') {
-            userName = orgUser.name;
-          } else if (typeof orgUser.displayName === 'string') {
-            userName = orgUser.displayName;
-          } else if (typeof orgUser.userName === 'string') {
-            userName = orgUser.userName;
-          }
+          .filter((orgUser: any) => orgUser.email && orgUser.email.includes('@'))
+          .map((orgUser: any) => {
+            // name 객체에서 문자열로 변환
+            let userName = 'Unknown User';
 
-          // 조직 정보에서 부서/직책 추출
-          const primaryOrg = orgUser.organizations?.find((org: any) => org.primary === true) || orgUser.organizations?.[0];
-          const department = primaryOrg?.orgUnitName || orgUser.department;
-          const position = primaryOrg?.positionName || orgUser.position || orgUser.title;
+            // displayName이나 userName이 객체인 경우 처리
+            if (orgUser.displayName && typeof orgUser.displayName === 'object') {
+              const nameObj = orgUser.displayName;
+              const lastName = nameObj.lastName || '';
+              const firstName = nameObj.firstName || '';
+              userName = `${lastName}${firstName}`.trim() || 'Unknown User';
+            } else if (orgUser.userName && typeof orgUser.userName === 'object') {
+              const nameObj = orgUser.userName;
+              const lastName = nameObj.lastName || '';
+              const firstName = nameObj.firstName || '';
+              userName = `${lastName}${firstName}`.trim() || 'Unknown User';
+            } else if (orgUser.name && typeof orgUser.name === 'object') {
+              const nameObj = orgUser.name;
+              const lastName = nameObj.lastName || '';
+              const firstName = nameObj.firstName || '';
+              userName = `${lastName}${firstName}`.trim() || 'Unknown User';
+            } else if (typeof orgUser.name === 'string') {
+              userName = orgUser.name;
+            } else if (typeof orgUser.displayName === 'string') {
+              userName = orgUser.displayName;
+            } else if (typeof orgUser.userName === 'string') {
+              userName = orgUser.userName;
+            }
 
-          return {
-            userId: orgUser.userId || orgUser.id,
-            email: orgUser.email || orgUser.emailAddress,
-            name: userName,
-            department: department,
-            position: position,
-            status: orgUser.status || 'active',
-            isAdministrator: orgUser.isAdministrator || false
-          };
-        })
-        .sort((a: any, b: any) => a.email.localeCompare(b.email));
+            // 조직 정보에서 부서/직책 추출
+            const primaryOrg = orgUser.organizations?.find((org: any) => org.primary === true) || orgUser.organizations?.[0];
+            const department = primaryOrg?.orgUnitName || orgUser.department;
+            const position = primaryOrg?.positionName || orgUser.position || orgUser.title;
+
+            return {
+              userId: orgUser.userId || orgUser.id,
+              email: orgUser.email || orgUser.emailAddress,
+              name: userName,
+              department: department,
+              position: position,
+              status: orgUser.status || 'active',
+              isAdministrator: orgUser.isAdministrator || false
+            };
+          })
+          .sort((a: any, b: any) => a.email.localeCompare(b.email));
 
       console.log(`네이버웍스 사용자 목록 조회 성공: ${filteredUsers.length}명`);
       res.json({ users: filteredUsers, total: filteredUsers.length });
     } catch (error) {
       console.error("Error fetching Naver Works users:", error);
-      res.status(500).json({ 
+      res.status(500).json({
         error: "Failed to fetch organization users",
         message: "조직 사용자 목록을 가져오는데 실패했습니다."
       });

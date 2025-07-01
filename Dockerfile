@@ -1,23 +1,29 @@
-FROM node:24-alpine
+# Stage 1: 빌드 단계
+FROM node:20-alpine AS builder
 
 # 작업 디렉토리 설정
 WORKDIR /app
 
+# pnpm 설치
 RUN npm install -g pnpm
 
-# 전체 프로젝트 파일 복사
+# package.json과 pnpm-lock.yaml 복사
+COPY package.json pnpm-lock.yaml ./
+
+# 의존성 설치 (개발 의존성 포함)
+RUN pnpm install --frozen-lockfile
+
+# 소스 코드 복사
 COPY . .
 
-RUN pnpm install
-
-# 프론트엔드 빌드
+# TypeScript 컴파일 및 클라이언트 빌드
 RUN pnpm run build
 
-# 스크립트 실행 권한 부여
-RUN chmod +x migrate.sh docker-entrypoint.sh
+# TypeScript 프로젝트 전체를 컴파일 (ormconfig.ts 포함)
+RUN npx tsc --project tsconfig.node.json
 
-# PostgreSQL 클라이언트 설치 (pg_isready 사용)
-RUN apk add --no-cache postgresql-client
+# Stage 2: 프로덕션 단계
+FROM node:20-alpine AS production
 
 # 작업 디렉토리 설정
 WORKDIR /app

@@ -5,11 +5,8 @@ services:
   postgres:
     image: postgres:17
     container_name: studiofragrance_db
-    environment:
-      POSTGRES_DB: studiofragrance
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres123
-      POSTGRES_HOST_AUTH_METHOD: md5
+    env_file:
+      - .env.docker
     ports:
       - "5430:5432"
     volumes:
@@ -29,6 +26,8 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: studiofragrance_app
+    env_file:
+      - .env
     environment:
       - NODE_ENV=production
       - DATABASE_URL=postgresql://postgres:postgres123@postgres:5432/studiofragrance
