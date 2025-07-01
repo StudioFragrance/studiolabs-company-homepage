@@ -4,18 +4,18 @@ services:
   # PostgreSQL 데이터베이스 서비스
   postgres:
     image: postgres:17
-    container_name: studiofragrance_db
+    container_name: studiolabs_homepage_db
     env_file:
       - .env.docker
     ports:
-      - "5430:5432"
+      - "5430:5430"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - app-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d studiofragrance"]
+      test: ["CMD-SHELL", "pg_isready -U studiolabs -d studiolabs"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -25,12 +25,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: studiofragrance_app
+    container_name: studiolabs-homepage
     env_file:
       - .env
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgresql://postgres:postgres123@postgres:5432/studiofragrance
+      - DATABASE_URL=postgresql://studiolabs:VdPyLLSTNf7jTsH@postgres:5430/studiolabs
     ports:
       - "5000:5000"
     depends_on:
@@ -44,10 +44,10 @@ services:
 networks:
   app-network:
     driver: bridge
-    name: studiofragrance_network
+    name: studiolabs_homepage_network
 
 # 볼륨 정의
 volumes:
   postgres_data:
     driver: local
-    name: studiofragrance_postgres_data
+    name: studiolabs_homepage_postgres_data

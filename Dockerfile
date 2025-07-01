@@ -11,7 +11,7 @@ RUN npm install -g pnpm
 COPY package.json pnpm-lock.yaml ./
 
 # 의존성 설치 (개발 의존성 포함)
-RUN pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 # 소스 코드 복사
 COPY . .
@@ -35,7 +35,7 @@ RUN npm install -g pnpm
 COPY package.json pnpm-lock.yaml ./
 
 # 프로덕션 의존성 설치 (tsx 포함을 위해 devDependencies도 설치)
-RUN pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 # 필요한 스크립트와 설정 파일들 복사
 COPY ormconfig.ts ./
@@ -53,4 +53,4 @@ COPY --from=builder /app/dist ./dist
 EXPOSE 5000
 
 # 데이터베이스 대기 후 마이그레이션 실행 및 애플리케이션 시작 (tsx 사용)
-CMD ["sh", "-c", "echo 'Starting Studiolabs application...' && npx wait-on tcp:postgres:5432 -t 60000 && echo 'Running database migrations...' && npx tsx scripts/migration.ts run && echo 'Seeding initial data...' && npx tsx scripts/seed-data.ts && echo 'Starting the server...' && npx tsx server/index.ts"]
+CMD ["sh", "-c", "echo 'Starting Studiolabs application...' && npx wait-on tcp:postgres:5430 -t 60000 && echo 'Running database migrations...' && npx tsx scripts/migration.ts run && echo 'Seeding initial data...' && npx tsx scripts/seed-data.ts && echo 'Starting the server...' && npx tsx server/index.ts"]
